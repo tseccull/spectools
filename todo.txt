@@ -1,0 +1,4 @@
+- Fully comment spectools scripts.
+- Add functionality for appending to the processing details headers of processed files 
+when saved.
+- Improve binspec.py where necessary/possible.

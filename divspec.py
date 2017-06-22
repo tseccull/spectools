@@ -1,6 +1,6 @@
 #! /Users/tseccull/anaconda2/bin/python
 
-# 'A script for dividing one spectrum by another. They must share a common wavelength axis.
+# A SCRIPT FOR DIVIDING ONE SPECTRUM BY ANOTHER. THEY MUST SHARE A COMMON WAVELENGTH. AXIS
 
 
 import argparse
@@ -10,7 +10,7 @@ import numpy as num
 import os
 import sys
 
-# Parse arguments
+# PARSE ARGUMENTS
 parser = argparse.ArgumentParser(description='A script for dividing one spectrum by another. They must share a common'
                                              'wavelength axis.')
 parser.add_argument('targFile', type=str, help='target spectrum to be divided')
@@ -19,6 +19,7 @@ parser.add_argument('-p', '--plot', help='plot the stacked spectrum and show on 
 parser.add_argument('-s', '--save', help='save the stacked spectrum to a new .fits file', action='store_true')
 args = parser.parse_args()
 
+# READ IN HEADER DATA AND SPECTRUM DATA FOR THE FIRST SPECTRUM
 with fits.open(args.targFile) as han:
     hdata = han[0].data[1]
     wav = han[0].data[0]
@@ -28,6 +29,7 @@ with fits.open(args.targFile) as han:
     if hhead['INSTRUME'] == 'XSHOOTER':
         arm = hhead['HIERARCH ESO SEQ ARM']
 
+# READ IN HEADER DATA AND SPECTRUM DATA FOR THE SECOND SPECTRUM
 with fits.open(args.starFile) as solo:
     shead = solo[0].header
     sdata = solo[0].data[1]
@@ -37,11 +39,11 @@ with fits.open(args.starFile) as solo:
 targobj = hhead['OBJECT'].replace(' ', '_')
 starobj = shead['OBJECT'].replace(' ', '_')
 
-# Divide the target spectrum by the star spectrum.
+# DIVIDE THE FIRST SPECTRUM BY THE SECOND SPECTRUM
 divSpec = num.divide(hdata, sdata)
 divquals = num.multiply(hquals, squals)
 
-# Plot the spectrum if required.
+# PLOT THE DIVIDED SPECTRUM IF SELECTED
 if args.plot:
     if 'HIERARCH GME UTC EXTRACTION DATE' in hhead:
         plt.plot(wav, divSpec, wav, divquals)
@@ -58,7 +60,7 @@ if args.plot:
 
     plt.show()
 
-# Save the spectrum to a new fits file if required.
+# SAVE THE DIVIDED SPECTRUM TO A NEW FITS FILE IF SELECTED
 if args.save:
     if 'HIERARCH GME UTC EXTRACTION DATE' in hhead:
         hdu = fits.PrimaryHDU([wav, divSpec, divquals], header=hhead)
