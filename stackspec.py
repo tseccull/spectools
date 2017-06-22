@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import general
+import sys
 
 # PARSE COMMAND LINE ARGUMENTS
 parser = argparse.ArgumentParser(description='A script for stacking multiple spectra into a single spectrum. Must '
@@ -104,7 +105,7 @@ if args.plot:
 
 # SAVE THE SPECTRUM TO A NEW FITS FILE IN THE PARENT DIRECTORY IF SELECTED
 if args.save:
-    if head['INSTRUME'] == 'FORS2' and head['HIERARCH GME UTC EXTRACTION DATE']:
+    if head['INSTRUME'] == 'FORS2' and 'HIERARCH GME UTC EXTRACTION DATE' in head:
         hdu = fits.PrimaryHDU([wav, stackspec, masterquals.astype(bool)], header=head)
     else:
         hdu = fits.PrimaryHDU([wav, stackspec], header=head)
@@ -112,12 +113,25 @@ if args.save:
     hdulist = fits.HDUList(hdu)
     cwd = os.getcwd()
 
-    if os.path.isfile(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits'):
-        print '[STACKSPEC] ' + os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits ' \
-              'already exists. New stack will not be saved. Terminating.'
-        sys.exit()
-    else:
-        hdulist.writeto(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits')
-        hdulist.close()
-        print '[STACKSPEC] Stacked spectrum saved at ' + os.path.dirname(cwd) + '/' + obj + '_' + \
-              str.upper(args.method) + '_STACK_' + '.fits'
+    if head['INSTRUME'] == 'FORS2':
+        if os.path.isfile(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits'):
+            print '[STACKSPEC] ' + os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits ' \
+                  'already exists. New stack will not be saved. Terminating.'
+            sys.exit()
+        else:
+            hdulist.writeto(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + '.fits')
+            hdulist.close()
+            print '[STACKSPEC] Stacked spectrum saved at ' + os.path.dirname(cwd) + '/' + obj + '_' + \
+                  str.upper(args.method) + '_STACK_' + '.fits'
+
+    if head['INSTRUME'] == 'XSHOOTER':
+        if os.path.isfile(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + arm + '.fits'):
+            print '[STACKSPEC] ' + os.path.dirname(cwd) + '/' + obj + '_' + str.upper(
+                args.method) + '_STACK_' + arm + '.fits already ' \
+                                                 'exists. New stack will not be saved. Terminating.'
+            sys.exit()
+        else:
+            hdulist.writeto(os.path.dirname(cwd) + '/' + obj + '_' + str.upper(args.method) + '_STACK_' + arm + '.fits')
+            hdulist.close()
+            print '[STACKSPEC] Stacked spectrum saved at ' + os.path.dirname(cwd) + '/' + obj + '_' + str.upper(
+                args.method) + '_STACK_' + arm + '.fits'
