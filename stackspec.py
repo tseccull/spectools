@@ -35,14 +35,15 @@ for i, path in enumerate(specpaths):
 
         # OBTAIN/MODIFY THE COSMIC RAY MASK SO IT MATCHES THE STACKED SPECTRUM AND OBTAIN THE WAVELENGTH AXIS
         if head['INSTRUME'] == 'FORS2':
-            if head['HIERARCH GME UTC EXTRACTION DATE']:
+            if 'HIERARCH GME UTC EXTRACTION DATE' in head:
                 if i == 0:
                     wav = han[0].data[0]
                     masterquals = han[0].data[2]
                 else:
                     masterquals *= han[0].data[2]
             else:
-                wav = general.wavaxis(head)
+                increment = head['CD1_1']
+                wav = general.wavaxis(head, increment)
 
         elif head['INSTRUME'] == 'XSHOOTER':
             wav = han[0].data[0]
