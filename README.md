@@ -5,7 +5,7 @@ Developer:    Tom Seccull
 Last Updated: 2023-10-24
 
 A personal collection of scripts I that use for reduction, processing, and analysis of astronomical spectroscopic data.
-This repo is not intended for distribution, so I cannot make any guarantees that this software will work,
+This repo is not intended for distribution, so I cannot make any guarantees that this software will either work,
 or be useful to others. Those that choose to use these scripts, in whole or in part, do so at their own risk.
 Support will not be provided.
 
