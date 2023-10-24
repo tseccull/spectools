@@ -9,8 +9,7 @@ This repo is not intended for distribution, so I cannot make any guarantees that
 or be useful to others. Those that choose to use these scripts, in whole or in part, do so at their own risk.
 Support will not be provided.
 
-If, against all odds, the software in this repo is helpful to your project in any way, please consider citing it
-as shown in this repo's CITATION.cff file.
+If, against all odds, the software in this repo is helpful to your project in any way, please consider citing it.
 
 ### scrap.py
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
