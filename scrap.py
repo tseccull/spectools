@@ -1,25 +1,25 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 
 """
-scrap.py - written by T. Seccull, 2023-10-24 - v1.0.0 
+scrap.py - written by T. Seccull, 2023-10-24 - v1.0.1 
 
-	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LACosmic. A 
+	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LA Cosmic. A 
 	script that runs the detect_cosmics() function from Astroscrappy on supplied astronomical 
-	spectroscopic data. Astroscrappy is a Python implentation of Pieter van Dokkum's LACosmic. Cite 
-	both Astroscrappy and LACosmic if used. scrap.py will assume all files in the current directory
-	are .fits formatted 2D spectra that need their cosmic rays masked and will try to apply 
-	detect_cosmics() to each in turn. scrap.py will replace the primary input data frame with the 
-	cleaned data array in the output .fits file; a copy of the original input data will be stored 
-	in a new Header Data Unit (HDU) of the output .fits file. The boolean cosmic ray mask that 
-	scrap.py creates will be either added to an existing quality frame (e.g. flagging bad pixels), 
-	or if a quality frame doesn't exist in the original file the crmask will be added to the output 
-	file as the new quality frame in a new HDU. A gaussian psfmodel is assumed, so in 
+	spectroscopic data. Astroscrappy is a Python implentation of Pieter van Dokkum's LA Cosmic. 
+	Cite both Astroscrappy and LA Cosmic if used. scrap.py will assume all files in the current 
+	directory are .fits formatted 2D spectra that need their cosmic rays masked and will try to 
+	apply detect_cosmics() to each in turn. scrap.py will replace the primary input data frame with 
+	the cleaned data array in the output .fits file; a copy of the original input data will be 
+	stored in a new Header Data Unit (HDU) of the output .fits file. The boolean cosmic ray mask 
+	that scrap.py creates will be either added to an existing quality frame (e.g. flagging bad 
+	pixels), or if a quality frame doesn't exist in the original file the crmask will be added to 
+	the output file as the new quality frame in a new HDU. A gaussian psfmodel is assumed, so in 
 	detect_cosmics() psfk=None by default, and psfbeta is ignored. Other detect_cosmics() 
 	parameters are either taken directly from the fits data and headers, or they can be set 
 	optionally when scrap.py is run. Astroscrappy docs and links to citables:
 	 -> https://astroscrappy.readthedocs.io/en/latest/
     
-    Original paper describing LACosmic 
+    Original paper describing LAvCosmic 
 		van Dokkum 2001, PASP, 113, 1420 - https://doi.org/10.1086/323894
     Astroscrappy Zenodo DOI
 		McCully et al. 2018, Astropy/Astroscrappy: v1.0.5 Zenodo Release (v1.0.5). Zenodo
@@ -147,7 +147,7 @@ def moffat_resid(x, datarange, data):
 
  
 ####################################################################################################
-def prep_gmos(iFile, iHead):
+def prep_gmos(iFile, iHead, fSMode):
 	"""
 	Combines all necessary data for detect_cosmics() into a dictionary for a spectrum observed with 
 	GMOS-N or GMOS-S.
@@ -157,6 +157,8 @@ def prep_gmos(iFile, iHead):
 		                        being processed. It contains all the dataframes and headers for the 
 		                        current spectrum.
 		iHead (.fits header)  : the header of the primary header data unit in iFile
+		fSMode (str)          : string keyword to tell prep_gmos how detect_cosmics() will
+		                        generate the fine structure image.
 		
 	Returns:
 		detCosmicsInput (dict): dictionary of dataframes and parameters collected from the input 
@@ -204,83 +206,93 @@ def prep_gmos(iFile, iHead):
 	else:
 		detCosmicsInput["satlvl"] = 117963
 
-    # All this is to get an initial estimate of the IQ. Tables below are based on the condition 
-    # constraints used by Gemini. See web page below.
-    # https://www.gemini.edu/observing/telescopes-and-sites/sites#ImageQuality
-	IQ_dict = {
-		"20-percentile": 0,
-		"70-percentile": 1,
-		"85-percentile": 2,
-		"100-percentile": 3,
-		"Any": 3,
-		"UNKNOWN": 3,
-	}
-
-	WavTab = np.array(
-		[
-			[0000.0, 4000.0, 0],
-			[4000.0, 5500.0, 1],
-			[5500.0, 7000.0, 2],
-			[7000.0, 8500.0, 3],
-			[8500.0, 9750.0, 4],
-			[9750.0, 11000.0, 5],
-		]
-	)
-
-	IQTab = np.array(
-		[
-			[0.6, 0.90, 1.20, 2.00],
-			[0.6, 0.85, 1.10, 1.90],
-			[0.5, 0.75, 1.05, 1.80],
-			[0.5, 0.75, 1.05, 1.70],
-			[0.5, 0.70, 0.95, 1.70],
-			[0.4, 0.70, 0.95, 1.65],
-		]
-	)
-
-	iq = iHead["RAWIQ"]
-
-	shortWav = iFile["SCI"].header["CRVAL1"]
-
-	for i in WavTab:
-		if shortWav > i[0] and shortWav < i[1]:
-			seeing = float(IQTab[int(i[2])][int(IQ_dict[iq])])
-			break
-
-	pixres = iHead["PIXSCALE"]
+	# If the fine stucture image is to be generated with a convolution of a model PSF, estimate
+	# the PSF's FWHM and size in pixels.
+	if fSMode == "convolve":
+		# All this is to get an initial estimate of the IQ. Tables below are based on the condition 
+		# constraints used by Gemini. See web page below.
+		# https://www.gemini.edu/observing/telescopes-and-sites/sites#ImageQuality
+		IQ_dict = {
+			"20-percentile": 0,
+			"70-percentile": 1,
+			"85-percentile": 2,
+			"100-percentile": 3,
+			"Any": 3,
+			"UNKNOWN": 3,
+		}
 	
-	# Measure the FWHM of the spectrum's spatial profile. A Moffat profile is fitted to the median 
-	# spatial profile to get an accurate measure of the Full Width at Half Maximum, even though the 
-	# psf model used by detect_cosmics() is a gaussian.
+		WavTab = np.array(
+			[
+				[0000.0, 4000.0, 0],
+				[4000.0, 5500.0, 1],
+				[5500.0, 7000.0, 2],
+				[7000.0, 8500.0, 3],
+				[8500.0, 9750.0, 4],
+				[9750.0, 11000.0, 5],
+			]
+		)
 	
-	# Calculate median spatial profile of the spectrum.
-	medProfile = np.nanmedian(iFile["SCI"].data, axis=1)
+		IQTab = np.array(
+			[
+				[0.6, 0.90, 1.20, 2.00],
+				[0.6, 0.85, 1.10, 1.90],
+				[0.5, 0.75, 1.05, 1.80],
+				[0.5, 0.75, 1.05, 1.70],
+				[0.5, 0.70, 0.95, 1.70],
+				[0.4, 0.70, 0.95, 1.65],
+			]
+		)
 	
-	# Scipy least squares doesn't like really tiny numbers like fluxes in erg/s/cm^2/Angstrom, so 
-	# it's necessary to scale the data to a size that least squares can handle. The shape of the 
-	# profile fitted to the scaled spatial profile is the same as the unscaled, so FWHM is 
-	# unaffected.
-	datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(medProfile)))))
+		iq = iHead["RAWIQ"]
 	
-	# Fit the median spatial profile with a Moffat function.
-	moffparams = moffat_least_squares(
-		range(np.shape(iFile["SCI"].data)[0]),
-		medProfile * datascale,
-		seeing,
-		pixres,
-		50
-	)
+		shortWav = iFile["SCI"].header["CRVAL1"]
 	
-	# Get an improved estimate of the FWHM of the spectrum from the best fit Moffat profile.
-	fwhm = 2 * moffparams[2] * np.sqrt((2 ** (1 / moffparams[3])) - 1)
+		for i in WavTab:
+			if shortWav > i[0] and shortWav < i[1]:
+				seeing = float(IQTab[int(i[2])][int(IQ_dict[iq])])
+				break
 	
-	detCosmicsInput["fwhm"] = fwhm
-	
-	psfSize = np.ceil(2.8*fwhm)
-	if psfSize % 2 == 0:
-		psfSize += 1
-	
-	detCosmicsInput["psfsiz"] = psfSize
+		pixres = iHead["PIXSCALE"]
+		
+		# Measure the FWHM of the spectrum's spatial profile. A Moffat profile is fitted to the 
+		# median spatial profile to get an accurate measure of the Full Width at Half Maximum, even 
+		# though the psf model used by detect_cosmics() is a gaussian.
+		
+		# Calculate median spatial profile of the spectrum.
+		medProfile = np.nanmedian(iFile["SCI"].data, axis=1)
+		
+		# Scipy least squares doesn't like really tiny numbers like fluxes in erg/s/cm^2/Angstrom, 
+		# so it's necessary to scale the data to a size that least squares can handle. The shape of 
+		# the profile fitted to the scaled spatial profile is the same as the unscaled, so FWHM is 
+		# unaffected.
+		datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(medProfile)))))
+		
+		# Fit the median spatial profile with a Moffat function.
+		moffparams = moffat_least_squares(
+			range(np.shape(iFile["SCI"].data)[0]),
+			medProfile * datascale,
+			seeing,
+			pixres,
+			50
+		)
+		
+		# Get an improved estimate of the FWHM of the spectrum from the best fit Moffat profile.
+		fwhm = 2 * moffparams[2] * np.sqrt((2 ** (1 / moffparams[3])) - 1)
+		
+		detCosmicsInput["fwhm"] = fwhm
+		
+		psfSize = np.ceil(2.8*fwhm)
+		if psfSize % 2 == 0:
+			psfSize += 1
+		
+		detCosmicsInput["psfsiz"] = psfSize
+		
+	# If a median filter is being used to generate the fine structure image, psffwhm and psfsize
+	# aren't needed. In this case we set their values to the defaults for detect_cosmics() with
+	# the knowledge that they won't be used.
+	else:
+		detCosmicsInput["fwhm"] = 2.5
+		detCosmicsInput["psfsiz"] = 7
 	
 	return detCosmicsInput
 
@@ -340,9 +352,10 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	cleanSciHead["CRSEPMED"] = (commandArgs.separatedMed, "Astroscrappy sepmed value")
 	cleanSciHead["CRDCTYPE"] = (commandArgs.dataCleanType, "Astroscrappy cleantype value")
 	cleanSciHead["CRFSMODE"] = (commandArgs.finStrucMode, "Astroscrappy fsmode value")
-	cleanSciHead["CRPSFMOD"] = (dCParams["pmodel"], "Astroscrappy psfmodel value")
-	cleanSciHead["CRPSFWHM"] = (dCParams["fwhm"], "Astroscrappy psffwhm value (pix)")
-	cleanSciHead["CRPSFSIZ"] = (dCParams["psfsiz"], "Astroscrappy psfsize value (pix)")
+	if commandArgs.finStrucMode == "convolve": # If fsmode is "median", then no psf parameters.
+		cleanSciHead["CRPSFMOD"] = (dCParams["pmodel"], "Astroscrappy psfmodel value")
+		cleanSciHead["CRPSFWHM"] = (dCParams["fwhm"], "Astroscrappy psffwhm value (pix)")
+		cleanSciHead["CRPSFSIZ"] = (dCParams["psfsiz"], "Astroscrappy psfsize value (pix)")
 	
 	# Update the header of the new DQ header to add details on the cosmic ray detection, masking, 
 	# and cleaning process. Add the cosmic ray mask to the DQ frame. 
@@ -367,9 +380,10 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	qualHead["CRSEPMED"] = (commandArgs.separatedMed, "Astroscrappy sepmed value")
 	qualHead["CRDCTYPE"] = (commandArgs.dataCleanType, "Astroscrappy cleantype value")
 	qualHead["CRFSMODE"] = (commandArgs.finStrucMode, "Astroscrappy fsmode value")
-	qualHead["CRPSFMOD"] = (dCParams["pmodel"], "Astroscrappy psfmodel value")
-	qualHead["CRPSFWHM"] = (dCParams["fwhm"], "Astroscrappy psffwhm value (pix)")
-	qualHead["CRPSFSIZ"] = (dCParams["psfsiz"], "Astroscrappy psfsize value (pix)")
+	if commandArgs.finStrucMode == "convolve": # If fsmode is "median", then no psf parameters.
+		qualHead["CRPSFMOD"] = (dCParams["pmodel"], "Astroscrappy psfmodel value")
+		qualHead["CRPSFWHM"] = (dCParams["fwhm"], "Astroscrappy psffwhm value (pix)")
+		qualHead["CRPSFSIZ"] = (dCParams["psfsiz"], "Astroscrappy psfsize value (pix)")
 	
 	# Construct the output .fits file.
 	iHDU = fits.PrimaryHDU(header=iHead)
@@ -469,7 +483,7 @@ for f in files:
 		inst = imgHead["INSTRUME"]
 		
 		# Based on the value of inst, this calls a prep_instrument function
-		detCosmicParams = instrument_prep[inst](imgFile, imgHead)
+		detCosmicParams = instrument_prep[inst](imgFile, imgHead, args.finStrucMode)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
 		crMask, cleanData = asc.detect_cosmics(
