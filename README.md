@@ -26,5 +26,3 @@ of instruments. If Astroscrappy is used, both McCully et al., and van Dokkum sho
 [van Dokkum 2001, PASP, 113, 1420](https://doi.org/10.1086/323894)
 
 v1.0.0
-
-Requires: Astropy, Astroscrappy, NumPy, SciPy
