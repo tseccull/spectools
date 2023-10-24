@@ -12,7 +12,6 @@ Support will not be provided.
 If, against all odds, the software in this repo is helpful to your project in any way, please consider citing it
 as shown in this repo's CITATION.cff file.
 
-
 ### scrap.py
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
 of Pieter van Dokkum's LA Cosmic. This script is used for detecting, masking, and cleaning cosmic ray hits in
@@ -26,3 +25,7 @@ of instruments. If Astroscrappy is used, both McCully et al., and van Dokkum sho
 [van Dokkum 2001, PASP, 113, 1420](https://doi.org/10.1086/323894)
 
 v1.0.0
+
+# License
+All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
+
