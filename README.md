@@ -7,7 +7,7 @@ Last Updated: 2023-10-24
 This is a personal collection of scripts I that use for reduction, processing, and analysis of astronomical 
 spectroscopic data. This repo is intended for storage and documentation, not distribution, so I cannot make any 
 guarantees that this software will either work, or be useful to others. Those that choose to use these scripts, 
-in whole or in part, do so at their own risk. Support will not be provided.
+in whole or in part, do so at their own risk. Support is also not guaranteed.
 
 ### scrap.py
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
