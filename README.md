@@ -13,7 +13,7 @@ If, against all odds, the software in this repo is helpful to your project in an
 as shown in this repo's CITATION.cff file.
 
 
-# scrap.py v1.0.0
+## scrap.py v1.0.0
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
 of Pieter van Dokkum's LA Cosmic. This script is used for detecting, masking, and cleaning cosmic ray hits in
 2D spectroscopic data. A modular design is intended to facilitate easy processing of data observed with a variety
