@@ -460,7 +460,7 @@ args = parser.parse_args()
 
 # List .fits files in current directory.
 #files = sorted(glob.glob('*.fits'))
-files = glob.glob('*.fits')
+files = sorted(glob.glob('*.fits'))
 
 # Create dictionary that scrap.py will use to call instrument specific data preparation functions.
 instrument_prep = {
