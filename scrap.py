@@ -33,7 +33,6 @@ import astroscrappy as asc
 import copy
 import datetime
 import glob
-import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy.optimize import least_squares
