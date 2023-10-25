@@ -1,7 +1,7 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 
 """
-scrap.py - written by T. Seccull, 2023-10-24 - v1.0.1 
+scrap.py - written by T. Seccull, 2023-10-24 - v1.0.2 
 
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LA Cosmic. A 
 	script that runs the detect_cosmics() function from Astroscrappy on supplied astronomical 

@@ -19,7 +19,7 @@ of instruments. If Astroscrappy is used, both McCully et al., and van Dokkum sho
 
 [van Dokkum 2001, PASP, 113, 1420](https://doi.org/10.1086/323894)
 
-v1.0.1
+v1.0.2
 
 Requires: [Astropy](https://www.astropy.org/), [Astroscrappy](https://doi.org/10.5281/zenodo.1482019), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)
 
