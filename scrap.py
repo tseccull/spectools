@@ -16,8 +16,7 @@ scrap.py - written by T. Seccull, 2023-10-24 - v1.0.1
 	the output file as the new quality frame in a new HDU. A gaussian psfmodel is assumed, so in 
 	detect_cosmics() psfk=None by default, and psfbeta is ignored. Other detect_cosmics() 
 	parameters are either taken directly from the fits data and headers, or they can be set 
-	optionally when scrap.py is run. Astroscrappy docs and links to citables:
-	 -> https://astroscrappy.readthedocs.io/en/latest/
+	optionally when scrap.py is run.
     
     Original paper describing LA Cosmic 
 		van Dokkum 2001, PASP, 113, 1420 - https://doi.org/10.1086/323894
