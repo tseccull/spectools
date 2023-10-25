@@ -304,8 +304,8 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	Args:
 		fileName (str)           : Name of the input file
 		iFile (.fits HDU list)   : the object produced by using fits.open on the fits file
-								   currently being processed. It contains all the dataframes and 
-								   headers for the current spectrum.
+		                           currently being processed. It contains all the dataframes and 
+		                           headers for the current spectrum.
 		iHead (.fits header)     : the header of the primary header data unit in iFile
 		cMask (numpy.ndarray)    : 2D array flagging the location of cosmic ray detections
 		cleanSci (numpy.ndarray) : 2D science data array after cosmic rays have been cleaned
