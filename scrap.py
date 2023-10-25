@@ -19,7 +19,7 @@ scrap.py - written by T. Seccull, 2023-10-24 - v1.0.1
 	optionally when scrap.py is run. Astroscrappy docs and links to citables:
 	 -> https://astroscrappy.readthedocs.io/en/latest/
     
-    Original paper describing LAvCosmic 
+    Original paper describing LA Cosmic 
 		van Dokkum 2001, PASP, 113, 1420 - https://doi.org/10.1086/323894
     Astroscrappy Zenodo DOI
 		McCully et al. 2018, Astropy/Astroscrappy: v1.0.5 Zenodo Release (v1.0.5). Zenodo
