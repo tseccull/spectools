@@ -303,7 +303,7 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	
 	Args:
 		fileName (str)           : Name of the input file
-		iFile (.fits HDU list)   : the object produced by using fits.open on the fits file 
+		iFile (.fits HDU list)   : the object produced by using fits.open on the fits file
 								   currently being processed. It contains all the dataframes and 
 								   headers for the current spectrum.
 		iHead (.fits header)     : the header of the primary header data unit in iFile
