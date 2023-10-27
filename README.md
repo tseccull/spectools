@@ -1,4 +1,4 @@
-# \_-T-\_
+# spectools
 
 Developer:    Tom Seccull
 
@@ -35,6 +35,3 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
-
-\_-T-\_ looks like a pyramid to me. I couldn't think of a catchy name.
-
