@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: spectools
+message: >-
+  If you use any of these scripts in your work, please cite
+  this repository and declare which scripts were used.
+type: software
+authors:
+  - given-names: Tom
+    family-names: Seccull
+    email: tom.seccull@proton.me
+    orcid: 'https://orcid.org/0000-0001-5605-1702'
+repository-code: 'https://github.com/tseccull/spectools'
+abstract: >-
+  A collection of scripts I that use for reduction,
+  processing, and analysis of astronomical spectroscopic
+  data.
+keywords:
+  - astronomy
+  - data reduction
+  - spectroscopy
+license: GPL-3.0
+version: 23.300.1
+date-released: '2023-10-24'
