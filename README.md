@@ -14,7 +14,7 @@ Please be sure to cite these as well where necessary:
 [Astropy](https://www.astropy.org/acknowledging.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
 
 
-### scrap.py
+# scrap.py
 
 v1.0.2
 
