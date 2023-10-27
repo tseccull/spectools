@@ -11,11 +11,7 @@ scripts in this repo end up being useful in your project(s), please consider cit
 The scripts in this repo rely on a lot of other Python packages that deserve recognition if they are used.
 Please be sure to cite these as well where necessary:
 
-[Astropy](https://www.astropy.org/acknowledging.html)
-
-[NumPy](https://numpy.org/citing-numpy/)
-
-[SciPy](https://scipy.org/citing-scipy/)
+[Astropy](https://www.astropy.org/acknowledging.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
 
 
 ### scrap.py
