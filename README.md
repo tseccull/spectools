@@ -11,7 +11,7 @@ in whole or in part, do so at their own risk. Support will be very very limited.
 scripts in this repo end up being useful in your work, please consider citing the repo with the details provided
 in the CITATION.cff file.
 
-The scripts in this repo rely on a lot of other Python packages that deserve recognition if they are used.
+The scripts in this repo rely on other Python packages that deserve recognition if they are used.
 Please be sure to cite these as well where necessary:
 
 [Astropy](https://www.astropy.org/acknowledging.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
