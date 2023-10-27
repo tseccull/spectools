@@ -8,7 +8,8 @@ This is a personal collection of scripts I that use for reduction, processing, a
 spectroscopic data. This repo is intended for storage and documentation, not distribution, so I cannot make any 
 guarantees that this software will either work, or be useful to others. Those that choose to use these scripts, 
 in whole or in part, do so at their own risk. Support will be very very limited. If, against all odds, any of the
-scripts in this repo end up being useful in your project(s), please consider acknowledging their use in your work
+scripts in this repo end up being useful in your work, please consider citing the repo with the details provided
+in the CITATION.cff file.
 
 The scripts in this repo rely on a lot of other Python packages that deserve recognition if they are used.
 Please be sure to cite these as well where necessary:
