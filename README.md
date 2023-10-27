@@ -1,5 +1,7 @@
 # spectools
 
+v23.300.1
+
 Developer:    Tom Seccull
 
 This is a personal collection of scripts I that use for reduction, processing, and analysis of astronomical 
