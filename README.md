@@ -7,7 +7,7 @@ Developer:    Tom Seccull
 This is a personal collection of scripts I that use for reduction, processing, and analysis of astronomical 
 spectroscopic data. This repo is mainly intended for storage and documentation, not distribution, so I cannot make any 
 guarantees that this software will either work, or be useful to others. Those that choose to use these scripts 
-do so at their own risk. Support will be very very limited. If, against all odds, any of the scripts in this repo 
+do so at their own risk. Support may be very very limited. If, against all odds, any of the scripts in this repo 
 end up being useful in your work, please consider citing the repo with the details provided in the CITATION.cff file.
 
 The scripts in this repo rely on other Python packages that deserve recognition if they are used.
