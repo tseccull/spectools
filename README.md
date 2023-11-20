@@ -18,7 +18,7 @@ Please be sure to cite these as well where necessary:
 
 # scrap.py
 
-v1.0.2
+v1.0.3
 
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
 of Pieter van Dokkum's LA Cosmic. This script is used for detecting, masking, and cleaning cosmic ray hits in

@@ -1,10 +1,10 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 
 """
-scrap.py - written by T. Seccull, 2023-10-24 - v1.0.2 
+scrap.py - written by T. Seccull, 2023-10-24 - v1.0.3 
 
-	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LA Cosmic. A 
-	script that runs the detect_cosmics() function from Astroscrappy on supplied astronomical 
+	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LA Cosmic. 
+	This script runs the detect_cosmics() function from Astroscrappy on supplied astronomical 
 	spectroscopic data. Astroscrappy is a Python implentation of Pieter van Dokkum's LA Cosmic. 
 	Cite both Astroscrappy and LA Cosmic if used. scrap.py will assume all files in the current 
 	directory are .fits formatted 2D spectra that need their cosmic rays masked and will try to 
@@ -402,7 +402,7 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 # Parse scrap.py arguments
 parser = argparse.ArgumentParser(
 	description="Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with\
-	             Astroscrappy/LACosmic. A script that runs the detect_cosmics() function from\
+	             Astroscrappy/LACosmic. This script runs the detect_cosmics() function from\
 	             Astroscrappy on supplied astronomical spectroscopic data. Astroscrappy is a\
 	             Python implentation of Pieter van Dokkum's LACosmic. Cite both Astroscrappy and\
 	             LACosmic if used. scrap.py will assume all files in the current directory\
