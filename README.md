@@ -1,12 +1,13 @@
 # spectools
 
-v24.038.0
+v24.038.1
 
 Developer:    Tom Seccull
 
 This is a personal collection of scripts I that use for reduction, processing, and analysis of astronomical 
 spectroscopic data. I cannot make any guarantees that this software will either work, or be useful to others. Those 
-that choose to use these scripts do so at their own risk. Support from me may be limited. If, against all odds, any 
+that choose to use these scripts do so at their own risk. At very least, the shebang Python path at the top of each 
+script should be updated to match the Python path in your system. Support from me may be limited. If, against all odds, any 
 of the scripts in this repo end up being useful in your work, please consider citing the repo with the details 
 provided in the CITATION.cff file.
 
