@@ -4,7 +4,7 @@ v24.104.0
 
 Developer:    Tom Seccull
 
-This is a personal collection of scripts I that use for reduction,processing, 
+This is a personal collection of scripts I that use for reduction, processing, 
 and analysis of astronomical spectroscopic data. I cannot make any guarantees 
 that this software will either work, or be useful to others. Updates to these 
 scripts may arrive in this repo randomly and without warning. Those that 
