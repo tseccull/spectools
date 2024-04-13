@@ -1,6 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-fronge.py - written by T. Seccull, 2023-10-27 - v1.0.0
+fronge.py - written by T. Seccull, 2023-10-27 - v1.0.1
+
+    Last updated: 2024-04-13
 
 	This script is designed to act on 2D spectroscopic data where the target has been observed in
 	a sequence of offset dither patterns along the spectrographic slit. For the science frame in
