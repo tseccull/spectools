@@ -26,14 +26,14 @@ import numpy as np
 
 
 ####################################################################################################
-def save_gmos(key, fgFrame, mdFrame, oDData):
+def save_gmos(file_string, fgFrame, mdFrame, oDData):
 	"""
 	Constructs and saves a new .fits file combining the original input dataframes and headers with 
 	the defringed science frame, updated variance frame, the new fringe frame, and the fringe
 	frame's uncertainty frame.
 	
 	Args:
-		key (str)                : Keyword for the current frame (i.e. the file name with the 
+		file_string (str)                : name for the current frame (i.e. the file name with the 
 		                           ".fits" cut off the end)
 		fgFrame (numpy.ndarray)  : 2D fringe frame array
 		mdFrame (numpy.ndarray)  : 2D array of median absolute deviation (i.e. estimated 
@@ -47,7 +47,7 @@ def save_gmos(key, fgFrame, mdFrame, oDData):
 	# Open the current fits file, extract relevant data frames and metadata, combine it with the
 	# new data frames and metadata and construct a new fits HDUList object that will be written to
 	# a new .fits file.
-	with fits.open(key+".fits") as iFile:
+	with fits.open(file_string+".fits") as iFile:
 		varHead = iFile["VAR"].header
 		ogVarHead = copy.deepcopy(varHead)
 		ogVarHead["EXTNAME"] = "OG_VAR"
@@ -77,7 +77,7 @@ def save_gmos(key, fgFrame, mdFrame, oDData):
 				fName+".fits", "SCI medianed into fringe frame"
 			)
 	
-	newFile.writeto("f" + key + ".fits")
+	newFile.writeto("f" + file_string + ".fits")
 	newFile.close()
 
 
