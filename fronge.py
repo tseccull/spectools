@@ -25,23 +25,26 @@ import glob
 import numpy as np
 
 
-####################################################################################################
+###############################################################################
 def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	"""
-	Constructs and saves a new .fits file combining the original input dataframes and headers with 
-	the defringed science frame, updated variance frame, the new fringe frame, and the fringe
-	frame's uncertainty frame.
+	Constructs and saves a new .fits file combining the original input
+	dataframes and headers with the defringed science frame, updated
+	variance frame, the new fringe frame, and the fringe frame's
+	uncertainty frame.
 	
 	Args:
-		file_string (str)                : name for the current frame (i.e. the file name with the 
-		                           ".fits" cut off the end)
-		fringe_frame (numpy.ndarray)  : 2D fringe frame array
-		mad_frame (numpy.ndarray)  : 2D array of median absolute deviation (i.e. estimated 
-		                           uncertainty) values for the fringe frame array 
-		other_dither_data (list)            : list of file keywords for all the files that were median 
-		                           combined to make the fringe frame
+	 --	file_string (str) - A name for the current frame (i.e. the file
+		    name with the ".fits" cut off the end).	
+	 --	fringe_frame (numpy.ndarray) - A 2D fringe frame array.
+	 --	mad_frame (numpy.ndarray) - A 2D array of median absolute 
+		    deviation (i.e. estimated uncertainty) values for the fringe
+		    frame array.
+	 --	other_dither_data (list) - A list of file keywords for all the
+		    files that were median combined to make the fringe frame
+	
 	Returns:
-		None
+	 --	None
 	"""
 	
 	# Open the current fits file, extract relevant data frames and metadata, combine it with the
