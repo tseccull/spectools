@@ -26,7 +26,7 @@ import numpy as np
 
 
 ####################################################################################################
-def save_gmos(file_string, fgFrame, mdFrame, oDData):
+def save_gmos(file_string, fringe_frame, mdFrame, oDData):
 	"""
 	Constructs and saves a new .fits file combining the original input dataframes and headers with 
 	the defringed science frame, updated variance frame, the new fringe frame, and the fringe
@@ -35,7 +35,7 @@ def save_gmos(file_string, fgFrame, mdFrame, oDData):
 	Args:
 		file_string (str)                : name for the current frame (i.e. the file name with the 
 		                           ".fits" cut off the end)
-		fgFrame (numpy.ndarray)  : 2D fringe frame array
+		fringe_frame (numpy.ndarray)  : 2D fringe frame array
 		mdFrame (numpy.ndarray)  : 2D array of median absolute deviation (i.e. estimated 
 		                           uncertainty) values for the fringe frame array 
 		oDData (list)            : list of file keywords for all the files that were median 
@@ -52,9 +52,9 @@ def save_gmos(file_string, fgFrame, mdFrame, oDData):
 		ogVarHead = copy.deepcopy(varHead)
 		ogVarHead["EXTNAME"] = "OG_VAR"
 		iFile.append(fits.ImageHDU(copy.deepcopy(iFile["VAR"].data), header=ogVarHead))
-		iFile["SCI"].data -= fgFrame
+		iFile["SCI"].data -= fringe_frame
 		iFile["VAR"].data += (mdFrame*mdFrame)
-		iFile.append(fits.ImageHDU(fgFrame))
+		iFile.append(fits.ImageHDU(fringe_frame))
 		iFile[-1].header = copy.deepcopy(iFile["OG_SCI"].header)
 		iFile[-1].header["EXTNAME"] = "FRINGE_FRAME"
 		iFile.append(fits.ImageHDU(mdFrame))
