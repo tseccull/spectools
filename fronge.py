@@ -26,7 +26,7 @@ import numpy as np
 
 
 ####################################################################################################
-def save_gmos(file_string, fringe_frame, mad_frame, oDData):
+def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	"""
 	Constructs and saves a new .fits file combining the original input dataframes and headers with 
 	the defringed science frame, updated variance frame, the new fringe frame, and the fringe
@@ -38,7 +38,7 @@ def save_gmos(file_string, fringe_frame, mad_frame, oDData):
 		fringe_frame (numpy.ndarray)  : 2D fringe frame array
 		mad_frame (numpy.ndarray)  : 2D array of median absolute deviation (i.e. estimated 
 		                           uncertainty) values for the fringe frame array 
-		oDData (list)            : list of file keywords for all the files that were median 
+		other_dither_data (list)            : list of file keywords for all the files that were median 
 		                           combined to make the fringe frame
 	Returns:
 		None
@@ -72,7 +72,7 @@ def save_gmos(file_string, fringe_frame, mad_frame, oDData):
 			datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
 			"UT timestamp for Fringeframe subtraction"
 		)
-		for i, fName in enumerate(oDData):
+		for i, fName in enumerate(other_dither_data):
 			newFile[frame].header["FRNGIN"+str(i+1)] = (
 				fName+".fits", "SCI medianed into fringe frame"
 			)
