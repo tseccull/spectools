@@ -59,9 +59,9 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	# .fits file.
 	with fits.open(file_string+".fits") as in_file_hdu_list:
 		variance_frame_header = in_file_hdu_list["VAR"].header
-		ogVarHead = copy.deepcopy(variance_frame_header)
-		ogVarHead["EXTNAME"] = "OG_VAR"
-		in_file_hdu_list.append(fits.ImageHDU(copy.deepcopy(in_file_hdu_list["VAR"].data), header=ogVarHead))
+		original_variance_frame_header = copy.deepcopy(variance_frame_header)
+		original_variance_frame_header["EXTNAME"] = "OG_VAR"
+		in_file_hdu_list.append(fits.ImageHDU(copy.deepcopy(in_file_hdu_list["VAR"].data), header=original_variance_frame_header))
 		in_file_hdu_list["SCI"].data -= fringe_frame
 		in_file_hdu_list["VAR"].data += (mad_frame*mad_frame)
 		in_file_hdu_list.append(fits.ImageHDU(fringe_frame))
