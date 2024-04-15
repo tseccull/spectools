@@ -164,12 +164,12 @@ for f in files:
 		# Get science frame and header metadata.
 		primary_header = image_file[0].header
 		inst = primary_header["INSTRUME"]
-		sciFrame = image_file[instrument_data_hdu[inst]].data
+		science_frame = image_file[instrument_data_hdu[inst]].data
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
-		medBackground = np.tile(np.nanmedian(sciFrame, axis=0), (np.shape(sciFrame)[0], 1))
-		data_frames[f[:-5]] = sciFrame - medBackground
+		medBackground = np.tile(np.nanmedian(science_frame, axis=0), (np.shape(science_frame)[0], 1))
+		data_frames[f[:-5]] = science_frame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
 		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[inst]], 1)
