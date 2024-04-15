@@ -166,19 +166,23 @@ for file_name in files:
 		instrument = primary_header["INSTRUME"]
 		science_frame = image_file[instrument_data_hdu[instrument]].data
 		
-		# Subtract median spatial background from the science frame to
-		# remove sky emissionlines.
-		background_1d = np.nanmedian(science_frame, axis=0)
-		background_2d = np.tile(background_1d, (np.shape(science_frame)[0], 1))
-		data_frames[file_name[:-5]] = science_frame - background_2d
-		
-		# Save the offset of the current science frame along the slit.
-		dither_points[file_name[:-5]] = round(primary_header[instrument_offset_keyword[instrument]], 1)
+	# Subtract median spatial background from the science frame to
+	# remove sky emissionlines.
+	background_1d = np.nanmedian(science_frame, axis=0)
+	background_2d = np.tile(background_1d, (np.shape(science_frame)[0], 1))
+	data_frames[file_name[:-5]] = science_frame - background_2d
+	
+	# Save the offset of the current science frame along the slit.
+	dither_points[file_name[:-5]] = round(
+		primary_header[instrument_offset_keyword[instrument]], 1
+	)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
 all_dithers = []
-[all_dithers.append(x) for x in list(dither_points.values()) if x not in all_dithers]
+for dither_point_value in list(dither_points.values()):
+	if dither_point_value not in all_dithers:
+		all_dithers.append(dither_point_value)
 
 # For each science frame:
 for k in data_frames:
@@ -188,7 +192,9 @@ for k in data_frames:
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
-	other_dither_data = [x for x in data_frames if dither_points[x] in other_dither_points[k]]
+	other_dither_data = [
+		x for x in data_frames if dither_points[x] in other_dither_points[k]
+	]
 	other_dither_frames = np.array([data_frames[x] for x in other_dither_data])
 	
 	# Create the fringe frame by median combining the frames in the
