@@ -159,8 +159,8 @@ other_dither_points = {}
 
 # Loop through input files, collecting the relevant data frames and
 # metadata needed for creation of a fringe frame for each science frame.
-for f in files:
-	with fits.open(f) as image_file:
+for file_name in files:
+	with fits.open(file_name) as image_file:
 		# Get science frame and header metadata.
 		primary_header = image_file[0].header
 		instrument = primary_header["INSTRUME"]
@@ -168,11 +168,12 @@ for f in files:
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
-		background = np.tile(np.nanmedian(science_frame, axis=0), (np.shape(science_frame)[0], 1))
-		data_frames[f[:-5]] = science_frame - background
+		background_1d = np.nanmedian(science_frame, axis=0)
+		background_2d = np.tile(background_1d, (np.shape(science_frame)[0], 1))
+		data_frames[file_name[:-5]] = science_frame - background_2d
 		
 		# Save the offset of the current science frame along the slit.
-		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[instrument]], 1)
+		dither_points[file_name[:-5]] = round(primary_header[instrument_offset_keyword[instrument]], 1)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
