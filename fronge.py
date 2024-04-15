@@ -150,7 +150,7 @@ instrument_save = {
 # All these dictionaries use the same keywords, but point to different
 # variables. In all cases the keywords are just the name of the .fits
 # file with the ".fits" removed from the end.
-dataFrames = {}        # Dictionary of 2D science frames.
+data_frames = {}        # Dictionary of 2D science frames.
 ditherPoints  = {}     # Dictionary of offset values along the slit.
 
 # Dictionary containing a list of all other offset values relative to
@@ -169,7 +169,7 @@ for f in files:
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
 		medBackground = np.tile(np.nanmedian(sciFrame, axis=0), (np.shape(sciFrame)[0], 1))
-		dataFrames[f[:-5]] = sciFrame - medBackground
+		data_frames[f[:-5]] = sciFrame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
 		ditherPoints[f[:-5]] = round(imgHead[instrument_offset_keyword[inst]], 1)
@@ -180,15 +180,15 @@ allDithers = []
 [allDithers.append(x) for x in list(ditherPoints.values()) if x not in allDithers]
 
 # For each science frame:
-for k in dataFrames:
+for k in data_frames:
 	# Get the dither points in all dither points that aren't the dither
 	# value of the current frame.
 	otherDitherPoints[k] = [x for x in allDithers if x!=ditherPoints[k]]
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
-	otherDitherData = [x for x in dataFrames if ditherPoints[x] in otherDitherPoints[k]]
-	otherDitherFrames = np.array([dataFrames[x] for x in otherDitherData])
+	otherDitherData = [x for x in data_frames if ditherPoints[x] in otherDitherPoints[k]]
+	otherDitherFrames = np.array([data_frames[x] for x in otherDitherData])
 	
 	# Create the fringe frame by median combining the frames in the
 	# otherDitherFrames
