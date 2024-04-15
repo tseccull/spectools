@@ -188,14 +188,14 @@ for k in data_frames:
 	# Collect all science frames with dithers other than that of the
 	# current frame.
 	other_dither_data = [x for x in data_frames if dither_points[x] in other_dither_points[k]]
-	otherDitherFrames = np.array([data_frames[x] for x in other_dither_data])
+	other_dither_frames = np.array([data_frames[x] for x in other_dither_data])
 	
 	# Create the fringe frame by median combining the frames in the
-	# otherDitherFrames
-	fringeFrame = np.nanmedian(otherDitherFrames, axis=0)
+	# other_dither_frames
+	fringeFrame = np.nanmedian(other_dither_frames, axis=0)
 	# Create the uncertainty frame of the fringe frame by estimating its
 	# median absolute deviation
-	madDitherFrames = np.abs(otherDitherFrames - fringeFrame)
+	madDitherFrames = np.abs(other_dither_frames - fringeFrame)
 	madFrame = np.nanmedian(madDitherFrames, axis=0)
 	
 	# Subtract the fringe frame from the science frame and save the
