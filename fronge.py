@@ -160,11 +160,11 @@ other_dither_points = {}
 # Loop through input files, collecting the relevant data frames and
 # metadata needed for creation of a fringe frame for each science frame.
 for f in files:
-	with fits.open(f) as imgFile:
+	with fits.open(f) as image_file:
 		# Get science frame and header metadata.
-		imgHead = imgFile[0].header
+		imgHead = image_file[0].header
 		inst = imgHead["INSTRUME"]
-		sciFrame = imgFile[instrument_data_hdu[inst]].data
+		sciFrame = image_file[instrument_data_hdu[inst]].data
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
