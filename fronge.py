@@ -97,24 +97,28 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	new_file_hdu_list.close()
 
 
-####################################################################################################
-#### SCRIPT STARTS HERE # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #### 
-####################################################################################################
+###############################################################################
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
+###############################################################################
 
 # Parse fronge.py help message.
 parser = argparse.ArgumentParser(
-	description="This script is designed to act on 2D spectroscopic data where the target has been\
-	observed in a sequence of offset dither patterns along the spectrographic slit. For the\
-	science frame in each file, fronge.py will search for all science frames that have a different\
-	dither position. The median of these science frames is taken to construct a fringe frame that\
-	is then subtracted from the science frame currently being processed. The uncertainties of the\
-	values in the fringe frame are estimated by taking the median absolute deviation of the set of\
-	values median-combined into each pixel of the fringe frame. fringe.py will save a new file for\
-	each that it processes that will contain the fringe corrected science frame, updated\
-	uncertainty frame, the fringe frame, and the fringe frame's uncertainty frame. fringe.py will\
-	assume that all .fits files in the current directory are intended for processing, and will\
-	attempt to fringe correct each one. This script has no optional arguments except -h, which\
-	will show this description."
+	description="This script is designed to act on 2D spectroscopic\
+	data where the target has been observed in a sequence of offset\
+	dither patterns along the spectrographic slit. For the science\
+	frame in each file, fronge.py will search for all science frames\
+	that have a different dither position. The median of these science\
+	frames is taken to construct a fringe frame that is then subtracted\
+	from the science frame currently being processed. The uncertainties\
+	of the values in the fringe frame are estimated by taking the\
+	median absolute deviation of the set of values median-combined into\
+	each pixel of the fringe frame. fringe.py will save a new file for\
+	each that it processes that will contain the fringe corrected\
+	science frame, updated uncertainty frame, the fringe frame, and the\
+	fringe frame's uncertainty frame. fringe.py will assume that all\
+	.fits files in the current directory are intended for processing,\
+	and will attempt to fringe correct each one. This script has no\
+	optional arguments except -h, which will show this description."
 )
 args = parser.parse_args()
 
