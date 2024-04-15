@@ -176,14 +176,14 @@ for f in files:
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
-allDithers = []
-[allDithers.append(x) for x in list(dither_points.values()) if x not in allDithers]
+all_dithers = []
+[all_dithers.append(x) for x in list(dither_points.values()) if x not in all_dithers]
 
 # For each science frame:
 for k in data_frames:
 	# Get the dither points in all dither points that aren't the dither
 	# value of the current frame.
-	other_dither_points[k] = [x for x in allDithers if x!=dither_points[k]]
+	other_dither_points[k] = [x for x in all_dithers if x!=dither_points[k]]
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
