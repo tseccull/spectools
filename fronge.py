@@ -53,9 +53,10 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	 --	None
 	"""
 	
-	# Open the current fits file, extract relevant data frames and metadata, combine it with the
-	# new data frames and metadata and construct a new fits HDUList object that will be written to
-	# a new .fits file.
+	# Open the current fits file, extract relevant data frames and 
+	# metadata, combine it with the new data frames and metadata and
+	# construct a new fits HDUList object that will be written to a new
+	# .fits file.
 	with fits.open(file_string+".fits") as iFile:
 		varHead = iFile["VAR"].header
 		ogVarHead = copy.deepcopy(varHead)
