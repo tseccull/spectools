@@ -58,8 +58,8 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	# construct a new fits HDUList object that will be written to a new
 	# .fits file.
 	with fits.open(file_string+".fits") as in_file:
-		varHead = in_file["VAR"].header
-		ogVarHead = copy.deepcopy(varHead)
+		variance_frame_header = in_file["VAR"].header
+		ogVarHead = copy.deepcopy(variance_frame_header)
 		ogVarHead["EXTNAME"] = "OG_VAR"
 		in_file.append(fits.ImageHDU(copy.deepcopy(in_file["VAR"].data), header=ogVarHead))
 		in_file["SCI"].data -= fringe_frame
