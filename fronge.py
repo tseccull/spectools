@@ -155,7 +155,7 @@ dither_points  = {}     # Dictionary of offset values along the slit.
 
 # Dictionary containing a list of all other offset values relative to
 # that of the current file.
-otherDitherPoints = {}
+other_dither_points = {}
 
 # Loop through input files, collecting the relevant data frames and
 # metadata needed for creation of a fringe frame for each science frame.
@@ -183,11 +183,11 @@ allDithers = []
 for k in data_frames:
 	# Get the dither points in all dither points that aren't the dither
 	# value of the current frame.
-	otherDitherPoints[k] = [x for x in allDithers if x!=dither_points[k]]
+	other_dither_points[k] = [x for x in allDithers if x!=dither_points[k]]
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
-	otherDitherData = [x for x in data_frames if dither_points[x] in otherDitherPoints[k]]
+	otherDitherData = [x for x in data_frames if dither_points[x] in other_dither_points[k]]
 	otherDitherFrames = np.array([data_frames[x] for x in otherDitherData])
 	
 	# Create the fringe frame by median combining the frames in the
