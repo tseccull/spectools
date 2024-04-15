@@ -168,8 +168,8 @@ for f in files:
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
-		medBackground = np.tile(np.nanmedian(science_frame, axis=0), (np.shape(science_frame)[0], 1))
-		data_frames[f[:-5]] = science_frame - medBackground
+		background = np.tile(np.nanmedian(science_frame, axis=0), (np.shape(science_frame)[0], 1))
+		data_frames[f[:-5]] = science_frame - background
 		
 		# Save the offset of the current science frame along the slit.
 		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[instrument]], 1)
