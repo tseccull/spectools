@@ -53,48 +53,48 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	 --	None
 	"""
 	
-	# Open the current fits file, extract relevant data frames and 
-	# metadata, combine it with the new data frames and metadata and
-	# construct a new fits HDUList object that will be written to a new
-	# .fits file.
 	with fits.open(file_string+".fits") as in_file_hdu_list:
-		variance_frame_header = in_file_hdu_list["VAR"].header
-		original_variance_frame_header = copy.deepcopy(variance_frame_header)
-		original_variance_frame_header["EXTNAME"] = "OG_VAR"
-		original_variance_hdu = fits.ImageHDU(
-			copy.deepcopy(in_file_hdu_list["VAR"].data), 
-			header=original_variance_frame_header
-		)
-		in_file_hdu_list.append(original_variance_hdu)
-		in_file_hdu_list["SCI"].data -= fringe_frame
-		in_file_hdu_list["VAR"].data += (mad_frame*mad_frame)
-		in_file_hdu_list.append(fits.ImageHDU(fringe_frame))
-		in_file_hdu_list[-1].header = copy.deepcopy(
-			in_file_hdu_list["OG_SCI"].header
-		)
-		in_file_hdu_list[-1].header["EXTNAME"] = "FRINGE_FRAME"
-		in_file_hdu_list.append(fits.ImageHDU(mad_frame))
-		in_file_hdu_list[-1].header = copy.deepcopy(in_file_hdu_list["OG_SCI"].header)
-		in_file_hdu_list[-1].header["EXTNAME"] = "MAD_FRINGE_FRAME"
-		newFile = copy.deepcopy(in_file_hdu_list)
+		new_file_hdu_list = copy.deepcopy(in_file_hdu_list)
 	
-		
-	newFile[0].header["FRNGDATE"] = (datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
+	extensions = []
+	for hdu in new_file_hdu_list:
+		if "XTENSION" in hdu.header:
+			extensions.append(hdu.header["EXTNAME"])
+			
+	if "OG_SCI" not in extensions:
+		new_file_hdu_list.append(copy.deepcopy(new_file_hdu_list["SCI"]))
+		new_file_hdu_list[-1].header["EXTNAME"] = "OG_SCI"
+	
+	if "OG_VAR" not in extensions:
+		new_file_hdu_list.append(copy.deepcopy(new_file_hdu_list["VAR"]))
+		new_file_hdu_list[-1].header["EXTNAME"] = "OG_VAR"
+	
+	new_file_hdu_list["SCI"].data -= fringe_frame
+	new_file_hdu_list.append(fits.ImageHDU(fringe_frame))
+	new_file_hdu_list[-1].header["EXTNAME"] = "FRINGE_FRAME"
+	
+	new_file_hdu_list["VAR"].data += (mad_frame*mad_frame)
+	new_file_hdu_list.append(fits.ImageHDU(mad_frame))
+	new_file_hdu_list[-1].header["EXTNAME"] = "MAD_FRINGE_FRAME"
+	
+	new_file_hdu_list[0].header["FRNGDATE"] = (
+		datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
 		"UT timestamp for fringe frame subtraction"
 	)
-	fFrames = ["SCI", "VAR", "FRINGE_FRAME", "MAD_FRINGE_FRAME"]
-	for frame in fFrames:
-		newFile[frame].header["FRNGDATE"] = (
+	
+	frame_list = ["SCI", "VAR", "FRINGE_FRAME", "MAD_FRINGE_FRAME"]
+	for frame in frame_list:
+		new_file_hdu_list[frame].header["FRNGDATE"] = (
 			datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
 			"UT timestamp for Fringeframe subtraction"
 		)
-		for i, fName in enumerate(other_dither_data):
-			newFile[frame].header["FRNGIN"+str(i+1)] = (
-				fName+".fits", "SCI medianed into fringe frame"
+		for i, file_name in enumerate(other_dither_data):
+			new_file_hdu_list[frame].header["FRNGIN"+str(i+1)] = (
+				file_name+".fits", "SCI medianed into fringe frame"
 			)
 	
-	newFile.writeto("f" + file_string + ".fits")
-	newFile.close()
+	new_file_hdu_list.writeto("f" + file_string + ".fits")
+	new_file_hdu_list.close()
 
 
 ####################################################################################################
