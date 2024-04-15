@@ -18,7 +18,7 @@ fronge.py - written by T. Seccull, 2023-10-27 - v1.0.2
 	updated uncertainty frame, the fringe frame, and the fringe frame's
 	uncertainty frame. fringe.py will assume that all .fits files in the
 	current directory are intended for processing, and will attempt to
-	fringe correct each one. This script has not optional arguments
+	fringe correct each one. This script has no optional arguments
 	except -h, which will show this description.
 """
 
