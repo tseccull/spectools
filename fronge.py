@@ -125,34 +125,40 @@ args = parser.parse_args()
 # Grab all fits files in the current directory.
 files = sorted(glob.glob("*.fits"))
 
-# Set the science extension name in the headers of fits files from different instruments.
+# Set the science extension name in the headers of fits files from
+# different instruments.
 instDataHDU = {
 	"GMOS-N": "SCI",
 	"GMOS-S": "SCI"
 }
 
-# Set the keyword that notes the offset in arcseconds along the slit relative to the zero position
-# for data observed with different instruments.
+# Set the keyword that notes the offset in arcseconds along the slit
+# relative to the zero position for data observed with different
+# instruments.
 instOffsetKeyword = {
 	"GMOS-N": "YOFFSET",
 	"GMOS-S": "YOFFSET"
 }
 
-# Create dictionary that scrap.py will use to call instrument specific data saving functions.
+# Create dictionary that scrap.py will use to call instrument specific
+# data saving functions.
 instrument_save = {
 	"GMOS-N": save_gmos,
 	"GMOS-S": save_gmos
 }
 
-# All these dictionaries use the same keywords, but point to different variables. In all cases the
-# keywords are just the name of the .fits file with the ".fits" removed from the end.
-dataFrames = {}        # Dictionary of 2D science frames
+# All these dictionaries use the same keywords, but point to different
+# variables. In all cases the keywords are just the name of the .fits
+# file with the ".fits" removed from the end.
+dataFrames = {}        # Dictionary of 2D science frames.
 ditherPoints  = {}     # Dictionary of offset values along the slit.
-otherDitherPoints = {} # Dictionary containing a list of all other offset values relative to that
-                       # of the current file.
 
-# Loop through input files, collecting the relevant data frames and metadata needed for creation of
-# a fringe frame for each science frame.
+# Dictionary containing a list of all other offset values relative to
+# that of the current file.
+otherDitherPoints = {}
+
+# Loop through input files, collecting the relevant data frames and
+# metadata needed for creation of a fringe frame for each science frame.
 for f in files:
 	with fits.open(f) as imgFile:
 		# Get science frame and header metadata.
@@ -160,32 +166,38 @@ for f in files:
 		inst = imgHead["INSTRUME"]
 		sciFrame = imgFile[instDataHDU[inst]].data
 		
-		# Subtract median spatial background from the science frame to remove sky emissionlines.
+		# Subtract median spatial background from the science frame to
+		# remove sky emissionlines.
 		medBackground = np.tile(np.nanmedian(sciFrame, axis=0), (np.shape(sciFrame)[0], 1))
 		dataFrames[f[:-5]] = sciFrame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
 		ditherPoints[f[:-5]] = round(imgHead[instOffsetKeyword[inst]], 1)
 
-# Make a list containing all dither positions along the slit represented by the current file list.
+# Make a list containing all dither positions along the slit represented
+# by the current file list.
 allDithers = []
 [allDithers.append(x) for x in list(ditherPoints.values()) if x not in allDithers]
 
 # For each science frame:
 for k in dataFrames:
-	# Get the dither points in all dither points that aren't the dither value of the current frame.
+	# Get the dither points in all dither points that aren't the dither
+	# value of the current frame.
 	otherDitherPoints[k] = [x for x in allDithers if x!=ditherPoints[k]]
 	
-	# Collect all science frames with dithers other than that of the current frame.
+	# Collect all science frames with dithers other than that of the
+	# current frame.
 	otherDitherData = [x for x in dataFrames if ditherPoints[x] in otherDitherPoints[k]]
 	otherDitherFrames = np.array([dataFrames[x] for x in otherDitherData])
 	
-	# Create the fringe frame by median combining the frames in the otherDitherFrames
+	# Create the fringe frame by median combining the frames in the
+	# otherDitherFrames
 	fringeFrame = np.nanmedian(otherDitherFrames, axis=0)
-	# Create the uncertainty frame of the fringe frame by estimating its median absolute deviation
+	# Create the uncertainty frame of the fringe frame by estimating its
+	# median absolute deviation
 	madDitherFrames = np.abs(otherDitherFrames - fringeFrame)
 	madFrame = np.nanmedian(madDitherFrames, axis=0)
 	
-	# Subtract the fringe frame from the science frame and save the fringe-corrected data.	
+	# Subtract the fringe frame from the science frame and save the
+	# fringe-corrected data.	
 	instrument_save[inst](k, fringeFrame, madFrame, otherDitherData)
-	
