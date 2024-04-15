@@ -187,8 +187,8 @@ for k in data_frames:
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
-	otherDitherData = [x for x in data_frames if dither_points[x] in other_dither_points[k]]
-	otherDitherFrames = np.array([data_frames[x] for x in otherDitherData])
+	other_dither_data = [x for x in data_frames if dither_points[x] in other_dither_points[k]]
+	otherDitherFrames = np.array([data_frames[x] for x in other_dither_data])
 	
 	# Create the fringe frame by median combining the frames in the
 	# otherDitherFrames
@@ -200,4 +200,4 @@ for k in data_frames:
 	
 	# Subtract the fringe frame from the science frame and save the
 	# fringe-corrected data.	
-	instrument_save[instrument](k, fringeFrame, madFrame, otherDitherData)
+	instrument_save[instrument](k, fringeFrame, madFrame, other_dither_data)
