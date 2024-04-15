@@ -57,20 +57,20 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	# metadata, combine it with the new data frames and metadata and
 	# construct a new fits HDUList object that will be written to a new
 	# .fits file.
-	with fits.open(file_string+".fits") as iFile:
-		varHead = iFile["VAR"].header
+	with fits.open(file_string+".fits") as in_file:
+		varHead = in_file["VAR"].header
 		ogVarHead = copy.deepcopy(varHead)
 		ogVarHead["EXTNAME"] = "OG_VAR"
-		iFile.append(fits.ImageHDU(copy.deepcopy(iFile["VAR"].data), header=ogVarHead))
-		iFile["SCI"].data -= fringe_frame
-		iFile["VAR"].data += (mad_frame*mad_frame)
-		iFile.append(fits.ImageHDU(fringe_frame))
-		iFile[-1].header = copy.deepcopy(iFile["OG_SCI"].header)
-		iFile[-1].header["EXTNAME"] = "FRINGE_FRAME"
-		iFile.append(fits.ImageHDU(mad_frame))
-		iFile[-1].header = copy.deepcopy(iFile["OG_SCI"].header)
-		iFile[-1].header["EXTNAME"] = "MAD_FRINGE_FRAME"
-		newFile = copy.deepcopy(iFile)
+		in_file.append(fits.ImageHDU(copy.deepcopy(in_file["VAR"].data), header=ogVarHead))
+		in_file["SCI"].data -= fringe_frame
+		in_file["VAR"].data += (mad_frame*mad_frame)
+		in_file.append(fits.ImageHDU(fringe_frame))
+		in_file[-1].header = copy.deepcopy(in_file["OG_SCI"].header)
+		in_file[-1].header["EXTNAME"] = "FRINGE_FRAME"
+		in_file.append(fits.ImageHDU(mad_frame))
+		in_file[-1].header = copy.deepcopy(in_file["OG_SCI"].header)
+		in_file[-1].header["EXTNAME"] = "MAD_FRINGE_FRAME"
+		newFile = copy.deepcopy(in_file)
 	
 		
 	newFile[0].header["FRNGDATE"] = (datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
