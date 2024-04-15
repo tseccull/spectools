@@ -151,7 +151,7 @@ instrument_save = {
 # variables. In all cases the keywords are just the name of the .fits
 # file with the ".fits" removed from the end.
 data_frames = {}        # Dictionary of 2D science frames.
-ditherPoints  = {}     # Dictionary of offset values along the slit.
+dither_points  = {}     # Dictionary of offset values along the slit.
 
 # Dictionary containing a list of all other offset values relative to
 # that of the current file.
@@ -172,22 +172,22 @@ for f in files:
 		data_frames[f[:-5]] = sciFrame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
-		ditherPoints[f[:-5]] = round(imgHead[instrument_offset_keyword[inst]], 1)
+		dither_points[f[:-5]] = round(imgHead[instrument_offset_keyword[inst]], 1)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
 allDithers = []
-[allDithers.append(x) for x in list(ditherPoints.values()) if x not in allDithers]
+[allDithers.append(x) for x in list(dither_points.values()) if x not in allDithers]
 
 # For each science frame:
 for k in data_frames:
 	# Get the dither points in all dither points that aren't the dither
 	# value of the current frame.
-	otherDitherPoints[k] = [x for x in allDithers if x!=ditherPoints[k]]
+	otherDitherPoints[k] = [x for x in allDithers if x!=dither_points[k]]
 	
 	# Collect all science frames with dithers other than that of the
 	# current frame.
-	otherDitherData = [x for x in data_frames if ditherPoints[x] in otherDitherPoints[k]]
+	otherDitherData = [x for x in data_frames if dither_points[x] in otherDitherPoints[k]]
 	otherDitherFrames = np.array([data_frames[x] for x in otherDitherData])
 	
 	# Create the fringe frame by median combining the frames in the
