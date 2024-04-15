@@ -127,7 +127,7 @@ files = sorted(glob.glob("*.fits"))
 
 # Set the science extension name in the headers of fits files from
 # different instruments.
-instDataHDU = {
+instrument_data_hdu = {
 	"GMOS-N": "SCI",
 	"GMOS-S": "SCI"
 }
@@ -164,7 +164,7 @@ for f in files:
 		# Get science frame and header metadata.
 		imgHead = imgFile[0].header
 		inst = imgHead["INSTRUME"]
-		sciFrame = imgFile[instDataHDU[inst]].data
+		sciFrame = imgFile[instrument_data_hdu[inst]].data
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
