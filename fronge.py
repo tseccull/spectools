@@ -196,8 +196,8 @@ for k in data_frames:
 	# Create the uncertainty frame of the fringe frame by estimating its
 	# median absolute deviation
 	mad_dither_frames = np.abs(other_dither_frames - fringe_frame)
-	madFrame = np.nanmedian(mad_dither_frames, axis=0)
+	mad_frame = np.nanmedian(mad_dither_frames, axis=0)
 	
 	# Subtract the fringe frame from the science frame and save the
 	# fringe-corrected data.	
-	instrument_save[instrument](k, fringe_frame, madFrame, other_dither_data)
+	instrument_save[instrument](k, fringe_frame, mad_frame, other_dither_data)
