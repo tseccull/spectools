@@ -1,6 +1,6 @@
 # spectools
 
-v24.104.0
+v24.106.0
 
 Developer:    Tom Seccull
 
@@ -43,7 +43,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # fronge.py
 
-v1.0.1
+v1.0.2
 
 This script is designed to correct fringing in 2D spectroscopic data by creating a median fringe frame and subtracting
 it from science data. A modular design is intended to facilitate easy processing of data observed with a variety
