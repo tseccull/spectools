@@ -69,7 +69,9 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 		in_file_hdu_list["SCI"].data -= fringe_frame
 		in_file_hdu_list["VAR"].data += (mad_frame*mad_frame)
 		in_file_hdu_list.append(fits.ImageHDU(fringe_frame))
-		in_file_hdu_list[-1].header = copy.deepcopy(in_file_hdu_list["OG_SCI"].header)
+		in_file_hdu_list[-1].header = copy.deepcopy(
+			in_file_hdu_list["OG_SCI"].header
+		)
 		in_file_hdu_list[-1].header["EXTNAME"] = "FRINGE_FRAME"
 		in_file_hdu_list.append(fits.ImageHDU(mad_frame))
 		in_file_hdu_list[-1].header = copy.deepcopy(in_file_hdu_list["OG_SCI"].header)
