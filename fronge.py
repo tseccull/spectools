@@ -135,7 +135,7 @@ instrument_data_hdu = {
 # Set the keyword that notes the offset in arcseconds along the slit
 # relative to the zero position for data observed with different
 # instruments.
-instOffsetKeyword = {
+instrument_offset_keyword = {
 	"GMOS-N": "YOFFSET",
 	"GMOS-S": "YOFFSET"
 }
@@ -172,7 +172,7 @@ for f in files:
 		dataFrames[f[:-5]] = sciFrame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
-		ditherPoints[f[:-5]] = round(imgHead[instOffsetKeyword[inst]], 1)
+		ditherPoints[f[:-5]] = round(imgHead[instrument_offset_keyword[inst]], 1)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
