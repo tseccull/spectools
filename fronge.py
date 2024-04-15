@@ -163,8 +163,8 @@ for f in files:
 	with fits.open(f) as image_file:
 		# Get science frame and header metadata.
 		primary_header = image_file[0].header
-		inst = primary_header["INSTRUME"]
-		science_frame = image_file[instrument_data_hdu[inst]].data
+		instrument = primary_header["INSTRUME"]
+		science_frame = image_file[instrument_data_hdu[instrument]].data
 		
 		# Subtract median spatial background from the science frame to
 		# remove sky emissionlines.
@@ -172,7 +172,7 @@ for f in files:
 		data_frames[f[:-5]] = science_frame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
-		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[inst]], 1)
+		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[instrument]], 1)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
@@ -200,4 +200,4 @@ for k in data_frames:
 	
 	# Subtract the fringe frame from the science frame and save the
 	# fringe-corrected data.	
-	instrument_save[inst](k, fringeFrame, madFrame, otherDitherData)
+	instrument_save[instrument](k, fringeFrame, madFrame, otherDitherData)
