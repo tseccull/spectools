@@ -162,8 +162,8 @@ other_dither_points = {}
 for f in files:
 	with fits.open(f) as image_file:
 		# Get science frame and header metadata.
-		imgHead = image_file[0].header
-		inst = imgHead["INSTRUME"]
+		primary_header = image_file[0].header
+		inst = primary_header["INSTRUME"]
 		sciFrame = image_file[instrument_data_hdu[inst]].data
 		
 		# Subtract median spatial background from the science frame to
@@ -172,7 +172,7 @@ for f in files:
 		data_frames[f[:-5]] = sciFrame - medBackground
 		
 		# Save the offset of the current science frame along the slit.
-		dither_points[f[:-5]] = round(imgHead[instrument_offset_keyword[inst]], 1)
+		dither_points[f[:-5]] = round(primary_header[instrument_offset_keyword[inst]], 1)
 
 # Make a list containing all dither positions along the slit represented
 # by the current file list.
