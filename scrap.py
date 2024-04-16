@@ -305,7 +305,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 				seeing = float(iq_tab[int(i[2])][int(iq_dict[iq])])
 				break
 	
-		pixres = primary_header["PIXSCALE"]
+		pixel_resolution = primary_header["PIXSCALE"]
 		
 		# Measure the FWHM of the spectrum's spatial profile. A Moffat
 		# profile is fitted to the median spatial profile to get an
@@ -327,7 +327,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			range(np.shape(in_file["SCI"].data)[0]),
 			medProfile * datascale,
 			seeing,
-			pixres,
+			pixel_resolution,
 			50
 		)
 		
