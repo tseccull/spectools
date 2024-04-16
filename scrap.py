@@ -175,49 +175,66 @@ def moffat_resid(x, spatial_axis, data):
     return residual
 
  
-####################################################################################################
+###############################################################################
 def prep_gmos(iFile, iHead, fSMode):
 	"""
-	Combines all necessary data for detect_cosmics() into a dictionary for a spectrum observed with 
-	GMOS-N or GMOS-S.
+	Combines all necessary data for detect_cosmics() into a dictionary
+	for a spectrum observed with GMOS-N or GMOS-S.
 	
 	Args:
-		iFile (.fits HDU list): the object produced by using fits.open on the fits file currently 
-		                        being processed. It contains all the dataframes and headers for the 
-		                        current spectrum.
-		iHead (.fits header)  : the header of the primary header data unit in iFile
-		fSMode (str)          : string keyword to tell prep_gmos how detect_cosmics() will
-		                        generate the fine structure image.
+	 -- iFile (.fits HDU list)
+			The object produced by using fits.open on the fits file
+			currently being processed. It contains all the dataframes
+			and headers for the current spectrum.
+	 -- iHead (.fits header)
+			The header of the primary header data unit in iFile
+	 -- fSMode (str)
+			A string keyword to tell prep_gmos how detect_cosmics() will
+		    generate the fine structure image.
 		
 	Returns:
-		detCosmicsInput (dict): dictionary of dataframes and parameters collected from the input 
-		                        file or calculated from it. Items in this dictionary are all inputs
-		                        for detect_cosmics():
-		indata (numpy.ndarray): the 2D science dataframe. The value of each pixel is in 
-		                        Analog-to-Digital Units (ADU)
-		inqual (numpy.ndarray): 2D frame flagging bad pixels in the science and variance frames
-		inbkgd (numpy.ndarray): estimate of the 2D background in the science frame. Units are ADUs
-		invari (numpy.ndarray): 2D frame containing the variance of each pixel in the science 
-		                        frame; units are ADU^2
-		adgain (float)        : average CCD detector gain for this data in e-/ADU
-		readns (float)        : average detector readout noise e- rms
-		pmodel (str)          : notes the Point Spread Function model adopted by detect_cosmics() 
-		                        when building the fine structure image. "gaussy" is used here 
-		                        because there is no option for a directional Moffat profile. 
-		fwhm (float)          : Full Width at Half Maximum measured for the median spatial profile 
-		                        of the spectrum. Units are pixels.
-		psfsiz (int)          : size of the PSF model in pixels that will be convolved with the 
-		                        data by detect_cosmics() to produce the fine structure model. This 
-		                        value must be odd.
+	 -- detCosmicsInput (dict)
+			A dictionary of dataframes and parameters collected from the
+			input file or calculated from it. Items in this dictionary
+			are all inputs for detect_cosmics():
+	 -- indata (numpy.ndarray)
+			The 2D science dataframe. The value of each pixel is in 
+		    Analog-to-Digital Units (ADU)
+	 -- inqual (numpy.ndarray)
+			2D frame flagging bad pixels in the science and variance
+			frames
+	 -- inbkgd (numpy.ndarray)
+			estimate of the 2D background in the science frame. Units
+			are ADUs
+	 -- invari (numpy.ndarray)
+			2D frame containing the variance of each pixel in the
+			science frame; units are ADU^2
+	 -- adgain (float)
+			average CCD detector gain for this data in e-/ADU
+	 -- readns (float)
+			average detector readout noise e- rms
+	 -- pmodel (str)
+			notes the Point Spread Function model adopted by
+			detect_cosmics() when building the fine structure image.
+			"gaussy" is used here because there is no option for a
+			directional Moffat profile. 
+	 -- fwhm (float)
+			Full Width at Half Maximum measured for the median spatial
+			profile of the spectrum. Units are pixels.
+	 -- psfsiz (int)
+			size of the PSF model in pixels that will be convolved with
+			the data by detect_cosmics() to produce the fine structure
+			model. This value must be odd.
 	"""
 	
-	# Take a median of the 2D science frame along the spatial axis to get a median sky spectrum, 
-	# then tile that to be the same shape as the original data frame. This will be used as the 
-	# estimated background.
+	# Take a median of the 2D science frame along the spatial axis to
+	# get a median sky spectrum, then tile that to be the same shape as
+	# the original data frame. This will be used as the estimated
+	# background.
 	bgFrame = np.tile(np.median(iFile["SCI"].data, axis=0), (np.shape(iFile["SCI"])[0], 1))
 	
-	# Create the output dictionary and fill it with relevant dataframes and values from the input 
-	# file.
+	# Create the output dictionary and fill it with relevant dataframes
+	# and values from the input file.
 	detCosmicsInput = {
 		"indata": iFile["SCI"].data,
 		"inqual": iFile["DQ"].data,
@@ -228,18 +245,20 @@ def prep_gmos(iFile, iHead, fSMode):
 		"pmodel": "gaussy"	
 	}
 	
-	# The detectors of GMOS-N and GMOS-S are slightly different, become non-linear at different 
-	# points, and therefore have different full well depths.
+	# The detectors of GMOS-N and GMOS-S are slightly different, become
+	# non-linear at different points, and therefore have different full
+	# well depths.
 	if iHead["INSTRUME"] == "GMOS-N":
 		detCosmicsInput["satlvl"] = 106822
 	else:
 		detCosmicsInput["satlvl"] = 117963
 
-	# If the fine stucture image is to be generated with a convolution of a model PSF, estimate
-	# the PSF's FWHM and size in pixels.
+	# If the fine stucture image is to be generated with a convolution
+	# of a model PSF, estimate the PSF's FWHM and size in pixels.
 	if fSMode == "convolve":
-		# All this is to get an initial estimate of the IQ. Tables below are based on the condition 
-		# constraints used by Gemini. See web page below.
+		# All this is to get an initial estimate of the IQ. Tables below
+		# are based on the condition constraints used by Gemini. See web
+		# page below.
 		# https://www.gemini.edu/observing/telescopes-and-sites/sites#ImageQuality
 		IQ_dict = {
 			"20-percentile": 0,
@@ -283,17 +302,19 @@ def prep_gmos(iFile, iHead, fSMode):
 	
 		pixres = iHead["PIXSCALE"]
 		
-		# Measure the FWHM of the spectrum's spatial profile. A Moffat profile is fitted to the 
-		# median spatial profile to get an accurate measure of the Full Width at Half Maximum, even 
+		# Measure the FWHM of the spectrum's spatial profile. A Moffat
+		# profile is fitted to the median spatial profile to get an
+		# accurate measure of the Full Width at Half Maximum, even
 		# though the psf model used by detect_cosmics() is a gaussian.
 		
 		# Calculate median spatial profile of the spectrum.
 		medProfile = np.nanmedian(iFile["SCI"].data, axis=1)
 		
-		# Scipy least squares doesn't like really tiny numbers like fluxes in erg/s/cm^2/Angstrom, 
-		# so it's necessary to scale the data to a size that least squares can handle. The shape of 
-		# the profile fitted to the scaled spatial profile is the same as the unscaled, so FWHM is 
-		# unaffected.
+		# Scipy least squares doesn't like really tiny numbers like
+		# fluxes in erg/s/cm^2/Angstrom, so it's necessary to scale the
+		# data to a size that least squares can handle. The shape of the
+		# profile fitted to the scaled spatial profile is the same as
+		# the unscaled, so FWHM is unaffected.
 		datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(medProfile)))))
 		
 		# Fit the median spatial profile with a Moffat function.
@@ -305,7 +326,8 @@ def prep_gmos(iFile, iHead, fSMode):
 			50
 		)
 		
-		# Get an improved estimate of the FWHM of the spectrum from the best fit Moffat profile.
+		# Get an improved estimate of the FWHM of the spectrum from the
+		# best fit Moffat profile.
 		fwhm = 2 * moffparams[2] * np.sqrt((2 ** (1 / moffparams[3])) - 1)
 		
 		detCosmicsInput["fwhm"] = fwhm
@@ -316,9 +338,10 @@ def prep_gmos(iFile, iHead, fSMode):
 		
 		detCosmicsInput["psfsiz"] = psfSize
 		
-	# If a median filter is being used to generate the fine structure image, psffwhm and psfsize
-	# aren't needed. In this case we set their values to the defaults for detect_cosmics() with
-	# the knowledge that they won't be used.
+	# If a median filter is being used to generate the fine structure
+	# image, psffwhm and psfsize aren't needed. In this case we set
+	# their values to the defaults for detect_cosmics() with the
+	# knowledge that they won't be used.
 	else:
 		detCosmicsInput["fwhm"] = 2.5
 		detCosmicsInput["psfsiz"] = 7
