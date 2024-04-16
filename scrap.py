@@ -176,7 +176,7 @@ def moffat_resid(x, spatial_axis, data):
 
  
 ###############################################################################
-def prep_gmos(in_file, iHead, fSMode):
+def prep_gmos(in_file, primary_header, fSMode):
 	"""
 	Combines all necessary data for detect_cosmics() into a dictionary
 	for a spectrum observed with GMOS-N or GMOS-S.
@@ -186,7 +186,7 @@ def prep_gmos(in_file, iHead, fSMode):
 			The object produced by using fits.open on the fits file
 			currently being processed. It contains all the dataframes
 			and headers for the current spectrum.
-	 -- iHead (.fits header)
+	 -- primary_header (.fits header)
 			The header of the primary header data unit in in_file
 	 -- fSMode (str)
 			A string keyword to tell prep_gmos how detect_cosmics() will
@@ -240,15 +240,15 @@ def prep_gmos(in_file, iHead, fSMode):
 		"inqual": in_file["DQ"].data,
 		"inbkgd": bgFrame,
 		"invari": in_file["VAR"].data,
-		"adgain": iHead["GAINMULT"],
-		"readns": iHead["RDNOISE"],
+		"adgain": primary_header["GAINMULT"],
+		"readns": primary_header["RDNOISE"],
 		"pmodel": "gaussy"	
 	}
 	
 	# The detectors of GMOS-N and GMOS-S are slightly different, become
 	# non-linear at different points, and therefore have different full
 	# well depths.
-	if iHead["INSTRUME"] == "GMOS-N":
+	if primary_header["INSTRUME"] == "GMOS-N":
 		detCosmicsInput["satlvl"] = 106822
 	else:
 		detCosmicsInput["satlvl"] = 117963
@@ -291,7 +291,7 @@ def prep_gmos(in_file, iHead, fSMode):
 			]
 		)
 	
-		iq = iHead["RAWIQ"]
+		iq = primary_header["RAWIQ"]
 	
 		shortWav = in_file["SCI"].header["CRVAL1"]
 	
@@ -300,7 +300,7 @@ def prep_gmos(in_file, iHead, fSMode):
 				seeing = float(IQTab[int(i[2])][int(IQ_dict[iq])])
 				break
 	
-		pixres = iHead["PIXSCALE"]
+		pixres = primary_header["PIXSCALE"]
 		
 		# Measure the FWHM of the spectrum's spatial profile. A Moffat
 		# profile is fitted to the median spatial profile to get an
