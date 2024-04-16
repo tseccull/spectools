@@ -3,25 +3,31 @@
 """
 scrap.py - written by T. Seccull, 2023-10-24 - v1.0.3 
 
-	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with Astroscrappy/LA Cosmic. 
-	This script runs the detect_cosmics() function from Astroscrappy on supplied astronomical 
-	spectroscopic data. Astroscrappy is a Python implentation of Pieter van Dokkum's LA Cosmic. 
-	Cite both Astroscrappy and LA Cosmic if used. scrap.py will assume all files in the current 
-	directory are .fits formatted 2D spectra that need their cosmic rays masked and will try to 
-	apply detect_cosmics() to each in turn. scrap.py will replace the primary input data frame with 
-	the cleaned data array in the output .fits file; a copy of the original input data will be 
-	stored in a new Header Data Unit (HDU) of the output .fits file. The boolean cosmic ray mask 
-	that scrap.py creates will be either added to an existing quality frame (e.g. flagging bad 
-	pixels), or if a quality frame doesn't exist in the original file the crmask will be added to 
-	the output file as the new quality frame in a new HDU. A gaussian psfmodel is assumed, so in 
-	detect_cosmics() psfk=None by default, and psfbeta is ignored. Other detect_cosmics() 
-	parameters are either taken directly from the fits data and headers, or they can be set 
+	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
+	with Astroscrappy/LA Cosmic. This script runs the detect_cosmics()
+	function from Astroscrappy on supplied astronomical spectroscopic
+	data. Astroscrappy is a Python implentation of Pieter van Dokkum's
+	LA Cosmic. Cite both Astroscrappy and LA Cosmic if used. scrap.py
+	will assume all files in the current directory are .fits formatted
+	2D spectra that need their cosmic rays masked and will try to apply
+	detect_cosmics() to each in turn. scrap.py will replace the primary
+	input data frame with the cleaned data array in the output .fits
+	file; a copy of the original input data will be stored in a new
+	Header Data Unit (HDU) of the output .fits file. The boolean cosmic
+	ray mask that scrap.py creates will be either added to an existing
+	quality frame (e.g. flagging bad pixels), or if a quality frame
+	doesn't exist in the original file the crmask will be added to the
+	output file as the new quality frame in a new HDU. A gaussian
+	psfmodel is assumed, so in detect_cosmics() psfk=None by default,
+	and psfbeta is ignored. Other detect_cosmics() parameters are either
+	taken directly from the fits data and headers, or they can be set 
 	optionally when scrap.py is run.
     
     Original paper describing LA Cosmic 
-		van Dokkum 2001, PASP, 113, 1420 - https://doi.org/10.1086/323894
+		van Dokkum 2001, PASP, 113, 1420
+		https://doi.org/10.1086/323894
     Astroscrappy Zenodo DOI
-		McCully et al. 2018, Astropy/Astroscrappy: v1.0.5 Zenodo Release (v1.0.5). Zenodo
+		McCully et al. 2018, Astropy/Astroscrappy: v1.0.5 Zenodo Release
 		https://doi.org/10.5281/zenodo.1482019
     Astroscrappy docs - https://astroscrappy.readthedocs.io/en/latest/
 """
