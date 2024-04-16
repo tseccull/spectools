@@ -53,20 +53,20 @@ def moffat_least_squares(r, col, seeing, pixres, eClip):
 
     Args:
      -- r (numpy.ndarray)
-			spatial axis of the data being fit
+			The spatial axis of the data being fit.
      -- col (numpy.ndarray)
-			data being fitted
+			The data being fitted.
      -- seeing (float)
-			estimated FWHM of the spatial profile
+			The estimated FWHM of the spatial profile.
      -- pixres (float)
-			spatial resolution of each pixel in arcsec/pixel
+			The spatial resolution of each pixel in arcsec/pixel.
      -- eClip (int)
-			number of pixels at each end of the spatial profile array to
-			ignore when fitting the Moffat profile.
+			The number of pixels at each end of the spatial profile
+			array to ignore when fitting the Moffat profile.
 
     Returns:
      -- param_list (list)
-			list of best fit output parameters returned by the least
+			The list of best fit output parameters returned by the least
 			squares routine.
     """
 
@@ -135,10 +135,11 @@ def moffat_least_squares(r, col, seeing, pixres, eClip):
     return param_list
 
 
-####################################################################################################
+###############################################################################
 def moffat_resid(x, datarange, data):
     """
-    Calculates residuals of fitted moffat profile and the data for the least squares fitting.
+    Calculates residuals of fitted moffat profile and the data for the
+    least squares fitting.
 
     Description:
         A = x[0]
@@ -149,13 +150,18 @@ def moffat_resid(x, datarange, data):
         m = x[5]
 
     Args:
-        x (numpy.ndarray)        : an array of parameters defining the shape of the model moffat 
-                                   profile
-        datarange (numpy.ndarray): spatial axis of the data
-        data (numpy.ndarray)     : the data
+     -- x (numpy.ndarray)
+			An array of parameters defining the shape of the model
+			moffat profile.
+     -- datarange (numpy.ndarray)
+			The spatial axis of the data.
+     -- data (numpy.ndarray)
+			The data.
 
     Returns:
-        residual (numpy.ndarray) : the residual array between the model moffat profile and the data
+     -- residual (numpy.ndarray)
+			The residual array between the model moffat profile and the
+			data.
     """
 
     moff = x[0] * ((1 + ((datarange - x[1]) * (datarange - x[1])) / (x[2] * x[2])) ** -x[3])
