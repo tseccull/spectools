@@ -274,7 +274,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			"UNKNOWN": 3,
 		}
 	
-		WavTab = np.array(
+		wav_tab = np.array(
 			[
 				[0000.0, 4000.0, 0],
 				[4000.0, 5500.0, 1],
@@ -300,7 +300,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	
 		shortWav = in_file["SCI"].header["CRVAL1"]
 	
-		for i in WavTab:
+		for i in wav_tab:
 			if shortWav > i[0] and shortWav < i[1]:
 				seeing = float(IQTab[int(i[2])][int(iq_dict[iq])])
 				break
