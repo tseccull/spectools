@@ -225,6 +225,8 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			size of the PSF model in pixels that will be convolved with
 			the data by detect_cosmics() to produce the fine structure
 			model. This value must be odd.
+	-- detect_cosmics_input["saturation_level"] (int)
+			number of counts at which the detector saturates.
 	"""
 	
 	# Take a median of the 2D science frame along the spatial axis to
@@ -249,9 +251,9 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	# non-linear at different points, and therefore have different full
 	# well depths.
 	if primary_header["INSTRUME"] == "GMOS-N":
-		detect_cosmics_input["satlvl"] = 106822
+		detect_cosmics_input["saturation_level"] = 106822
 	else:
-		detect_cosmics_input["satlvl"] = 117963
+		detect_cosmics_input["saturation_level"] = 117963
 
 	# If the fine stucture image is to be generated with a convolution
 	# of a model PSF, estimate the PSF's FWHM and size in pixels.
