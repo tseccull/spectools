@@ -176,18 +176,18 @@ def moffat_resid(x, spatial_axis, data):
 
  
 ###############################################################################
-def prep_gmos(iFile, iHead, fSMode):
+def prep_gmos(in_file, iHead, fSMode):
 	"""
 	Combines all necessary data for detect_cosmics() into a dictionary
 	for a spectrum observed with GMOS-N or GMOS-S.
 	
 	Args:
-	 -- iFile (.fits HDU list)
+	 -- in_file (.fits HDU list)
 			The object produced by using fits.open on the fits file
 			currently being processed. It contains all the dataframes
 			and headers for the current spectrum.
 	 -- iHead (.fits header)
-			The header of the primary header data unit in iFile
+			The header of the primary header data unit in in_file
 	 -- fSMode (str)
 			A string keyword to tell prep_gmos how detect_cosmics() will
 		    generate the fine structure image.
@@ -231,15 +231,15 @@ def prep_gmos(iFile, iHead, fSMode):
 	# get a median sky spectrum, then tile that to be the same shape as
 	# the original data frame. This will be used as the estimated
 	# background.
-	bgFrame = np.tile(np.median(iFile["SCI"].data, axis=0), (np.shape(iFile["SCI"])[0], 1))
+	bgFrame = np.tile(np.median(in_file["SCI"].data, axis=0), (np.shape(in_file["SCI"])[0], 1))
 	
 	# Create the output dictionary and fill it with relevant dataframes
 	# and values from the input file.
 	detCosmicsInput = {
-		"indata": iFile["SCI"].data,
-		"inqual": iFile["DQ"].data,
+		"indata": in_file["SCI"].data,
+		"inqual": in_file["DQ"].data,
 		"inbkgd": bgFrame,
-		"invari": iFile["VAR"].data,
+		"invari": in_file["VAR"].data,
 		"adgain": iHead["GAINMULT"],
 		"readns": iHead["RDNOISE"],
 		"pmodel": "gaussy"	
@@ -293,7 +293,7 @@ def prep_gmos(iFile, iHead, fSMode):
 	
 		iq = iHead["RAWIQ"]
 	
-		shortWav = iFile["SCI"].header["CRVAL1"]
+		shortWav = in_file["SCI"].header["CRVAL1"]
 	
 		for i in WavTab:
 			if shortWav > i[0] and shortWav < i[1]:
@@ -308,7 +308,7 @@ def prep_gmos(iFile, iHead, fSMode):
 		# though the psf model used by detect_cosmics() is a gaussian.
 		
 		# Calculate median spatial profile of the spectrum.
-		medProfile = np.nanmedian(iFile["SCI"].data, axis=1)
+		medProfile = np.nanmedian(in_file["SCI"].data, axis=1)
 		
 		# Scipy least squares doesn't like really tiny numbers like
 		# fluxes in erg/s/cm^2/Angstrom, so it's necessary to scale the
@@ -319,7 +319,7 @@ def prep_gmos(iFile, iHead, fSMode):
 		
 		# Fit the median spatial profile with a Moffat function.
 		moffparams = moffat_least_squares(
-			range(np.shape(iFile["SCI"].data)[0]),
+			range(np.shape(in_file["SCI"].data)[0]),
 			medProfile * datascale,
 			seeing,
 			pixres,
