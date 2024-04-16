@@ -44,24 +44,30 @@ import numpy as np
 from scipy.optimize import least_squares
 
 
-####################################################################################################
+###############################################################################
 def moffat_least_squares(r, col, seeing, pixres, eClip):
     """
-    Takes a data column, spatial axis and seeing of the observation and fits a Moffat function to 
-    the column using a least squares method. Returns the best fit parameters of the Moffat 
-    function.
+    Takes a data column, spatial axis and seeing of the observation and
+    fits a Moffat function to the column using a least squares method.
+    Returns the best fit parameters of the Moffat function.
 
     Args:
-        r (numpy.ndarray)  : spatial axis of the data being fit
-        col (numpy.ndarray): data being fitted
-        seeing (float)     : estimated FWHM of the spatial profile
-        pixres (float)     : spatial resolution of each pixel in arcsec/pixel
-        eClip (int)        : number of pixels at each end of the spatial profile array to ignore 
-                             when fitting the Moffat profile.
+     -- r (numpy.ndarray)
+			spatial axis of the data being fit
+     -- col (numpy.ndarray)
+			data being fitted
+     -- seeing (float)
+			estimated FWHM of the spatial profile
+     -- pixres (float)
+			spatial resolution of each pixel in arcsec/pixel
+     -- eClip (int)
+			number of pixels at each end of the spatial profile array to
+			ignore when fitting the Moffat profile.
 
     Returns:
-        param_list (list)  : list of best fit output parameters returned by the 
-                             least squares routine.
+     -- param_list (list)
+			list of best fit output parameters returned by the least
+			squares routine.
     """
 
 	# Clip the median spatial profile to be fitted based on the value of eClip
