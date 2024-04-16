@@ -221,7 +221,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	 -- detect_cosmics_input["fwhm"] (float)
 			Full Width at Half Maximum measured for the median spatial
 			profile of the spectrum. Units are pixels.
-	 -- psfsiz (int)
+	 -- detect_cosmics_input["psf_size"] (int)
 			size of the PSF model in pixels that will be convolved with
 			the data by detect_cosmics() to produce the fine structure
 			model. This value must be odd.
@@ -336,7 +336,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		if psfSize % 2 == 0:
 			psfSize += 1
 		
-		detect_cosmics_input["psfsiz"] = psfSize
+		detect_cosmics_input["psf_size"] = psfSize
 		
 	# If a median filter is being used to generate the fine structure
 	# image, psffwhm and psfsize aren't needed. In this case we set
@@ -344,7 +344,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	# knowledge that they won't be used.
 	else:
 		detect_cosmics_input["fwhm"] = 2.5
-		detect_cosmics_input["psfsiz"] = 7
+		detect_cosmics_input["psf_size"] = 7
 	
 	return detect_cosmics_input
 
