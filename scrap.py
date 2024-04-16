@@ -320,12 +320,13 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		# data to a size that least squares can handle. The shape of the
 		# profile fitted to the scaled spatial profile is the same as
 		# the unscaled, so FWHM is unaffected.
-		datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(median_profile)))))
+		absolute_median_counts = np.abs(np.nanmedian(median_profile))
+		data_scale = 10 ** np.abs(np.floor(np.log10(absolute_median_counts)))
 		
 		# Fit the median spatial profile with a Moffat function.
 		moffparams = moffat_least_squares(
 			range(np.shape(in_file["SCI"].data)[0]),
-			median_profile * datascale,
+			median_profile * data_scale,
 			seeing,
 			pixel_resolution,
 			50
