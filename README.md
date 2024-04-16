@@ -1,6 +1,6 @@
 # spectools
 
-v24.106.0
+v24.107.0
 
 Developer:    Tom Seccull
 
@@ -23,7 +23,7 @@ Please be sure to cite these as well where necessary:
 
 # scrap.py
 
-v1.0.3
+v1.0.4
 
 This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
 of Pieter van Dokkum's LA Cosmic. This script is used for detecting, masking, and cleaning cosmic ray hits in
