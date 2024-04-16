@@ -233,14 +233,17 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	# get a median sky spectrum, then tile that to be the same shape as
 	# the original data frame. This will be used as the estimated
 	# background.
-	bgFrame = np.tile(np.median(in_file["SCI"].data, axis=0), (np.shape(in_file["SCI"])[0], 1))
+	background_frame = np.tile(
+		np.median(in_file["SCI"].data, axis=0), 
+		(np.shape(in_file["SCI"])[0], 1)
+	)
 	
 	# Create the output dictionary and fill it with relevant dataframes
 	# and values from the input file.
 	detect_cosmics_input = {
 		"in_data_frame": in_file["SCI"].data,
 		"in_quality_frame": in_file["DQ"].data,
-		"in_background_frame": bgFrame,
+		"in_background_frame": background_frame,
 		"in_variance_frame": in_file["VAR"].data,
 		"detector_gain": primary_header["GAINMULT"],
 		"read_noise": primary_header["RDNOISE"],
