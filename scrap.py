@@ -45,14 +45,16 @@ from scipy.optimize import least_squares
 
 
 ###############################################################################
-def moffat_least_squares(r, column, seeing, pixel_resolution, end_clip):
+def moffat_least_squares(
+	spatial_axis, column, seeing, pixel_resolution, end_clip
+):
     """
     Takes a data column, spatial axis and seeing of the observation and
     fits a Moffat function to the column using a least squares method.
     Returns the best fit parameters of the Moffat function.
 
     Args:
-     -- r (numpy.ndarray)
+     -- spatial_axis (numpy.ndarray)
 			The spatial axis of the data being fit.
      -- column (numpy.ndarray)
 			The data being fitted.
@@ -119,7 +121,7 @@ def moffat_least_squares(r, column, seeing, pixel_resolution, end_clip):
                 np.inf,
             ],
         ),
-        args=(r, column),
+        args=(spatial_axis, column),
         method="trf",
         ftol=1e-12,
     )
