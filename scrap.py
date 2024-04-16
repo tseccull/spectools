@@ -196,7 +196,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	 -- detect_cosmics_input (dict)
 			A dictionary of dataframes and parameters collected from the
 			input file or calculated from it. Items in this dictionary
-			are all inputs for detect_cosmics():
+			are all inputs for detect_cosmics().
 	 -- detect_cosmics_input["in_data_frame"] (numpy.ndarray)
 			The 2D science dataframe. The value of each pixel is in 
 		    Analog-to-Digital Units (ADU)
@@ -218,7 +218,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			detect_cosmics() when building the fine structure image.
 			"gaussy" is used here because there is no option for a
 			directional Moffat profile. 
-	 -- fwhm (float)
+	 -- detect_cosmics_input["fwhm"] (float)
 			Full Width at Half Maximum measured for the median spatial
 			profile of the spectrum. Units are pixels.
 	 -- psfsiz (int)
