@@ -285,7 +285,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			]
 		)
 	
-		IQTab = np.array(
+		iq_tab = np.array(
 			[
 				[0.6, 0.90, 1.20, 2.00],
 				[0.6, 0.85, 1.10, 1.90],
@@ -302,7 +302,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	
 		for i in wav_tab:
 			if shortWav > i[0] and shortWav < i[1]:
-				seeing = float(IQTab[int(i[2])][int(iq_dict[iq])])
+				seeing = float(iq_tab[int(i[2])][int(iq_dict[iq])])
 				break
 	
 		pixres = primary_header["PIXSCALE"]
