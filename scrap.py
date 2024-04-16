@@ -70,14 +70,23 @@ def moffat_least_squares(r, col, seeing, pixres, eClip):
 			squares routine.
     """
 
-	# Clip the median spatial profile to be fitted based on the value of eClip
+	# Clip the median spatial profile to be fitted based on the value of
+	# eClip
     col[:eClip] = np.median(col)
     col[-eClip:] = np.median(col)
 
     # Set up initial conditions for the least squares fit.
-    # x0 = [amplitude, centre, alpha, beta, background gradient, background level]
-    # Initial beta estimate comes from optimal value from atmospheric turbulence theory as 
-    # described in Trujillo, I. et al. (2001), MNRAS, 328, 977-985
+    # x0 = [
+    #	 amplitude,
+    # 	 centre,
+    #	 alpha,
+    #	 beta,
+    #	 background gradient,
+    #	 background level
+    # ]
+    # Initial beta estimate comes from optimal value from atmospheric
+    # turbulence theory as described in 
+    # Trujillo, I. et al. (2001), MNRAS, 328, 977-985
     # See https://ui.adsabs.harvard.edu/abs/2001MNRAS.328..977T/abstract
     x0 = [
         np.nanmedian(np.sort(col)[-3:]),
