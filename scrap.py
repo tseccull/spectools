@@ -324,7 +324,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		data_scale = 10 ** np.abs(np.floor(np.log10(absolute_median_counts)))
 		
 		# Fit the median spatial profile with a Moffat function.
-		moffparams = moffat_least_squares(
+		moffat_parameters = moffat_least_squares(
 			range(np.shape(in_file["SCI"].data)[0]),
 			median_profile * data_scale,
 			seeing,
@@ -334,7 +334,8 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		
 		# Get an improved estimate of the FWHM of the spectrum from the
 		# best fit Moffat profile.
-		fwhm = 2 * moffparams[2] * np.sqrt((2 ** (1 / moffparams[3])) - 1)
+		sqrt_beta_factor = np.sqrt((2**(1/moffat_parameters[3])) - 1)
+		fwhm = 2 * moffat_parameters[2] * sqrt_beta_factor
 		
 		detect_cosmics_input["fwhm"] = fwhm
 		
