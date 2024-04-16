@@ -203,7 +203,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	 -- detect_cosmics_input["in_quality_frame"] (numpy.ndarray)
 			2D frame flagging bad pixels in the science and variance
 			frames
-	 -- inbkgd (numpy.ndarray)
+	 -- detect_cosmics_input["in_background_frame"] (numpy.ndarray)
 			estimate of the 2D background in the science frame. Units
 			are ADUs
 	 -- invari (numpy.ndarray)
@@ -238,7 +238,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	detect_cosmics_input = {
 		"in_data_frame": in_file["SCI"].data,
 		"in_quality_frame": in_file["DQ"].data,
-		"inbkgd": bgFrame,
+		"in_background_frame": bgFrame,
 		"invari": in_file["VAR"].data,
 		"adgain": primary_header["GAINMULT"],
 		"readns": primary_header["RDNOISE"],
