@@ -138,7 +138,7 @@ def moffat_least_squares(
 
 
 ###############################################################################
-def moffat_resid(x, data_range, data):
+def moffat_resid(x, spatial_axis, data):
     """
     Calculates residuals of fitted moffat profile and the data for the
     least squares fitting.
@@ -155,7 +155,7 @@ def moffat_resid(x, data_range, data):
      -- x (numpy.ndarray)
 			An array of parameters defining the shape of the model
 			moffat profile.
-     -- data_range (numpy.ndarray)
+     -- spatial_axis (numpy.ndarray)
 			The spatial axis of the data.
      -- data (numpy.ndarray)
 			The data.
@@ -165,10 +165,12 @@ def moffat_resid(x, data_range, data):
 			The residual array between the model moffat profile and the
 			data.
     """
-
-    moff = x[0] * ((1 + ((data_range - x[1]) * (data_range - x[1])) / (x[2] * x[2])) ** -x[3])
     
-    residual = moff + x[4] + (data_range * x[5]) - data
+    moff = x[0]*(
+		(1+((spatial_axis-x[1])*(spatial_axis-x[1]))/(x[2]*x[2]))**-x[3]
+	)
+    
+    residual = moff + x[4] + (spatial_axis * x[5]) - data
     
     return residual
 
