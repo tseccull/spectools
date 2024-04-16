@@ -193,7 +193,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		    generate the fine structure image.
 		
 	Returns:
-	 -- detCosmicsInput (dict)
+	 -- detect_cosmics_input (dict)
 			A dictionary of dataframes and parameters collected from the
 			input file or calculated from it. Items in this dictionary
 			are all inputs for detect_cosmics():
@@ -235,7 +235,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	
 	# Create the output dictionary and fill it with relevant dataframes
 	# and values from the input file.
-	detCosmicsInput = {
+	detect_cosmics_input = {
 		"indata": in_file["SCI"].data,
 		"inqual": in_file["DQ"].data,
 		"inbkgd": bgFrame,
@@ -249,9 +249,9 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	# non-linear at different points, and therefore have different full
 	# well depths.
 	if primary_header["INSTRUME"] == "GMOS-N":
-		detCosmicsInput["satlvl"] = 106822
+		detect_cosmics_input["satlvl"] = 106822
 	else:
-		detCosmicsInput["satlvl"] = 117963
+		detect_cosmics_input["satlvl"] = 117963
 
 	# If the fine stucture image is to be generated with a convolution
 	# of a model PSF, estimate the PSF's FWHM and size in pixels.
@@ -330,23 +330,23 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		# best fit Moffat profile.
 		fwhm = 2 * moffparams[2] * np.sqrt((2 ** (1 / moffparams[3])) - 1)
 		
-		detCosmicsInput["fwhm"] = fwhm
+		detect_cosmics_input["fwhm"] = fwhm
 		
 		psfSize = np.ceil(2.8*fwhm)
 		if psfSize % 2 == 0:
 			psfSize += 1
 		
-		detCosmicsInput["psfsiz"] = psfSize
+		detect_cosmics_input["psfsiz"] = psfSize
 		
 	# If a median filter is being used to generate the fine structure
 	# image, psffwhm and psfsize aren't needed. In this case we set
 	# their values to the defaults for detect_cosmics() with the
 	# knowledge that they won't be used.
 	else:
-		detCosmicsInput["fwhm"] = 2.5
-		detCosmicsInput["psfsiz"] = 7
+		detect_cosmics_input["fwhm"] = 2.5
+		detect_cosmics_input["psfsiz"] = 7
 	
-	return detCosmicsInput
+	return detect_cosmics_input
 
 
 ####################################################################################################
