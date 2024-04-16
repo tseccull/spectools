@@ -213,7 +213,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			average CCD detector gain for this data in e-/ADU
 	 -- detect_cosmics_input["read_noise"] (float)
 			average detector readout noise e- rms
-	 -- pmodel (str)
+	 -- detect_cosmics_input["psf_model"] (str)
 			notes the Point Spread Function model adopted by
 			detect_cosmics() when building the fine structure image.
 			"gaussy" is used here because there is no option for a
@@ -242,7 +242,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		"in_variance_frame": in_file["VAR"].data,
 		"detector_gain": primary_header["GAINMULT"],
 		"read_noise": primary_header["RDNOISE"],
-		"pmodel": "gaussy"	
+		"psf_model": "gaussy"	
 	}
 	
 	# The detectors of GMOS-N and GMOS-S are slightly different, become
