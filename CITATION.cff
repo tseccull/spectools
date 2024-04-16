@@ -14,9 +14,8 @@ authors:
     orcid: 'https://orcid.org/0000-0001-5605-1702'
 repository-code: 'https://github.com/tseccull/spectools'
 abstract: >-
-  A collection of scripts I that use for reduction,
-  processing, and analysis of astronomical spectroscopic
-  data.
+  A collection of scripts used for reduction, processing, 
+  and analysis of astronomical spectroscopic data.
 keywords:
   - astronomy
   - data reduction
