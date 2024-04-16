@@ -176,7 +176,7 @@ def moffat_resid(x, spatial_axis, data):
 
  
 ###############################################################################
-def prep_gmos(in_file, primary_header, fSMode):
+def prep_gmos(in_file, primary_header, fine_structure_mode):
 	"""
 	Combines all necessary data for detect_cosmics() into a dictionary
 	for a spectrum observed with GMOS-N or GMOS-S.
@@ -188,7 +188,7 @@ def prep_gmos(in_file, primary_header, fSMode):
 			and headers for the current spectrum.
 	 -- primary_header (.fits header)
 			The header of the primary header data unit in in_file
-	 -- fSMode (str)
+	 -- fine_structure_mode (str)
 			A string keyword to tell prep_gmos how detect_cosmics() will
 		    generate the fine structure image.
 		
@@ -255,7 +255,7 @@ def prep_gmos(in_file, primary_header, fSMode):
 
 	# If the fine stucture image is to be generated with a convolution
 	# of a model PSF, estimate the PSF's FWHM and size in pixels.
-	if fSMode == "convolve":
+	if fine_structure_mode == "convolve":
 		# All this is to get an initial estimate of the IQ. Tables below
 		# are based on the condition constraints used by Gemini. See web
 		# page below.
