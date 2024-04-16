@@ -45,7 +45,7 @@ from scipy.optimize import least_squares
 
 
 ###############################################################################
-def moffat_least_squares(r, col, seeing, pixres, end_clip):
+def moffat_least_squares(r, column, seeing, pixres, end_clip):
     """
     Takes a data column, spatial axis and seeing of the observation and
     fits a Moffat function to the column using a least squares method.
@@ -54,7 +54,7 @@ def moffat_least_squares(r, col, seeing, pixres, end_clip):
     Args:
      -- r (numpy.ndarray)
 			The spatial axis of the data being fit.
-     -- col (numpy.ndarray)
+     -- column (numpy.ndarray)
 			The data being fitted.
      -- seeing (float)
 			The estimated FWHM of the spatial profile.
@@ -72,8 +72,8 @@ def moffat_least_squares(r, col, seeing, pixres, end_clip):
 
 	# Clip the median spatial profile to be fitted based on the value of
 	# end_clip
-    col[:end_clip] = np.median(col)
-    col[-end_clip:] = np.median(col)
+    column[:end_clip] = np.median(column)
+    column[-end_clip:] = np.median(column)
 
     # Set up initial conditions for the least squares fit.
     # x0 = [
@@ -89,12 +89,12 @@ def moffat_least_squares(r, col, seeing, pixres, end_clip):
     # Trujillo, I. et al. (2001), MNRAS, 328, 977-985
     # See https://ui.adsabs.harvard.edu/abs/2001MNRAS.328..977T/abstract
     x0 = [
-        np.nanmedian(np.sort(col)[-3:]),
-        np.argmax(col),
+        np.nanmedian(np.sort(column)[-3:]),
+        np.argmax(column),
         seeing / pixres,
         4.765,
         0.0,
-        np.median(np.concatenate((col[:5], col[-5:]))),
+        np.median(np.concatenate((column[:5], column[-5:]))),
     ]
 
     # Run the least squares fit.
@@ -104,7 +104,7 @@ def moffat_least_squares(r, col, seeing, pixres, end_clip):
         bounds=(
             [
                 0.0, 
-                np.argmax(col) - 1.0,
+                np.argmax(column) - 1.0,
                 0.0, 
                 0.0, 
                 0.0, 
@@ -112,14 +112,14 @@ def moffat_least_squares(r, col, seeing, pixres, end_clip):
             ],
             [
                 np.inf,
-                np.argmax(col) + 1,
+                np.argmax(column) + 1,
                 (5 * seeing / pixres),
                 5.0,
                 np.inf,
                 np.inf,
             ],
         ),
-        args=(r, col),
+        args=(r, column),
         method="trf",
         ftol=1e-12,
     )
