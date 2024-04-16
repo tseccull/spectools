@@ -206,7 +206,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	 -- detect_cosmics_input["in_background_frame"] (numpy.ndarray)
 			estimate of the 2D background in the science frame. Units
 			are ADUs
-	 -- invari (numpy.ndarray)
+	 -- detect_cosmics_input["in_variance_frame"] (numpy.ndarray)
 			2D frame containing the variance of each pixel in the
 			science frame; units are ADU^2
 	 -- adgain (float)
@@ -239,7 +239,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		"in_data_frame": in_file["SCI"].data,
 		"in_quality_frame": in_file["DQ"].data,
 		"in_background_frame": bgFrame,
-		"invari": in_file["VAR"].data,
+		"in_variance_frame": in_file["VAR"].data,
 		"adgain": primary_header["GAINMULT"],
 		"readns": primary_header["RDNOISE"],
 		"pmodel": "gaussy"	
