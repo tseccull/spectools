@@ -197,7 +197,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 			A dictionary of dataframes and parameters collected from the
 			input file or calculated from it. Items in this dictionary
 			are all inputs for detect_cosmics():
-	 -- indata (numpy.ndarray)
+	 -- detect_cosmics_input["in_data_frame"] (numpy.ndarray)
 			The 2D science dataframe. The value of each pixel is in 
 		    Analog-to-Digital Units (ADU)
 	 -- inqual (numpy.ndarray)
@@ -236,7 +236,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	# Create the output dictionary and fill it with relevant dataframes
 	# and values from the input file.
 	detect_cosmics_input = {
-		"indata": in_file["SCI"].data,
+		"in_data_frame": in_file["SCI"].data,
 		"inqual": in_file["DQ"].data,
 		"inbkgd": bgFrame,
 		"invari": in_file["VAR"].data,
