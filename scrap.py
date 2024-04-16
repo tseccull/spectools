@@ -45,7 +45,7 @@ from scipy.optimize import least_squares
 
 
 ###############################################################################
-def moffat_least_squares(r, col, seeing, pixres, eClip):
+def moffat_least_squares(r, col, seeing, pixres, end_clip):
     """
     Takes a data column, spatial axis and seeing of the observation and
     fits a Moffat function to the column using a least squares method.
@@ -60,7 +60,7 @@ def moffat_least_squares(r, col, seeing, pixres, eClip):
 			The estimated FWHM of the spatial profile.
      -- pixres (float)
 			The spatial resolution of each pixel in arcsec/pixel.
-     -- eClip (int)
+     -- end_clip (int)
 			The number of pixels at each end of the spatial profile
 			array to ignore when fitting the Moffat profile.
 
@@ -71,9 +71,9 @@ def moffat_least_squares(r, col, seeing, pixres, eClip):
     """
 
 	# Clip the median spatial profile to be fitted based on the value of
-	# eClip
-    col[:eClip] = np.median(col)
-    col[-eClip:] = np.median(col)
+	# end_clip
+    col[:end_clip] = np.median(col)
+    col[-end_clip:] = np.median(col)
 
     # Set up initial conditions for the least squares fit.
     # x0 = [
