@@ -339,14 +339,14 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		
 		detect_cosmics_input["fwhm"] = fwhm
 		
-		psfSize = np.ceil(2.8*fwhm)
-		if psfSize % 2 == 0:
-			psfSize += 1
+		psf_scale = np.ceil(2.8*fwhm)
+		if psf_scale % 2 == 0:
+			psf_scale += 1
 		
-		detect_cosmics_input["psf_size"] = psfSize
+		detect_cosmics_input["psf_size"] = psf_scale
 		
 	# If a median filter is being used to generate the fine structure
-	# image, psffwhm and psfsize aren't needed. In this case we set
+	# image, fwhm and psf_size aren't needed. In this case we set
 	# their values to the defaults for detect_cosmics() with the
 	# knowledge that they won't be used.
 	else:
