@@ -298,10 +298,10 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	
 		iq = primary_header["RAWIQ"]
 	
-		shortWav = in_file["SCI"].header["CRVAL1"]
+		short_wav = in_file["SCI"].header["CRVAL1"]
 	
 		for i in wav_tab:
-			if shortWav > i[0] and shortWav < i[1]:
+			if short_wav > i[0] and short_wav < i[1]:
 				seeing = float(iq_tab[int(i[2])][int(iq_dict[iq])])
 				break
 	
