@@ -313,19 +313,19 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		# though the psf model used by detect_cosmics() is a gaussian.
 		
 		# Calculate median spatial profile of the spectrum.
-		medProfile = np.nanmedian(in_file["SCI"].data, axis=1)
+		median_profile = np.nanmedian(in_file["SCI"].data, axis=1)
 		
 		# Scipy least squares doesn't like really tiny numbers like
 		# fluxes in erg/s/cm^2/Angstrom, so it's necessary to scale the
 		# data to a size that least squares can handle. The shape of the
 		# profile fitted to the scaled spatial profile is the same as
 		# the unscaled, so FWHM is unaffected.
-		datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(medProfile)))))
+		datascale = 10 ** np.abs(np.floor(np.log10(np.abs(np.nanmedian(median_profile)))))
 		
 		# Fit the median spatial profile with a Moffat function.
 		moffparams = moffat_least_squares(
 			range(np.shape(in_file["SCI"].data)[0]),
-			medProfile * datascale,
+			median_profile * datascale,
 			seeing,
 			pixel_resolution,
 			50
