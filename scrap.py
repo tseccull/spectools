@@ -166,11 +166,11 @@ def moffat_resid(x, spatial_axis, data):
 			data.
     """
     
-    moff = x[0]*(
+    moffat_profile = x[0]*(
 		(1+((spatial_axis-x[1])*(spatial_axis-x[1]))/(x[2]*x[2]))**-x[3]
 	)
     
-    residual = moff + x[4] + (spatial_axis * x[5]) - data
+    residual = moffat_profile + x[4] + (spatial_axis*x[5]) - data
     
     return residual
 
