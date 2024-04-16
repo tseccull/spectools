@@ -265,7 +265,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 		# are based on the condition constraints used by Gemini. See web
 		# page below.
 		# https://www.gemini.edu/observing/telescopes-and-sites/sites#ImageQuality
-		IQ_dict = {
+		iq_dict = {
 			"20-percentile": 0,
 			"70-percentile": 1,
 			"85-percentile": 2,
@@ -302,7 +302,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 	
 		for i in WavTab:
 			if shortWav > i[0] and shortWav < i[1]:
-				seeing = float(IQTab[int(i[2])][int(IQ_dict[iq])])
+				seeing = float(IQTab[int(i[2])][int(iq_dict[iq])])
 				break
 	
 		pixres = primary_header["PIXSCALE"]
