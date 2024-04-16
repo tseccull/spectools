@@ -65,7 +65,7 @@ def moffat_least_squares(r, column, seeing, pixel_resolution, end_clip):
 			array to ignore when fitting the Moffat profile.
 
     Returns:
-     -- param_list (list)
+     -- parameter_list (list)
 			The list of best fit output parameters returned by the least
 			squares routine.
     """
@@ -124,7 +124,7 @@ def moffat_least_squares(r, column, seeing, pixel_resolution, end_clip):
         ftol=1e-12,
     )
     
-    param_list = [
+    parameter_list = [
         res_lsq.x[0],
         res_lsq.x[1],
         res_lsq.x[2],
@@ -132,7 +132,7 @@ def moffat_least_squares(r, column, seeing, pixel_resolution, end_clip):
         res_lsq.x[4],
         res_lsq.x[5]
     ]
-    return param_list
+    return parameter_list
 
 
 ###############################################################################
