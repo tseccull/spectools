@@ -675,7 +675,7 @@ for f in files:
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
 		cosmic_ray_mask, clean_science_data = asc.detect_cosmics(
 			detect_cosmics_parameters["in_data_frame"],
-			inmask    = detect_cosmics_parameters["inqual"],
+			inmask    = detect_cosmics_parameters["in_quality_frame"],
 			inbkg     = detect_cosmics_parameters["inbkgd"],
 			invar     = detect_cosmics_parameters["invari"],
 			sigclip   = args.sigmaClip,
