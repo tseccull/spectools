@@ -676,7 +676,7 @@ for f in files:
 		cosmic_ray_mask, clean_science_data = asc.detect_cosmics(
 			detect_cosmics_parameters["in_data_frame"],
 			inmask    = detect_cosmics_parameters["in_quality_frame"],
-			inbkg     = detect_cosmics_parameters["inbkgd"],
+			inbkg     = detect_cosmics_parameters["in_background_frame"],
 			invar     = detect_cosmics_parameters["invari"],
 			sigclip   = args.sigmaClip,
 			sigfrac   = args.sigmaFrac,
