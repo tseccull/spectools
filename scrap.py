@@ -677,7 +677,7 @@ for f in files:
 			detect_cosmics_parameters["in_data_frame"],
 			inmask    = detect_cosmics_parameters["in_quality_frame"],
 			inbkg     = detect_cosmics_parameters["in_background_frame"],
-			invar     = detect_cosmics_parameters["invari"],
+			invar     = detect_cosmics_parameters["in_variance_frame"],
 			sigclip   = args.sigmaClip,
 			sigfrac   = args.sigmaFrac,
 			objlim    = args.objLimit,
