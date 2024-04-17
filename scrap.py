@@ -434,7 +434,7 @@ def save_gmos(
 		"Astroscrappy sigclip value"
 	)
 	clean_science_header["CRSIGFRC"] = (
-		command_line_arguments.sigmaFrac,
+		command_line_arguments.sigma_frac,
 		"Astroscrappy sigfrac value"
 	)
 	clean_science_header["CROBJLIM"] = (
@@ -502,7 +502,7 @@ def save_gmos(
 		"Astroscrappy sigclip value"
 	)
 	qualHead["CRSIGFRC"] = (
-		command_line_arguments.sigmaFrac,
+		command_line_arguments.sigma_frac,
 		"Astroscrappy sigfrac value"
 	)
 	qualHead["CROBJLIM"] = (
