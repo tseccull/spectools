@@ -359,7 +359,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 
 
 ###############################################################################
-def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, cleanSci, dCParams, commandArgs):
+def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science_frame, dCParams, commandArgs):
 	'''
 	Constructs and saves a new .fits file combining the original input
 	dataframes and headers with the cleaned science data and updated
@@ -376,7 +376,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, cleanSci, dCP
 			The header of the primary header data unit in in_file
 	 -- cosmic_ray_mask (numpy.ndarray)
 			2D array flagging the location of cosmic ray detections
-	 -- cleanSci (numpy.ndarray)
+	 -- clean_science_frame (numpy.ndarray)
 			2D science data array after cosmic rays have been cleaned
 	 -- dCParams (dict)
 			dictionary of data and parameters fed to Astroscrappy 
@@ -539,7 +539,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, cleanSci, dCP
 	# Construct the output .fits file.
 	iHDU = fits.PrimaryHDU(header=primary_header)
 	mdfHDU = in_file["MDF"]
-	cleanSciHDU = fits.ImageHDU(cleanSci, header=cleanSciHead)
+	cleanSciHDU = fits.ImageHDU(clean_science_frame, header=cleanSciHead)
 	varHDU = in_file["VAR"]
 	qualHDU = fits.ImageHDU(qualData, header=qualHead)
 	sciHDU = in_file["OG_SCI"]
