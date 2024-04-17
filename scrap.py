@@ -548,11 +548,14 @@ def save_gmos(
 	# Construct the output .fits file.
 	primary_hdu = fits.PrimaryHDU(header=primary_header)
 	mdf_hdu = in_file["MDF"]
-	cleanSciHDU = fits.ImageHDU(clean_science_frame, header=clean_science_header)
+	clean_science_hdu = fits.ImageHDU(
+		clean_science_frame, 
+		header=clean_science_header
+	)
 	varHDU = in_file["VAR"]
 	qualHDU = fits.ImageHDU(quality_frame, header=quality_header)
 	sciHDU = in_file["OG_SCI"]
-	hduList=fits.HDUList([primary_hdu, mdf_hdu, cleanSciHDU, varHDU, qualHDU, sciHDU])
+	hduList=fits.HDUList([primary_hdu, mdf_hdu, clean_science_hdu, varHDU, qualHDU, sciHDU])
 	hduList.writeto("c" + file_name)
 	hduList.close()
 
