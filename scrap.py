@@ -615,7 +615,7 @@ parser.add_argument("-in", "--iteration_number", default=4, type=int,
 	help="[int] Number of iterations of the LA Cosmic algorithm to\
 	perform. Default: 4"
 )
-parser.add_argument("-sm", "--seperable_median", default=True, type=bool,
+parser.add_argument("-sm", "--separable_median", default=True, type=bool,
 	help="[boolean] Use the separable median filter instead of the full\
 	median filter. The separable median is not identical to the full\
 	median filter, but they are approximately the same and the\
@@ -678,24 +678,30 @@ for f in files:
 			inmask    = detect_cosmics_parameters["in_quality_frame"],
 			inbkg     = detect_cosmics_parameters["in_background_frame"],
 			invar     = detect_cosmics_parameters["in_variance_frame"],
-			sigclip   = args.sigmaClip,
-			sigfrac   = args.sigmaFrac,
-			objlim    = args.objLimit,
-			gain      = detect_cosmics_parameters["adgain"],
-			readnoise = detect_cosmics_parameters["readns"],
-			satlevel  = detect_cosmics_parameters["satlvl"],
-			niter     = args.numIter,
-			sepmed    = args.separatedMed,
-			cleantype = args.dataCleanType,
+			sigclip   = args.sigma_clip,
+			sigfrac   = args.sigma_frac,
+			objlim    = args.obj_limit,
+			gain      = detect_cosmics_parameters["detector_gain"],
+			readnoise = detect_cosmics_parameters["read_noise"],
+			satlevel  = detect_cosmics_parameters["saturation_level"],
+			niter     = args.iteration_number,
+			sepmed    = args.separable_median,
+			cleantype = args.data_clean_type,
 			fsmode    = args.fine_structure_mode,
-			psfmodel  = detect_cosmics_parameters["pmodel"],
+			psfmodel  = detect_cosmics_parameters["psf_model"],
 			psffwhm   = detect_cosmics_parameters["fwhm"],
-			psfsize   = detect_cosmics_parameters["psfsiz"],
+			psfsize   = detect_cosmics_parameters["psf_size"],
 			verbose   = args.verbose
 		)
 		
 		# Save cleaned science frame, and save cosmic_ray_mask as part
 		# of the quality frame.
 		instrument_save[instrument](
-			f, spectrum_file, primary_header, cosmic_ray_mask*1, clean_science_data, detect_cosmics_parameters, args
+			f,
+			spectrum_file,
+			primary_header,
+			cosmic_ray_mask*1,
+			clean_science_data,
+			detect_cosmics_parameters,
+			args
 		)
