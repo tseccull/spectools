@@ -25,7 +25,7 @@ Please be sure to cite these as well where necessary:
 
 v1.0.5
 
-This is essentially a Python wrapper for Curtis McCully's Astroscrappy, which is itself a Python implementation
+This is essentially a Python wrapper for Astropy's Astroscrappy, which is itself a Python implementation
 of Pieter van Dokkum's LA Cosmic. This script is used for detecting, masking, and cleaning cosmic ray hits in
 2D spectroscopic data. A modular design is intended to facilitate easy processing of data observed with a variety
 of instruments. If Astroscrappy is used, both McCully et al., and van Dokkum should be cited:
