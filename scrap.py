@@ -477,7 +477,7 @@ def save_gmos(
 			"Astroscrappy psfsize value (pix)"
 		)
 	
-	# Update the header of the new DQ header to add details on the
+	# Update the header of the new DQ frame to add details on the
 	# cosmic ray detection, masking, and cleaning process. Add the
 	# cosmic ray mask to the DQ frame. 
 	quality_header = in_file["DQ"].header
