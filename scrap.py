@@ -438,7 +438,7 @@ def save_gmos(
 		"Astroscrappy sigfrac value"
 	)
 	clean_science_header["CROBJLIM"] = (
-		command_line_arguments.objLimit,
+		command_line_arguments.obj_limit,
 		"Astroscrappy objlim value"
 	)
 	clean_science_header["CRDETSAT"] = (
@@ -506,7 +506,7 @@ def save_gmos(
 		"Astroscrappy sigfrac value"
 	)
 	qualHead["CROBJLIM"] = (
-		command_line_arguments.objLimit,
+		command_line_arguments.obj_limit,
 		"Astroscrappy objlim value"
 	)
 	qualHead["CRDETSAT"] = (
