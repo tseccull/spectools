@@ -518,7 +518,7 @@ def save_gmos(
 		"Astroscrappy niter value"
 	)
 	quality_header["CRSEPMED"] = (
-		command_line_arguments.seperable_median,
+		command_line_arguments.separable_median,
 		"Astroscrappy sepmed value"
 	)
 	quality_header["CRDCTYPE"] = (
