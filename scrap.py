@@ -669,7 +669,7 @@ for f in files:
 		# Based on the value of instrument, this calls a prep_instrument
 		# function
 		detect_cosmics_parameters = instrument_prep[instrument](
-			spectrum_file, primary_header, args.finStrucMode
+			spectrum_file, primary_header, args.fine_structure_mode
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
@@ -687,7 +687,7 @@ for f in files:
 			niter     = args.numIter,
 			sepmed    = args.separatedMed,
 			cleantype = args.dataCleanType,
-			fsmode    = args.finStrucMode,
+			fsmode    = args.fine_structure_mode,
 			psfmodel  = detect_cosmics_parameters["pmodel"],
 			psffwhm   = detect_cosmics_parameters["fwhm"],
 			psfsize   = detect_cosmics_parameters["psfsiz"],
