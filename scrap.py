@@ -359,7 +359,15 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 
 
 ###############################################################################
-def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science_frame, detect_cosmics_parameters, commandArgs):
+def save_gmos(
+	file_name,
+	in_file,
+	primary_header,
+	cosmic_ray_mask,
+	clean_science_frame,
+	detect_cosmics_parameters,
+	command_line_arguments
+):
 	'''
 	Constructs and saves a new .fits file combining the original input
 	dataframes and headers with the cleaned science data and updated
@@ -381,7 +389,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 	 -- detect_cosmics_parameters (dict)
 			dictionary of data and parameters fed to Astroscrappy 
 			detect_cosmics()
-	 -- commandArgs (class)
+	 -- command_line_arguments (class)
 			scrap.py command line argument namespace
 	Returns:
 	 -- None
@@ -421,15 +429,15 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Background estimation method for Astroscrappy"
 	)
 	cleanSciHead["CRSIGCLP"] = (
-		commandArgs.sigmaClip,
+		command_line_arguments.sigmaClip,
 		"Astroscrappy sigclip value"
 	)
 	cleanSciHead["CRSIGFRC"] = (
-		commandArgs.sigmaFrac,
+		command_line_arguments.sigmaFrac,
 		"Astroscrappy sigfrac value"
 	)
 	cleanSciHead["CROBJLIM"] = (
-		commandArgs.objLimit,
+		command_line_arguments.objLimit,
 		"Astroscrappy objlim value"
 	)
 	cleanSciHead["CRDETSAT"] = (
@@ -437,24 +445,24 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Astroscrappy satlevel value (e-)"
 	)
 	cleanSciHead["CRNITER"]  = (
-		commandArgs.numIter,
+		command_line_arguments.numIter,
 		"Astroscrappy niter value"
 	)
 	cleanSciHead["CRSEPMED"] = (
-		commandArgs.separatedMed,
+		command_line_arguments.separatedMed,
 		"Astroscrappy sepmed value"
 	)
 	cleanSciHead["CRDCTYPE"] = (
-		commandArgs.dataCleanType,
+		command_line_arguments.dataCleanType,
 		"Astroscrappy cleantype value"
 	)
 	cleanSciHead["CRFSMODE"] = (
-		commandArgs.finStrucMode,
+		command_line_arguments.finStrucMode,
 		"Astroscrappy fsmode value"
 	)
 	
 	# If fsmode is "median", then no psf parameters.
-	if commandArgs.finStrucMode == "convolve":
+	if command_line_arguments.finStrucMode == "convolve":
 		cleanSciHead["CRPSFMOD"] = (
 			detect_cosmics_parameters["pmodel"],
 			"Astroscrappy psfmodel value"
@@ -489,15 +497,15 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Background estimation method for Astroscrappy"
 	)
 	qualHead["CRSIGCLP"] = (
-		commandArgs.sigmaClip,
+		command_line_arguments.sigmaClip,
 		"Astroscrappy sigclip value"
 	)
 	qualHead["CRSIGFRC"] = (
-		commandArgs.sigmaFrac,
+		command_line_arguments.sigmaFrac,
 		"Astroscrappy sigfrac value"
 	)
 	qualHead["CROBJLIM"] = (
-		commandArgs.objLimit,
+		command_line_arguments.objLimit,
 		"Astroscrappy objlim value"
 	)
 	qualHead["CRDETSAT"] = (
@@ -505,24 +513,24 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Astroscrappy satlevel value (e-)"
 	)
 	qualHead["CRNITER"]  = (
-		commandArgs.numIter,
+		command_line_arguments.numIter,
 		"Astroscrappy niter value"
 	)
 	qualHead["CRSEPMED"] = (
-		commandArgs.separatedMed,
+		command_line_arguments.separatedMed,
 		"Astroscrappy sepmed value"
 	)
 	qualHead["CRDCTYPE"] = (
-		commandArgs.dataCleanType,
+		command_line_arguments.dataCleanType,
 		"Astroscrappy cleantype value"
 	)
 	qualHead["CRFSMODE"] = (
-		commandArgs.finStrucMode,
+		command_line_arguments.finStrucMode,
 		"Astroscrappy fsmode value"
 	)
 	
 	# If fsmode is "median", then no psf parameters.
-	if commandArgs.finStrucMode == "convolve":
+	if command_line_arguments.finStrucMode == "convolve":
 		qualHead["CRPSFMOD"] = (
 			detect_cosmics_parameters["pmodel"],
 			"Astroscrappy psfmodel value"
