@@ -446,7 +446,7 @@ def save_gmos(
 		"Astroscrappy satlevel value (e-)"
 	)
 	clean_science_header["CRNITER"]  = (
-		command_line_arguments.numIter,
+		command_line_arguments.iteration_number,
 		"Astroscrappy niter value"
 	)
 	clean_science_header["CRSEPMED"] = (
@@ -514,7 +514,7 @@ def save_gmos(
 		"Astroscrappy satlevel value (e-)"
 	)
 	qualHead["CRNITER"]  = (
-		command_line_arguments.numIter,
+		command_line_arguments.iteration_number,
 		"Astroscrappy niter value"
 	)
 	qualHead["CRSEPMED"] = (
