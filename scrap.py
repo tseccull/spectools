@@ -359,14 +359,14 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 
 
 ###############################################################################
-def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
+def save_gmos(file_name, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	'''
 	Constructs and saves a new .fits file combining the original input
 	dataframes and headers with the cleaned science data and updated
 	quality mask.
 	
 	Args:
-	 -- fileName (str)
+	 -- file_name (str)
 			Name of the input file
 	 -- iFile (.fits HDU list)
 			The object produced by using fits.open on the fits file
@@ -544,7 +544,7 @@ def save_gmos(fileName, iFile, iHead, cMask, cleanSci, dCParams, commandArgs):
 	qualHDU = fits.ImageHDU(qualData, header=qualHead)
 	sciHDU = iFile["OG_SCI"]
 	hduList=fits.HDUList([iHDU, mdfHDU, cleanSciHDU, varHDU, qualHDU, sciHDU])
-	hduList.writeto("c" + fileName)
+	hduList.writeto("c" + file_name)
 	hduList.close()
 
 
