@@ -553,9 +553,9 @@ def save_gmos(
 		header=clean_science_header
 	)
 	variance_hdu = in_file["VAR"]
-	qualHDU = fits.ImageHDU(quality_frame, header=quality_header)
+	quality_hdu = fits.ImageHDU(quality_frame, header=quality_header)
 	sciHDU = in_file["OG_SCI"]
-	hduList=fits.HDUList([primary_hdu, mdf_hdu, clean_science_hdu, variance_hdu, qualHDU, sciHDU])
+	hduList=fits.HDUList([primary_hdu, mdf_hdu, clean_science_hdu, variance_hdu, quality_hdu, sciHDU])
 	hduList.writeto("c" + file_name)
 	hduList.close()
 
