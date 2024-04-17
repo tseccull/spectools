@@ -430,7 +430,7 @@ def save_gmos(
 		"Background estimation method for Astroscrappy"
 	)
 	clean_science_header["CRSIGCLP"] = (
-		command_line_arguments.sigmaClip,
+		command_line_arguments.sigma_clip,
 		"Astroscrappy sigclip value"
 	)
 	clean_science_header["CRSIGFRC"] = (
@@ -498,7 +498,7 @@ def save_gmos(
 		"Background estimation method for Astroscrappy"
 	)
 	qualHead["CRSIGCLP"] = (
-		command_line_arguments.sigmaClip,
+		command_line_arguments.sigma_clip,
 		"Astroscrappy sigclip value"
 	)
 	qualHead["CRSIGFRC"] = (
