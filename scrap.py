@@ -465,7 +465,7 @@ def save_gmos(
 	# If fsmode is "median", then no psf parameters.
 	if command_line_arguments.fine_structure_mode == "convolve":
 		clean_science_header["CRPSFMOD"] = (
-			detect_cosmics_parameters["pmodel"],
+			detect_cosmics_parameters["psf_model"],
 			"Astroscrappy psfmodel value"
 		)
 		clean_science_header["CRPSFWHM"] = (
@@ -533,7 +533,7 @@ def save_gmos(
 	# If fsmode is "median", then no psf parameters.
 	if command_line_arguments.fine_structure_mode == "convolve":
 		qualHead["CRPSFMOD"] = (
-			detect_cosmics_parameters["pmodel"],
+			detect_cosmics_parameters["psf_model"],
 			"Astroscrappy psfmodel value"
 		)
 		qualHead["CRPSFWHM"] = (
