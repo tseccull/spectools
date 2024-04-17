@@ -663,13 +663,13 @@ instrument_save = {
 # Run detect_cosmics on every fits file listed in files.
 for f in files:
 	with fits.open(f) as spectrum_file:
-		imgHead = spectrum_file[0].header
-		inst = imgHead["INSTRUME"]
+		primary_header = spectrum_file[0].header
+		inst = primary_header["INSTRUME"]
 		
 		# Based on the value of inst, this calls a prep_instrument
 		# function
 		detCosmicParams = instrument_prep[inst](
-			spectrum_file, imgHead, args.finStrucMode
+			spectrum_file, primary_header, args.finStrucMode
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
@@ -697,5 +697,5 @@ for f in files:
 		# Save cleaned science frame, and save crMask as part of the
 		# quality frame
 		instrument_save[inst](
-			f, spectrum_file, imgHead, crMask*1, cleanData, detCosmicParams, args
+			f, spectrum_file, primary_header, crMask*1, cleanData, detCosmicParams, args
 		)
