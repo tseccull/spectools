@@ -375,22 +375,23 @@ def save_gmos(
 	
 	Args:
 	 -- file_name (str)
-			Name of the input file
+			The name of the input file.
 	 -- in_file (.fits HDU list)
 			The object produced by using fits.open on the fits file
 			currently being processed. It contains all the dataframes
 			and headers for the current spectrum.
 	 -- primary_header (.fits header)
-			The header of the primary header data unit in in_file
+			The header of the primary header data unit in in_file.
 	 -- cosmic_ray_mask (numpy.ndarray)
-			2D array flagging the location of cosmic ray detections
+			A 2D array flagging the location of cosmic ray detections.
 	 -- clean_science_frame (numpy.ndarray)
-			2D science data array after cosmic rays have been cleaned
+			The 2D science data array after cosmic rays have been
+			cleaned.
 	 -- detect_cosmics_parameters (dict)
-			dictionary of data and parameters fed to Astroscrappy 
-			detect_cosmics()
+			A dictionary of data and parameters fed to Astroscrappy 
+			detect_cosmics().
 	 -- command_line_arguments (class)
-			scrap.py command line argument namespace
+			The scrap.py command line argument namespace.
 	Returns:
 	 -- None
 	'''
