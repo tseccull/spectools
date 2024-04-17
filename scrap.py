@@ -673,7 +673,7 @@ for f in files:
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
-		crMask, cleanData = asc.detect_cosmics(
+		cosmic_ray_mask, cleanData = asc.detect_cosmics(
 			detect_cosmics_parameters["indata"],
 			inmask    = detect_cosmics_parameters["inqual"],
 			inbkg     = detect_cosmics_parameters["inbkgd"],
@@ -694,8 +694,8 @@ for f in files:
 			verbose   = args.verbose
 		)
 		
-		# Save cleaned science frame, and save crMask as part of the
-		# quality frame
+		# Save cleaned science frame, and save cosmic_ray_mask as part
+		# of the quality frame.
 		instrument_save[instrument](
-			f, spectrum_file, primary_header, crMask*1, cleanData, detect_cosmics_parameters, args
+			f, spectrum_file, primary_header, cosmic_ray_mask*1, cleanData, detect_cosmics_parameters, args
 		)
