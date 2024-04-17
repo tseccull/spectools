@@ -668,34 +668,34 @@ for f in files:
 		
 		# Based on the value of instrument, this calls a prep_instrument
 		# function
-		detCosmicParams = instrument_prep[instrument](
+		detect_cosmics_parameters = instrument_prep[instrument](
 			spectrum_file, primary_header, args.finStrucMode
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
 		crMask, cleanData = asc.detect_cosmics(
-			detCosmicParams["indata"],
-			inmask    = detCosmicParams["inqual"],
-			inbkg     = detCosmicParams["inbkgd"],
-			invar     = detCosmicParams["invari"],
+			detect_cosmics_parameters["indata"],
+			inmask    = detect_cosmics_parameters["inqual"],
+			inbkg     = detect_cosmics_parameters["inbkgd"],
+			invar     = detect_cosmics_parameters["invari"],
 			sigclip   = args.sigmaClip,
 			sigfrac   = args.sigmaFrac,
 			objlim    = args.objLimit,
-			gain      = detCosmicParams["adgain"],
-			readnoise = detCosmicParams["readns"],
-			satlevel  = detCosmicParams["satlvl"],
+			gain      = detect_cosmics_parameters["adgain"],
+			readnoise = detect_cosmics_parameters["readns"],
+			satlevel  = detect_cosmics_parameters["satlvl"],
 			niter     = args.numIter,
 			sepmed    = args.separatedMed,
 			cleantype = args.dataCleanType,
 			fsmode    = args.finStrucMode,
-			psfmodel  = detCosmicParams["pmodel"],
-			psffwhm   = detCosmicParams["fwhm"],
-			psfsize   = detCosmicParams["psfsiz"],
+			psfmodel  = detect_cosmics_parameters["pmodel"],
+			psffwhm   = detect_cosmics_parameters["fwhm"],
+			psfsize   = detect_cosmics_parameters["psfsiz"],
 			verbose   = args.verbose
 		)
 		
 		# Save cleaned science frame, and save crMask as part of the
 		# quality frame
 		instrument_save[instrument](
-			f, spectrum_file, primary_header, crMask*1, cleanData, detCosmicParams, args
+			f, spectrum_file, primary_header, crMask*1, cleanData, detect_cosmics_parameters, args
 		)
