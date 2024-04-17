@@ -664,11 +664,11 @@ instrument_save = {
 for f in files:
 	with fits.open(f) as spectrum_file:
 		primary_header = spectrum_file[0].header
-		inst = primary_header["INSTRUME"]
+		instrument = primary_header["INSTRUME"]
 		
-		# Based on the value of inst, this calls a prep_instrument
+		# Based on the value of instrument, this calls a prep_instrument
 		# function
-		detCosmicParams = instrument_prep[inst](
+		detCosmicParams = instrument_prep[instrument](
 			spectrum_file, primary_header, args.finStrucMode
 		)
 		
@@ -696,6 +696,6 @@ for f in files:
 		
 		# Save cleaned science frame, and save crMask as part of the
 		# quality frame
-		instrument_save[inst](
+		instrument_save[instrument](
 			f, spectrum_file, primary_header, crMask*1, cleanData, detCosmicParams, args
 		)
