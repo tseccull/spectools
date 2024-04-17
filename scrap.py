@@ -569,80 +569,91 @@ def save_gmos(
 	hdu_list.close()
 
 
-####################################################################################################
-#### SCRIPT STARTS HERE # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #### 
-####################################################################################################
+###############################################################################
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
+###############################################################################
 
 # Parse scrap.py arguments
 parser = argparse.ArgumentParser(
-	description="Locate, mask, and clean cosmic ray hits in 2D spectroscopic data with\
-	             Astroscrappy/LACosmic. This script runs the detect_cosmics() function from\
-	             Astroscrappy on supplied astronomical spectroscopic data. Astroscrappy is a\
-	             Python implentation of Pieter van Dokkum's LACosmic. Cite both Astroscrappy and\
-	             LACosmic if used. scrap.py will assume all files in the current directory\
-	             are .fits formatted 2D spectra that need their cosmic rays masked and will try to\
-	             apply detect_cosmics() to each in turn. scrap.py will replace the primary input\
-	             data frame with the cleaned data array in the output .fits file; a copy of the\
-	             original input data will be stored in a new Header Data Unit (HDU) of the output\
-	             .fits file. The boolean cosmic ray mask that scrap.py creates will be either\
-	             added to an existing quality frame (e.g. flagging bad pixels), or if a quality\
-	             frame doesn't exist in the original file the crmask will be added to the output\
-	             file as the new quality frame in a new HDU. A gaussian psfmodel is assumed, so in\
-	             detect_cosmics() psfk=None by default, and psfbeta is ignored. Other\
-	             detect_cosmics() parameters are either taken directly from the fits data and\
-	             headers, or they can be set optionally when scrap.py is run. Astroscrappy docs\
-	             and links to citables -> https://astroscrappy.readthedocs.io/en/latest/"
+	description="Locate, mask, and clean cosmic ray hits in 2D\
+	spectroscopic data with Astroscrappy/LACosmic. This script runs the\
+	detect_cosmics() function from Astroscrappy on supplied\
+	astronomical spectroscopic data. Astroscrappy is a Python\
+	implentation of Pieter van Dokkum's LACosmic. Cite both\
+	Astroscrappy and LACosmic if used. scrap.py will assume all files\
+	in the current directory are .fits formatted 2D spectra that need\
+	their cosmic rays masked and will try to apply detect_cosmics() to\
+	each in turn. scrap.py will replace the primary input data frame\
+	with the cleaned data array in the output .fits file; a copy of the\
+	original input data will be stored in a new Header Data Unit (HDU)\
+	of the output .fits file. The boolean cosmic ray mask that scrap.py\
+	creates will be either added to an existing quality frame (e.g.\
+	flagging bad pixels), or if a quality frame doesn't exist in the\
+	original file the crmask will be added to the output file as the\
+	new quality frame in a new HDU. A gaussian psfmodel is assumed, so\
+	in detect_cosmics() psfk=None by default, and psfbeta is ignored.\
+	Other detect_cosmics() parameters are either taken directly from\
+	the fits data and headers, or they can be set optionally when\
+	scrap.py is run. Astroscrappy docs and links to citables ->\
+	https://astroscrappy.readthedocs.io/en/latest/"
 )
-parser.add_argument("-sc", "--sigmaClip", default=4.5, type=float, help="[float]\
-    Laplacian-to-noise limit for cosmic ray detection. Lower values will flag more pixels as\
-    cosmic rays. Default: 4.5"
+parser.add_argument("-sc", "--sigmaClip", default=4.5, type=float,
+	help="[float] Laplacian-to-noise limit for cosmic ray detection.\
+	Lower values will flag more pixels as cosmic rays. Default: 4.5"
 )
-parser.add_argument("-sf", "--sigmaFrac", default=0.3, type=float, help="[float] Fractional\
-    detection limit for neighboring pixels. For cosmic ray neighbor pixels, a lapacian-to-noise\
-    detection limit of sigfrac * sigclip will be used. Default: 0.3"
+parser.add_argument("-sf", "--sigmaFrac", default=0.3, type=float,
+	help="[float] Fractional detection limit for neighboring pixels.\
+	For cosmic ray neighbor pixels, a lapacian-to-noise detection\
+	limit of sigfrac * sigclip will be used. Default: 0.3"
 )
-parser.add_argument("-ol", "--objLimit", default=5.0, type=float, help="[float] Minimum contrast\
-    between Laplacian image and the fine structure image. Increase this value if cores of bright\
-    stars are flagged as cosmic rays. Default: 5.0"
+parser.add_argument("-ol", "--objLimit", default=5.0, type=float,
+	help="[float] Minimum contrast between Laplacian image and the fine\
+	structure image. Increase this value if cores of bright stars are\
+	flagged as cosmic rays. Default: 5.0"
 )
-parser.add_argument("-ni", "--numIter", default=4, type=int, help="[int] Number of iterations of\
-    the LA Cosmic algorithm to perform. Default: 4"
+parser.add_argument("-ni", "--numIter", default=4, type=int,
+	help="[int] Number of iterations of the LA Cosmic algorithm to\
+	perform. Default: 4"
 )
-parser.add_argument("-sm", "--separatedMed", default=True, type=bool, help="[boolean] Use the\
-    separable median filter instead of the full median filter. The separable median is not\
-    identical to the full median filter, but they are approximately the same and the separable\
-    median filter is significantly faster and still detects cosmic rays well. Default: True"
+parser.add_argument("-sm", "--separatedMed", default=True, type=bool,
+	help="[boolean] Use the separable median filter instead of the full\
+	median filter. The separable median is not identical to the full\
+	median filter, but they are approximately the same and the\
+	separable median filter is significantly faster and still detects\
+	cosmic rays well. Default: True"
 )
-parser.add_argument("-ct", "--dataCleanType", default="meanmask", type=str, help="\
-    [str] {'median', 'medmask', 'meanmask', 'idw'} Set which clean algorithm is used:\
-    ('median': An umasked 5x5 median filter), ('medmask': A masked 5x5 median filter),\
-    ('meanmask': A masked 5x5 mean filter),\
-    ('idw': A masked 5x5 inverse distance weighted interpolation.)\
-    Default: 'meanmask'"
+parser.add_argument("-ct", "--dataCleanType", default="meanmask", type=str, 
+	help="[str] {'median', 'medmask', 'meanmask', 'idw'} Set which\
+	clean algorithm is used: ('median': An umasked 5x5 median filter),\
+	('medmask': A masked 5x5 median filter), ('meanmask': A masked 5x5\
+	mean filter), ('idw': A masked 5x5 inverse distance weighted\
+	interpolation). Default: 'meanmask'"
 )
-parser.add_argument("-fsm", "--finStrucMode", default="convolve", type=str, help="\
-    [str] {'median', 'convolve'} Method to build the fine structure image:\
-    ('median': Use the median filter in the standard LA Cosmic algorithm),\
-    ('convolve': Convolve the image with the psf kernel to calculate the fine structure image),\
-    Default: 'convolve'"
+parser.add_argument("-fsm", "--finStrucMode", default="convolve", type=str,
+	help="[str] {'median', 'convolve'} Method to build the fine\
+	structure image: ('median': Use the median filter in the standard\
+	LA Cosmic algorithm), ('convolve': Convolve the image with the psf\
+	kernel to calculate the fine structure image), Default: 'convolve'"
 )
-parser.add_argument("-v", "--verbose", default=False, type=bool, help="[boolean] Set whether or\
-	not detect_cosmics() will print to screen. Default: False"
+parser.add_argument("-v", "--verbose", default=False, type=bool,
+	help="[boolean] Set whether or not detect_cosmics() will print to\
+	screen. Default: False"
 )
 args = parser.parse_args()
 
 
 # List .fits files in current directory.
-#files = sorted(glob.glob('*.fits'))
 files = sorted(glob.glob('*.fits'))
 
-# Create dictionary that scrap.py will use to call instrument specific data preparation functions.
+# Create dictionary that scrap.py will use to call instrument specific
+# data preparation functions.
 instrument_prep = {
 	"GMOS-N": prep_gmos,
 	"GMOS-S": prep_gmos
 }
 
-# Create dictionary that scrap.py will use to call instrument specific data saving functions.
+# Create dictionary that scrap.py will use to call instrument specific
+# data saving functions.
 instrument_save = {
 	"GMOS-N": save_gmos,
 	"GMOS-S": save_gmos
@@ -654,8 +665,11 @@ for f in files:
 		imgHead = imgFile[0].header
 		inst = imgHead["INSTRUME"]
 		
-		# Based on the value of inst, this calls a prep_instrument function
-		detCosmicParams = instrument_prep[inst](imgFile, imgHead, args.finStrucMode)
+		# Based on the value of inst, this calls a prep_instrument
+		# function
+		detCosmicParams = instrument_prep[inst](
+			imgFile, imgHead, args.finStrucMode
+		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
 		crMask, cleanData = asc.detect_cosmics(
@@ -679,6 +693,8 @@ for f in files:
 			verbose   = args.verbose
 		)
 		
-		# Save cleaned science frame, and save crMask as part of the quality frame
-		instrument_save[inst](f, imgFile, imgHead, crMask*1, cleanData, detCosmicParams, args)
-	
+		# Save cleaned science frame, and save crMask as part of the
+		# quality frame
+		instrument_save[inst](
+			f, imgFile, imgHead, crMask*1, cleanData, detCosmicParams, args
+		)
