@@ -442,7 +442,7 @@ def save_gmos(
 		"Astroscrappy objlim value"
 	)
 	clean_science_header["CRDETSAT"] = (
-		detect_cosmics_parameters["satlvl"],
+		detect_cosmics_parameters["saturation_level"],
 		"Astroscrappy satlevel value (e-)"
 	)
 	clean_science_header["CRNITER"]  = (
@@ -510,7 +510,7 @@ def save_gmos(
 		"Astroscrappy objlim value"
 	)
 	qualHead["CRDETSAT"] = (
-		detect_cosmics_parameters["satlvl"],
+		detect_cosmics_parameters["saturation_level"],
 		"Astroscrappy satlevel value (e-)"
 	)
 	qualHead["CRNITER"]  = (
