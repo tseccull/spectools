@@ -359,7 +359,7 @@ def prep_gmos(in_file, primary_header, fine_structure_mode):
 
 
 ###############################################################################
-def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science_frame, dCParams, commandArgs):
+def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science_frame, detect_cosmics_parameters, commandArgs):
 	'''
 	Constructs and saves a new .fits file combining the original input
 	dataframes and headers with the cleaned science data and updated
@@ -378,7 +378,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 			2D array flagging the location of cosmic ray detections
 	 -- clean_science_frame (numpy.ndarray)
 			2D science data array after cosmic rays have been cleaned
-	 -- dCParams (dict)
+	 -- detect_cosmics_parameters (dict)
 			dictionary of data and parameters fed to Astroscrappy 
 			detect_cosmics()
 	 -- commandArgs (class)
@@ -433,7 +433,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Astroscrappy objlim value"
 	)
 	cleanSciHead["CRDETSAT"] = (
-		dCParams["satlvl"],
+		detect_cosmics_parameters["satlvl"],
 		"Astroscrappy satlevel value (e-)"
 	)
 	cleanSciHead["CRNITER"]  = (
@@ -456,15 +456,15 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 	# If fsmode is "median", then no psf parameters.
 	if commandArgs.finStrucMode == "convolve":
 		cleanSciHead["CRPSFMOD"] = (
-			dCParams["pmodel"],
+			detect_cosmics_parameters["pmodel"],
 			"Astroscrappy psfmodel value"
 		)
 		cleanSciHead["CRPSFWHM"] = (
-			dCParams["fwhm"],
+			detect_cosmics_parameters["fwhm"],
 			"Astroscrappy psffwhm value (pix)"
 		)
 		cleanSciHead["CRPSFSIZ"] = (
-			dCParams["psfsiz"],
+			detect_cosmics_parameters["psfsiz"],
 			"Astroscrappy psfsize value (pix)"
 		)
 	
@@ -501,7 +501,7 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 		"Astroscrappy objlim value"
 	)
 	qualHead["CRDETSAT"] = (
-		dCParams["satlvl"],
+		detect_cosmics_parameters["satlvl"],
 		"Astroscrappy satlevel value (e-)"
 	)
 	qualHead["CRNITER"]  = (
@@ -524,15 +524,15 @@ def save_gmos(file_name, in_file, primary_header, cosmic_ray_mask, clean_science
 	# If fsmode is "median", then no psf parameters.
 	if commandArgs.finStrucMode == "convolve":
 		qualHead["CRPSFMOD"] = (
-			dCParams["pmodel"],
+			detect_cosmics_parameters["pmodel"],
 			"Astroscrappy psfmodel value"
 		)
 		qualHead["CRPSFWHM"] = (
-			dCParams["fwhm"],
+			detect_cosmics_parameters["fwhm"],
 			"Astroscrappy psffwhm value (pix)"
 		)
 		qualHead["CRPSFSIZ"] = (
-			dCParams["psfsiz"],
+			detect_cosmics_parameters["psfsiz"],
 			"Astroscrappy psfsize value (pix)"
 		)
 	
