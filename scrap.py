@@ -473,7 +473,7 @@ def save_gmos(
 			"Astroscrappy psffwhm value (pix)"
 		)
 		clean_science_header["CRPSFSIZ"] = (
-			detect_cosmics_parameters["psfsiz"],
+			detect_cosmics_parameters["psf_size"],
 			"Astroscrappy psfsize value (pix)"
 		)
 	
@@ -541,7 +541,7 @@ def save_gmos(
 			"Astroscrappy psffwhm value (pix)"
 		)
 		qualHead["CRPSFSIZ"] = (
-			detect_cosmics_parameters["psfsiz"],
+			detect_cosmics_parameters["psf_size"],
 			"Astroscrappy psfsize value (pix)"
 		)
 	
