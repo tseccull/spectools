@@ -454,7 +454,7 @@ def save_gmos(
 		"Astroscrappy sepmed value"
 	)
 	clean_science_header["CRDCTYPE"] = (
-		command_line_arguments.dataCleanType,
+		command_line_arguments.data_clean_type,
 		"Astroscrappy cleantype value"
 	)
 	clean_science_header["CRFSMODE"] = (
@@ -522,7 +522,7 @@ def save_gmos(
 		"Astroscrappy sepmed value"
 	)
 	qualHead["CRDCTYPE"] = (
-		command_line_arguments.dataCleanType,
+		command_line_arguments.data_clean_type,
 		"Astroscrappy cleantype value"
 	)
 	qualHead["CRFSMODE"] = (
