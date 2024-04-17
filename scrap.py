@@ -1,9 +1,9 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 
 """
-scrap.py - written by T. Seccull, 2023-10-24 - v1.0.4
+scrap.py - written by T. Seccull, 2023-10-24 - v1.0.5
 
-	Last updated - 2024-04-16
+	Last updated - 2024-04-17
 
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
 	with Astroscrappy/LA Cosmic. This script runs the detect_cosmics()
@@ -624,7 +624,7 @@ parser.add_argument("-sm", "--separable_median", default=True, type=bool,
 )
 parser.add_argument("-ct", "--data_clean_type", default="meanmask", type=str, 
 	help="[str] {'median', 'medmask', 'meanmask', 'idw'} Set which\
-	clean algorithm is used: ('median': An umasked 5x5 median filter),\
+	clean algorithm is used: ('median': An unmasked 5x5 median filter),\
 	('medmask': A masked 5x5 median filter), ('meanmask': A masked 5x5\
 	mean filter), ('idw': A masked 5x5 inverse distance weighted\
 	interpolation). Default: 'meanmask'"
