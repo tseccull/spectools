@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-stack.py - written by Tom Seccull, 2024-04-18 - v0.0.1
+stack.py - written by Tom Seccull, 2024-04-18 - v0.0.2
 
-	Last updated: 2024-04-26
+	Last updated: 2024-04-27
 	
 	This script takes multiple 1D spectra and combines them with a
 	weighted bootstrapped median to produce a stacked 1D spectrum with
@@ -280,6 +280,41 @@ def stack_header_gmos(new_hdu, heads, files):
 		
 	# Instrument metadata
 	new_head["INSTRUME"] = (heads[key_0]["INSTRUME"], "Instrument used in observation")
+	new_head["INPORT"] = (heads[key_0]["INPORT"], "ISS port where GMOS was attached")
+	new_head["GMOSCC"] = (heads[key_0]["GMOSCC"], "GMOS components controller software")
+	new_head["CONID"] = (heads[key_0]["CONID"], "Detector controller ID")
+	new_head["DETECTOR"] = (heads[key_0]["DETECTOR"], "Detector name")
+	new_head["DEWAR"] = (heads[key_0]["DEWAR"], "Dewar name")
+	new_head["ARRYTSET"] = (heads[key_0]["ARRYTSET"], "Array temperature setpoint, C")
+	
+	temps = ["A", "B", "C", "D"]
+	for t in temps:
+		array_temps = np.array([heads[x[:-5]]["ARRYTMP"+t] for x in files])
+		median_temp = round(np.median(array_temps), 3)
+		comment_string = "Median array temperature " + t + ", C"
+		new_head["MEDARTP"+t] = (median_temp, comment_string)
+	
+	new_head["DETSIZE"] = (heads[key_0]["DETSIZE"], "Detector size, pixels")
+	new_head["NCCDS"] = (heads[key_0]["NCCDS"], "Number of CCD chips")
+	new_head["NAMPS"] = (heads[key_0]["NAMPS"], "Number of amplifiers")
+	new_head["AMPINTEG"] = (heads[key_0]["AMPINTEG"], "Amplifier integration time")
+	new_head["NSUBEXP"] = (heads[key_0]["NSUBEXP"], "Number of sub exposures")
+	new_head["EXPTIME"] = (heads[key_0]["EXPTIME"], "Exposure time, s")
+	new_head["DARKTIME"] = (round(heads[key_0]["DARKTIME"], 2), "Dark current integration, s")
+	new_head["MASKID"] = (heads[key_0]["MASKID"], "Mask/IFU barcode")
+	new_head["MASKNAME"] = (heads[key_0]["MASKNAME"], "Mask name")
+	new_head["MASKTYPE"] = (heads[key_0]["MASKTYP"], "Mask/IFU type (-1=IFU/0=none/1=mask)")
+	new_head["MASKLOC"] = (heads[key_0]["MASKLOC"], "Mask/IFU location (-1=unknown/0=FP/1=cassette)")
+	new_head["FILTER1"] = (heads[key_0]["FILTER1"], "Filter 1 name")
+	new_head["FILTID1"] = (heads[key_0]["FILTID1"], "Filter 1 barcode")
+	new_head["FILTER2"] = (heads[key_0]["FILTER2"], "Filter 2 name")
+	new_head["FILTID2"] = (heads[key_0]["FILTID2"], "Filter 2 barcode")
+	new_head["GRATING"] = (heads[key_0]["GRATING"], "Grating name")
+	new_head["GRATID"] = (heads[key_0]["GRATID"], "Grating barcode")
+	new_head["CENTWAVE"] = (heads[key_0]["CENTWAVE"], "Central wavelength, nm")
+	new_head["GRWLEN"] = (heads[key_0]["GRWLEN"], "Grating wavelength at slit, nm")
+	new_head["GRORDER"] = (heads[key_0]["GRORDER"], "Grating order")
+	new_head["GRTILT"] = (heads[key_0]["GRTILT"], "Grating tilt angle, deg")
 	
 	# Stacking metadata
 	new_head["STACKED"] = (len(files), "Number of stacked frames")
@@ -289,7 +324,7 @@ def stack_header_gmos(new_hdu, heads, files):
 		new_head[stack_key_string] = (file_name, comment_string)
 	
 	for i in files:
-		print(headers[i[:-5]]["HUMIDITY"])
+		print(headers[i[:-5]]["GRSTEP"])
 	return new_hdu
 
 

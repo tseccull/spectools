@@ -1,6 +1,6 @@
 # spectools
 
-v24.117.0
+v24.118.0
 
 Developer:    Tom Seccull
 
@@ -60,7 +60,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # stack.py
 
-v0.0.1 - PARTIALLY FUNCTIONAL
+v0.0.2 - PARTIALLY FUNCTIONAL
 
 This script takes multiple 1D spectra and combines them with a weighted 
 bootstrapped median to produce a stacked 1D spectrum with reduced noise. It is
