@@ -1,6 +1,6 @@
 # spectools
 
-v24.118.0
+v24.127.0
 
 Developer:    Tom Seccull
 
@@ -24,7 +24,7 @@ Please be sure to cite these as well where necessary:
 
 # scrap.py
 
-v1.0.5
+v1.0.6
 
 This is essentially a Python wrapper for Astropy's Astroscrappy, which is 
 itself a Python implementation of Pieter van Dokkum's LA Cosmic. This script 
@@ -46,7 +46,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # fronge.py
 
-v1.0.2
+v1.0.3
 
 This script is designed to correct fringing in 2D spectroscopic data by 
 creating a median fringe frame and subtracting it from science data. A modular 
@@ -60,16 +60,23 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # stack.py
 
-v0.0.2 - PARTIALLY FUNCTIONAL
+v1.0.0
 
-This script takes multiple 1D spectra and combines them with a weighted 
-bootstrapped median to produce a stacked 1D spectrum with reduced noise. It is
-only readily compatible with spectra extracted by
-[MOTES](https://github.com/tseccull/motes).
+This script takes multiple 1D spectra and combines them to produce a stacked 1D
+spectrum with reduced noise. Each input spectrum is scaled to unity at either a
+user-selected wavelength or the central wavelength of the spectrum's wavelength
+range. They are then each resampled within their uncertainties to estimate the
+distribution of possible values at each wavelength in the stacked spectrum. The
+median of the distribution is found to be within one standard error of the mean
+of the distribution in almost all cases, so the median of the distribution in
+each wavelength element is taken as the value of the stacked spectrum at that
+wavelength. Standard error of the mean of the distribution is taken to be the
+uncertainty of the median. It is only readily compatible with spectra extracted
+by [MOTES](https://github.com/tseccull/motes).
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
-Supported Instruments: All that are also supported by  [MOTES](https://github.com/tseccull/motes). Testing is currently being run on GMOS spectra.
+Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
