@@ -65,14 +65,15 @@ v1.0.0
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
 spectrum with reduced noise. Each input spectrum is scaled to unity at either a
 user-selected wavelength or the central wavelength of the spectrum's wavelength
-range. They are then each resampled within their uncertainties to estimate the
-distribution of possible values at each wavelength in the stacked spectrum. The
-median of the distribution is found to be within one standard error of the mean
-of the distribution in almost all cases, so the median of the distribution in
-each wavelength element is taken as the value of the stacked spectrum at that
-wavelength. Standard error of the mean of the distribution is taken to be the
-uncertainty of the median. It is only readily compatible with spectra extracted
-by [MOTES](https://github.com/tseccull/motes).
+range. They are then all resampled within their uncertainties to estimate the
+combined distribution of possible values at each wavelength in the stacked 
+spectrum. The median of the combined distribution at each wavelength point is 
+found to be within a distance of one standard error of the mean from the mean 
+of the distribution in almost all cases; as a result, the median of the 
+combined distribution in each wavelength element is taken as the value of the
+stacked spectrum at that wavelength. Standard error of the mean of the
+distribution is taken to be the uncertainty of the median. stack.py is only
+readily compatible with spectra extracted by [MOTES](https://github.com/tseccull/motes).
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
