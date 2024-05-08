@@ -2,7 +2,8 @@
 """
 gmosio.py - written by T. Seccull, 2024-05-06
 
-    Last updated: 2024-05-06
+	Called by fronge.py
+    Last updated: 2024-05-08
 
 	This module contains the save_gmos() function called by fronge.py.
 """

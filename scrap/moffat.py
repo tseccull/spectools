@@ -3,7 +3,8 @@
 """
 moffat.py - written by T. Seccull, 2024-05-06
 
-	Last updated - 2024-05-06
+	Called by: gmosio.py
+	Last updated - 2024-05-08
 
 	This file contains the moffat_least_squares() and moffat_resid()
 	functions which are needed to determine the FWHM of spectra when
