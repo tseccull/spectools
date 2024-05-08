@@ -63,17 +63,21 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 v1.0.0
 
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
-spectrum with reduced noise. Each input spectrum is scaled to unity at either a
-user-selected wavelength or the central wavelength of the spectrum's wavelength
-range. They are then all resampled within their uncertainties to estimate the
-combined distribution of possible values at each wavelength in the stacked 
-spectrum. The median of the combined distribution at each wavelength point is 
-found to be within a distance of one standard error of the mean from the mean 
-of the distribution in almost all cases; as a result, the median of the 
-combined distribution in each wavelength element is taken as the value of the
-stacked spectrum at that wavelength. Standard error of the mean of the
-distribution is taken to be the uncertainty of the median. stack.py is only
-readily compatible with spectra extracted by [MOTES](https://github.com/tseccull/motes).
+spectrum with reduced noise. All input spectra are scaled to unity at either a
+user-selected wavelength or the central wavelength of the spectra. The spectra 
+are then all randomly resampled within their uncertainties to estimate the 
+total combined distribution of possible values for each wavelength in the 
+stacked spectrum. The uncertainty distribution of each data point in each
+spectrum is assumed to be Gaussian with the mean defined by the value of 
+the data point and the standard deviation defined by its uncertainty. For the 
+resulting distribution of resampled points at each wavelength element, its 
+mean and median are found to be within one standard error of the mean from each
+other in almost all cases. Given its close proximity to the mean and its 
+robustness against outliers, the median of the combined distribution in each 
+wavelength element is taken as the value of the stacked spectrum at that 
+wavelength. The standard error of the mean of the distribution is taken to be 
+the uncertainty each stacked data point. stack.py is only readily compatible 
+with spectra extracted by [MOTES](https://github.com/tseccull/motes).
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
