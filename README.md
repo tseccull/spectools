@@ -1,6 +1,6 @@
 # spectools
 
-v24.127.0
+v24.128.0
 
 Developer:    Tom Seccull
 
@@ -82,6 +82,17 @@ with spectra extracted by [MOTES](https://github.com/tseccull/motes).
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
+
+# divide.py
+
+v0.0.0 - Under development
+
+This script divides one 1D spectrum by another. divide.py expects both spectra
+to have a common wavelength axis, be the product of extraction by MOTES, and
+stacking by stack.py. 
+
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
+
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
