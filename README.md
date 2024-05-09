@@ -1,6 +1,6 @@
 # spectools
 
-v24.128.0
+v24.129.0
 
 Developer:    Tom Seccull
 
@@ -60,7 +60,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # stack.py
 
-v1.0.0
+v1.0.1
 
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
 spectrum with reduced noise. All input spectra are scaled to unity at either a
