@@ -88,8 +88,8 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 v0.0.0 - Under development
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
-to have a common wavelength axis, be the product of extraction by MOTES, and
-stacking by stack.py. 
+to have a common wavelength axis and be the product of both extraction by MOTES
+and stacking by stack.py. 
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
