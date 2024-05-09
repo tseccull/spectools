@@ -227,6 +227,7 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	]
 	
 	for i in range(len(guide_keys)):
+		if guider=="OI" and guide_keys[i]=="FOCUS": continue
 		guide_star_parameter = heads[key_0][guider+guide_keys[i]]
 		comment_string = guide_probe + guide_comments[i]
 		new_head[guider+guide_keys[i]] = (guide_star_parameter, comment_string)
@@ -329,13 +330,20 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	new_head["CRMETHOD"] = (heads[key_0]["CRMETHOD"], "Cosmic ray masking/cleaning method in scrap.py")
 	
 	reduction_keys = [
-		"GPREPARE", "GGAIN", "GIREDUCE", "GMOSAIC", "GSAPPWAV",
-		"GSREDUCE", "WMEF", "GSTRANSF", "CRDATE", "FRNGDATE", "MOTESDAT"
+		"GPREPARE", "GGAIN", "GIREDUCE", "GMOSAIC",
+		"GSAPPWAV", "GSREDUCE", "WMEF", "GSTRANSF"
 	]
+	
 	reduction_comments = copy.deepcopy(reduction_keys)
-	reduction_comments[-3] = "scrap.py"
-	reduction_comments[-2] = "fronge.py"
-	reduction_comments[-1] = "MOTES"
+	if "CRDATE" in heads[key_0]:
+		reduction_keys.append("CRDATE")
+		reduction_comments.append("scrap.py")
+	if "FRNGDATE" in heads[key_0]:
+		reduction_keys.append("FRNGDATE")
+		reduction_comments.append("fronge.py")
+	reduction_keys.append("MOTESDAT")
+	reduction_comments.append("MOTES")
+	
 	for i, k in enumerate(reduction_keys):
 		date_times = [heads[x[:-5]][k] for x in files]
 		date_times = [datetime.datetime.fromisoformat(x) for x in date_times]
