@@ -1,6 +1,6 @@
 # spectools
 
-v24.129.0
+v24.150.0
 
 Developer:    Tom Seccull
 
@@ -57,6 +57,20 @@ Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)
 
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
+# extinct.py
+
+v0.0.0 - Under development
+This script applies a correction to input 1D astronomical spectroscopic data 
+based on the measured atmospheric extinction curve of the observing site. The 
+spectrum and its uncertainties are each multiplied by 
+10 ^ (0.4 * airmass * k(lambda)), where airmass is the median airmass at which 
+the spectrum was observed and k(lambda) is the wavelength dependent extinction 
+curve at the observing site.
+
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
+
+Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
+
 
 # stack.py
 
@@ -83,9 +97,10 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
+
 # divide.py
 
-v0.0.0 - Under development
+v0.0.2 - Under development
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
 to have a common wavelength axis and be the product of both extraction by MOTES
