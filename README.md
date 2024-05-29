@@ -60,6 +60,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 # extinct.py
 
 v0.0.0 - Under development
+
 This script applies a correction to input 1D astronomical spectroscopic data 
 based on the measured atmospheric extinction curve of the observing site. The 
 spectrum and its uncertainties are each multiplied by 
