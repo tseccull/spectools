@@ -67,13 +67,20 @@ based on the measured atmospheric extinction curve of the observing site. The
 spectrum and its uncertainties are each multiplied by 
 10 ^ (0.4 * airmass * k(lambda)), where airmass is the median airmass at which 
 the spectrum was observed and k(lambda) is the wavelength dependent extinction 
-curve at the observing site. This script does not create new files, but instead
-just updates the input files.
+curve at the observing site given in magnitudes per unit airmass. Note that
+the extinction curves used here are averages that do not account
+for variable atmospheric extinction due to variable concentrations of 
+atmospheric water vapour or scattering particles. This script
+does not create new files, but instead just updates the input files.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
+Extinction Curve Sources:
+GMOS-N - [See the Gemini Observatory web pages.](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction)
+GMOS-S - [Stone & Baldwin 1983, MNRAS, 204, 347](https://doi.org/10.1093/mnras/204.2.347)
+    
 
 # stack.py
 

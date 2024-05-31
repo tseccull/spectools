@@ -10,8 +10,14 @@ extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.0
 	are each multiplied by 10 ^ (0.4 * airmass * k(lambda)), where
 	airmass is the mean airmass at which the spectrum was observed and
 	k(lambda) is the wavelength dependent extinction curve of the
-	observing site. This script does not create new files, but instead
-	just updates the input files.
+	observing site given in magnitudes per unit airmass. Note that the
+	extinction curves used here are averages that do not account for
+	variable atmospheric extinction due to variable concentrations of
+	atmospheric water vapour or scattering particles. When comparing or
+	calibrating one corrected spectrum with another it is assumed that 
+	atmospheric conditions were stable across the consecutive 
+	observations of both targets.This script does not create new files,
+	but instead just updates the input files.
 """
 
 
@@ -46,9 +52,15 @@ parser = argparse.ArgumentParser(
 	uncertainties are each multiplied by\
 	10 ^ (0.4 * airmass * k(lambda)), where airmass is the median\
 	airmass at which the spectrum was observed and k(lambda) is the\
-	wavelength dependent extinction curve of the observing site. This\
-	script does not create new files, but instead just updates the\
-	input files."
+	wavelength dependent extinction curve of the observing site given\
+	in magnitudes per unit airmass. Note that the extinction curves\
+	used here are averages that do not account for variable atmospheric\
+	extinction due to variable concentrations of atmospheric water\
+	vapour or scattering particles. When comparing or calibrating one\
+	corrected spectrum with another it is assumed that atmospheric\
+	conditions were stable across the consecutive observations of both\
+	targets. This script does not create new files, but instead just\
+	updates the input files."
 )
 parser.add_argument("-p", "--plot", action="store_true",
 	help="[boolean] Plot each spectrum before and after extinction\
