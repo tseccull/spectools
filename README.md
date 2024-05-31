@@ -71,7 +71,9 @@ for variable atmospheric extinction due to variable concentrations of
 atmospheric water vapour or scattering particles. When comparing or calibrating
 one corrected spectrum with another it is assumed that atmospheric conditions
 were stable across the consecutive observations of both targets. This script
-does not create new files, but instead just updates the input files.
+does not create new files, but instead just updates the input files. If this
+script is used, be sure to cite the appropriate article or link for the
+extinction curve.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
