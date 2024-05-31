@@ -39,8 +39,7 @@ McCully et al., and van Dokkum should be cited:
 
 [van Dokkum 2001, PASP, 113, 1420](https://doi.org/10.1086/323894)
 
-Requires: [Astropy](https://www.astropy.org/), [Astroscrappy](https://doi.org/10.5281/zenodo.1482019), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)
-
+Requires: [Astropy](https://www.astropy.org/), [Astroscrappy](https://doi.org/10.5281/zenodo.1482019), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 
@@ -53,8 +52,7 @@ creating a median fringe frame and subtracting it from science data. A modular
 design is intended to facilitate easy processing of data observed with a 
 variety of instruments.
 
-Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)
-
+Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 
@@ -75,13 +73,11 @@ one corrected spectrum with another it is assumed that atmospheric conditions
 were stable across the consecutive observations of both targets. This script
 does not create new files, but instead just updates the input files.
 
-Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
-
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
-#####Extinction Curve Sources:
-
-GMOS-N - [See the Gemini Observatory web pages.](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction)
+Extinction Curve Sources:\
+GMOS-N - [See the Gemini Observatory web pages.](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction)\
 GMOS-S - [Stone & Baldwin 1983, MNRAS, 204, 347](https://doi.org/10.1093/mnras/204.2.347)
     
 
@@ -106,8 +102,7 @@ wavelength. The standard error of the mean of the distribution is taken to be
 the uncertainty each stacked data point. stack.py is only readily compatible 
 with spectra extracted by [MOTES](https://github.com/tseccull/motes).
 
-Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
-
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 
