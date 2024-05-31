@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-stack.py - written by Tom Seccull, 2024-05-06 - v1.0.1
+stack.py - written by Tom Seccull, 2024-05-06 - v1.0.2
 
-	Last updated: 2024-05-06
+	Last updated: 2024-05-31
 	
 	This script takes multiple 1D spectra and combines them to produce a
 	stacked 1D spectrum with reduced noise. All input spectra are scaled
@@ -264,7 +264,7 @@ if args.save:
 	new_header["FITSDOI"] = (
 		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
 	)
-	new_header["ORIGIN"] = ("stack.py v1.0.1", "Script that created this file")
+	new_header["ORIGIN"] = ("stack.py v1.0.2", "Script that created this file")
 	new_header["STACKDOI"] = ("UNKNOWN", "Script repository DOI")
 	stack_hdu = stack_header_dict[instrument](
 		new_hdu, headers, files, args.scaling_wavelength

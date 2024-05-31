@@ -3,7 +3,7 @@
 gmos_stack_head.py - written by Tom Seccull, 2024-05-06
 
 	Called by: stack.py
-	Last updated: 2024-05-06
+	Last updated: 2024-05-31
 	
 	This file contains the stack_header_gmos() function, which creates
 	the astropy header for the HDU containing the stacked GMOS spectra
@@ -343,6 +343,9 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 		reduction_comments.append("fronge.py")
 	reduction_keys.append("MOTESDAT")
 	reduction_comments.append("MOTES")
+	if "EXTIDATE" in heads[key_0]:
+		reduction_keys.append("EXTIDATE")
+		reduction_comments.append("extinct.py")
 	
 	for i, k in enumerate(reduction_keys):
 		date_times = [heads[x[:-5]][k] for x in files]

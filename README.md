@@ -1,6 +1,6 @@
 # spectools
 
-v24.150.0
+v24.152.0
 
 Developer:    Tom Seccull
 
@@ -57,16 +57,18 @@ Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)
 
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
+
 # extinct.py
 
-v0.0.0 - Under development
+v1.0.0
 
 This script applies a correction to input 1D astronomical spectroscopic data 
 based on the measured atmospheric extinction curve of the observing site. The 
 spectrum and its uncertainties are each multiplied by 
 10 ^ (0.4 * airmass * k(lambda)), where airmass is the median airmass at which 
 the spectrum was observed and k(lambda) is the wavelength dependent extinction 
-curve at the observing site.
+curve at the observing site. This script does not create new files, but instead
+just updates the input files.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
@@ -75,7 +77,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # stack.py
 
-v1.0.1
+v1.0.2
 
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
 spectrum with reduced noise. All input spectra are scaled to unity at either a
