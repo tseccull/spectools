@@ -17,7 +17,8 @@ extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.0
 	calibrating one corrected spectrum with another it is assumed that 
 	atmospheric conditions were stable across the consecutive 
 	observations of both targets.This script does not create new files,
-	but instead just updates the input files.
+	but instead just updates the input files. extinct.py is only readily
+	compatible with spectra extracted by MOTES.
 """
 
 
@@ -60,7 +61,8 @@ parser = argparse.ArgumentParser(
 	corrected spectrum with another it is assumed that atmospheric\
 	conditions were stable across the consecutive observations of both\
 	targets. This script does not create new files, but instead just\
-	updates the input files."
+	updates the input files. extinct.py is only readily compatible with\
+	spectra extracted by MOTES."
 )
 parser.add_argument("-p", "--plot", action="store_true",
 	help="[boolean] Plot each spectrum before and after extinction\

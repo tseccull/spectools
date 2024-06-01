@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v0.0.2
+divide.py - written by Tom Seccull, 2024-05-08 - v0.0.3
 
-	Last updated: 2024-05-29
+	Last updated: 2024-06-01
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -15,6 +15,71 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from matplotlib.widgets import Slider
+
+
+def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
+	shifted_spectra = [spectra[0]]
+	shifted_uncertainties = [uncertainties[0]]
+
+	shifted_spectra.append(
+		np.interp(wave_axis, shifted_wave_axis, spectra[1], left=0., right=0.)
+	)
+
+	shifted_uncertainties.append(
+		(
+			np.interp(
+				wave_axis,
+				shifted_wave_axis,
+				spectra[1] + uncertainties[1],
+				left=0., 
+				right=0.
+			)
+			- shifted_spectra[1]
+		)
+	)
+
+	mult_spec = shifted_spectra[0] * shifted_spectra[1]
+	qual_1d = [1 if x!=0. else 0 for x in mult_spec]
+
+	if offset > 0:
+		zero_edges = [x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]]
+		zero_edges = np.array(zero_edges)
+		qual_1d = np.array(qual_1d)	
+		qual_1d[zero_edges] = 0
+	elif offset < 0:
+		zero_edges = [x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]]
+		zero_edges = np.array(zero_edges)
+		qual_1d = np.array(qual_1d)	
+		qual_1d[zero_edges] = 0
+	else:
+		qual_1d = np.array(qual_1d)
+
+	shifted_spectra[0][qual_1d==0] = 0
+	shifted_spectra[1][qual_1d==0] = 0
+	shifted_uncertainties[0][qual_1d==0] = 0
+	shifted_uncertainties[1][qual_1d==0] = 0
+
+	shifted_spectra[0][shifted_spectra[1]==0] = 0
+	shifted_spectra[1][shifted_spectra[0]==0] = 1
+	
+	ratio_spectrum = shifted_spectra[0]/shifted_spectra[1]
+	
+	shifted_uncertainties[0][shifted_spectra[0]==0] = 0
+	shifted_spectra[0][shifted_uncertainties[0]==0] = 1
+	
+	shifted_uncertainties[1][shifted_spectra[1]==0] = 0
+	shifted_spectra[1][shifted_uncertainties[1]==0] = 1
+	
+	ratio_uncertainties = np.abs(ratio_spectrum)*((((shifted_uncertainties[0]/shifted_spectra[0])**2)+((shifted_uncertainties[1]/shifted_spectra[1])**2))**0.5)
+	
+	return np.array([wavelength_axis, ratio_spectrum, ratio_uncertainties, qual_1d])
+
+def update_wave(val):
+	global offset
+	offset = wave_slider.val
+	two_spec.set_data(wavelength_axis+offset, optimal_spectra[1])
+	fig.canvas.draw()
+
 
 parser = argparse.ArgumentParser(
 	description="This script divides one 1D spectrum by another.\
@@ -61,12 +126,6 @@ two_spec, = ax.plot(wavelength_axis, optimal_spectra[1], marker='.', zorder=2)
 ax.set_xlabel(r"$\lambda$, " + primary_head_one["WAVU"])
 ax.set_ylabel("Relative Counts")
 
-def update_wave(val):
-	global offset
-	offset = wave_slider.val
-	two_spec.set_data(wavelength_axis+offset, optimal_spectra[1])
-	fig.canvas.draw()
-
 ax_wave_slider = plt.axes([0.25, 0.05, 0.5, 0.03])
 wave_slider = Slider(
 	ax_wave_slider,
@@ -87,6 +146,18 @@ except NameError:
 	offset = 0.0
 
 shifted_wavelength_axis = wavelength_axis + offset
+
+optimal_ratio_frame = division(
+	wavelength_axis,
+	shifted_wavelength_axis,
+	optimal_spectra,
+	optimal_uncertainties
+)
+
+plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2])
+plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3])
+plt.show()
+exit()
 
 optimal_shifted_spectra = [optimal_spectra[0]]
 optimal_shifted_uncertainties = [optimal_uncertainties[0]]
@@ -136,10 +207,14 @@ optimal_shifted_uncertainties[0][qual_1d==0] = 0
 optimal_shifted_uncertainties[1][qual_1d==0] = 0
 
 optimal_shifted_spectra[0][optimal_shifted_spectra[1]==0] = 0
-qual_1d[optimal_shifted_spectra[1]==0] = 0
+optimal_shifted_spectra[1][optimal_shifted_spectra[0]==0] = 1
+qual_1d[optimal_shifted_spectra[0]==0] = 0
 
 divided_optimal_spectrum = optimal_shifted_spectra[0]/optimal_shifted_spectra[1]
 plt.plot(wavelength_axis, divided_optimal_spectrum)
+plt.plot(wavelength_axis, qual_1d)
+plt.plot(wavelength_axis, optimal_shifted_spectra[0])
+plt.plot(wavelength_axis, optimal_shifted_spectra[1])
 plt.show()
 
 print(offset)
