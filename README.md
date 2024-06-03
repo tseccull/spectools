@@ -1,6 +1,6 @@
 # spectools
 
-v24.153.0
+v24.155.0
 
 Developer:    Tom Seccull
 
@@ -111,7 +111,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v0.0.3 - Under development
+v0.0.4 - Under development
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
 to have a common wavelength axis and be the product of both extraction by MOTES

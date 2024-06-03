@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v0.0.3
+divide.py - written by Tom Seccull, 2024-05-08 - v0.0.4
 
-	Last updated: 2024-06-01
+	Last updated: 2024-06-03
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -154,67 +154,47 @@ optimal_ratio_frame = division(
 	optimal_uncertainties
 )
 
+aperture_ratio_frame = division(
+	wavelength_axis,
+	shifted_wavelength_axis,
+	aperture_spectra,
+	aperture_uncertainties
+)
+
+aperture_ratio_frame[1][optimal_ratio_frame[3]==0] = 0
+aperture_ratio_frame[2][optimal_ratio_frame[3]==0] = 0
+aperture_ratio_frame[3][optimal_ratio_frame[3]==0] = 0
+
+if args.plot:
+	qual_shade_top = np.ones(len(aperture_ratio_frame[1]))*np.inf
+	qual_shade_bottom = -np.ones(len(aperture_ratio_frame[1]))*np.inf
+	
+	plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Optimal", zorder=1)
+	plt.errorbar(aperture_ratio_frame[0], aperture_ratio_frame[1], yerr=aperture_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Aperture", zorder=0)
+	plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3], label="Quality Flag: 1=Good, 0=Bad", zorder=2)
+	plt.fill_between(optimal_ratio_frame[0], qual_shade_bottom, qual_shade_top, where=optimal_ratio_frame[3]==0, facecolor="red", alpha=0.5)
+	plt.xlabel(r"$\lambda$, " + primary_head_one["WAVU"])
+	plt.ylabel("Relative Reflectance")
+	plt.grid(linestyle="dashed", alpha=0.5)
+	plt.legend()
+	plt.show()
+	exit()
+
+combi_ratio_frame = np.array(
+	[
+		optimal_ratio_frame[0],
+		optimal_ratio_frame[1],
+		optimal_ratio_frame[2],
+		aperture_ratio_frame[1],
+		aperture_ratio_frame[2],
+		optimal_ratio_frame[3]
+	]
+)
+
 plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2])
-plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3])
+plt.errorbar(aperture_ratio_frame[0], aperture_ratio_frame[1], yerr=aperture_ratio_frame[2])
+#plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3])
+plt.plot(aperture_ratio_frame[0], aperture_ratio_frame[3])
 plt.show()
 exit()
 
-optimal_shifted_spectra = [optimal_spectra[0]]
-optimal_shifted_uncertainties = [optimal_uncertainties[0]]
-
-optimal_shifted_spectra.append(
-	np.interp(
-		wavelength_axis,
-		shifted_wavelength_axis,
-		optimal_spectra[1],
-		left=0., 
-		right=0.
-	)
-)
-
-optimal_shifted_uncertainties.append(
-	(
-		np.interp(
-			wavelength_axis,
-			shifted_wavelength_axis,
-			optimal_spectra[1] + optimal_uncertainties[1],
-			left=0., 
-			right=0.
-		)
-		- optimal_shifted_spectra[1]
-	)
-)
-
-mult_spec = optimal_shifted_spectra[0] * optimal_shifted_spectra[1]
-qual_1d = [1 if x!=0. else 0 for x in mult_spec]
-
-if offset > 0:
-	zero_edges = [x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]]
-	zero_edges = np.array(zero_edges)
-	qual_1d = np.array(qual_1d)	
-	qual_1d[zero_edges] = 0
-elif offset < 0:
-	zero_edges = [x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]]
-	zero_edges = np.array(zero_edges)
-	qual_1d = np.array(qual_1d)	
-	qual_1d[zero_edges] = 0
-else:
-	qual_1d = np.array(qual_1d)
-
-optimal_shifted_spectra[0][qual_1d==0] = 0
-optimal_shifted_spectra[1][qual_1d==0] = 0
-optimal_shifted_uncertainties[0][qual_1d==0] = 0
-optimal_shifted_uncertainties[1][qual_1d==0] = 0
-
-optimal_shifted_spectra[0][optimal_shifted_spectra[1]==0] = 0
-optimal_shifted_spectra[1][optimal_shifted_spectra[0]==0] = 1
-qual_1d[optimal_shifted_spectra[0]==0] = 0
-
-divided_optimal_spectrum = optimal_shifted_spectra[0]/optimal_shifted_spectra[1]
-plt.plot(wavelength_axis, divided_optimal_spectrum)
-plt.plot(wavelength_axis, qual_1d)
-plt.plot(wavelength_axis, optimal_shifted_spectra[0])
-plt.plot(wavelength_axis, optimal_shifted_spectra[1])
-plt.show()
-
-print(offset)
