@@ -1,16 +1,20 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v0.0.4
+divide.py - written by Tom Seccull, 2024-05-08 - v0.0.5
 
-	Last updated: 2024-06-03
+	Last updated: 2024-06-04
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
-	of extraction by MOTES, and stacking by stack.py. 
+	of extraction by MOTES, and stacking by stack.py. Typical use of
+	this script is to calibrate a spectrum of a minor planet with that
+	of a solar twin or solar analog to derive the minor planet's
+	reflectance spectrum.
 """
 
 import argparse
 import astropy.io.fits as fits
+import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -137,7 +141,6 @@ wave_slider = Slider(
 	valstep=.1
 )
 wave_slider.on_changed(update_wave)
-
 plt.show()
 
 try:
@@ -166,13 +169,15 @@ aperture_ratio_frame[2][optimal_ratio_frame[3]==0] = 0
 aperture_ratio_frame[3][optimal_ratio_frame[3]==0] = 0
 
 if args.plot:
-	qual_shade_top = np.ones(len(aperture_ratio_frame[1]))*np.inf
-	qual_shade_bottom = -np.ones(len(aperture_ratio_frame[1]))*np.inf
-	
 	plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Optimal", zorder=1)
 	plt.errorbar(aperture_ratio_frame[0], aperture_ratio_frame[1], yerr=aperture_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Aperture", zorder=0)
-	plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3], label="Quality Flag: 1=Good, 0=Bad", zorder=2)
-	plt.fill_between(optimal_ratio_frame[0], qual_shade_bottom, qual_shade_top, where=optimal_ratio_frame[3]==0, facecolor="red", alpha=0.5)
+	
+	ylim_bottom, ylim_top = plt.ylim()
+	qual_shade_bottom = np.ones(len(aperture_ratio_frame[1])) * ylim_bottom
+	qual_shade_top = np.ones(len(aperture_ratio_frame[1])) * ylim_top
+	plt.fill_between(optimal_ratio_frame[0], qual_shade_bottom, qual_shade_top, where=optimal_ratio_frame[3]==0, facecolor="red", alpha=0.5, label="QUAL=0")
+	
+	plt.ylim(ylim_bottom, ylim_top)
 	plt.xlabel(r"$\lambda$, " + primary_head_one["WAVU"])
 	plt.ylabel("Relative Reflectance")
 	plt.grid(linestyle="dashed", alpha=0.5)
@@ -180,21 +185,33 @@ if args.plot:
 	plt.show()
 	exit()
 
-combi_ratio_frame = np.array(
-	[
-		optimal_ratio_frame[0],
-		optimal_ratio_frame[1],
-		optimal_ratio_frame[2],
-		aperture_ratio_frame[1],
-		aperture_ratio_frame[2],
-		optimal_ratio_frame[3]
-	]
-)
-
-plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2])
-plt.errorbar(aperture_ratio_frame[0], aperture_ratio_frame[1], yerr=aperture_ratio_frame[2])
-#plt.plot(optimal_ratio_frame[0], optimal_ratio_frame[3])
-plt.plot(aperture_ratio_frame[0], aperture_ratio_frame[3])
-plt.show()
-exit()
-
+if args.save:
+	ratio_hdu = fits.PrimaryHDU()
+	combi_ratio_frame = np.array(
+		[
+			optimal_ratio_frame[0],
+			optimal_ratio_frame[1],
+			optimal_ratio_frame[2],
+			aperture_ratio_frame[1],
+			aperture_ratio_frame[2],
+			optimal_ratio_frame[3]
+		]
+	)
+	ratio_header = ratio_hdu.header
+	ratio_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
+	ratio_header["FITSDOI"] = (
+		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
+	)
+	ratio_header["ORIGIN"] = ("divide.py v0.0.5", "Script that created this file.")
+	ratio_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
+	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
+	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")
+	#Object 1 & 2
+	#HDUs 1 & 2
+	#Wavelength offset
+	#Wavelength offset unit
+	#HDUROW Definitions
+	#EXTNAME
+	
+	#Add all HDUs from both files to the ratio HDU and save as new fits file prepended with d 
+	print(ratio_header)
