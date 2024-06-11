@@ -18,7 +18,8 @@ extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.0
 	atmospheric conditions were stable across the consecutive 
 	observations of both targets.This script does not create new files,
 	but instead just updates the input files. extinct.py is only readily
-	compatible with spectra extracted by MOTES.
+	compatible with spectra extracted by MOTES, and it should be run on 
+	individual 1D spectra of a given target prior to stacking them.
 """
 
 

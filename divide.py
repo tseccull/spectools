@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v0.0.5
+divide.py - written by Tom Seccull, 2024-05-08 - v0.0.6
 
-	Last updated: 2024-06-04
+	Last updated: 2024-06-11
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -183,10 +183,9 @@ if args.plot:
 	plt.grid(linestyle="dashed", alpha=0.5)
 	plt.legend()
 	plt.show()
-	exit()
 
 if args.save:
-	ratio_hdu = fits.PrimaryHDU()
+	
 	combi_ratio_frame = np.array(
 		[
 			optimal_ratio_frame[0],
@@ -197,21 +196,40 @@ if args.save:
 			optimal_ratio_frame[3]
 		]
 	)
+	
+	ratio_hdu = fits.PrimaryHDU(combi_ratio_frame)
 	ratio_header = ratio_hdu.header
 	ratio_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
 	ratio_header["FITSDOI"] = (
 		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
 	)
-	ratio_header["ORIGIN"] = ("divide.py v0.0.5", "Script that created this file.")
+	ratio_header["ORIGIN"] = ("divide.py v0.0.6", "Script that created this file.")
 	ratio_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
 	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
 	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")
-	#Object 1 & 2
-	#HDUs 1 & 2
-	#Wavelength offset
-	#Wavelength offset unit
-	#HDUROW Definitions
-	#EXTNAME
+	ratio_header["OBJECT1"] = (primary_head_one["OBJECT"], "Name of object in first spectrum")
+	ratio_header["OBJECT2"] = (primary_head_two["OBJECT"], "Name of object in second spectrum")
+	ratio_header["EXTENS1"] = (args.spec_file_one[:-5], "Extension of first spectrum data frame")
+	ratio_header["EXTENS2"] = (args.spec_file_two[:-5], "Extension of second spectrum data frame")
+	ratio_header["WAVEOFFS"] = (offset, "Wavelength offset applied to spectrum two")
+	ratio_header["WAVOFFSU"] = (primary_head_two["WAVU"], "Unit of wavelength offset")
+	ratio_header["HDUROW0"] = "Wavelength axis, " + primary_head_one["WAVU"]
+	ratio_header["HDUROW1"] = "Optimal ratio spectrum"
+	ratio_header["HDUROW2"] = "Optimal ratio spectrum uncertainty"
+	ratio_header["HDUROW3"] = "Aperture ratio spectrum"
+	ratio_header["HDUROW4"] = "Aperture ratio spectrum uncertainty"
+	ratio_header["HDUROW5"] = "Quality flags: 1=GOOD, 0=BAD"
+	ratio_header["EXTNAME"] = primary_head_one["OBJECT"].replace(" ","_") + "/" + primary_head_two["OBJECT"].replace(" ","_")
 	
-	#Add all HDUs from both files to the ratio HDU and save as new fits file prepended with d 
-	print(ratio_header)
+	listed_hdus = [ratio_hdu]
+	
+	for i in range(len(one_headers)):
+		listed_hdus.append(fits.ImageHDU(one_frames[i], header=one_headers[i]))
+	for i in range(len(two_headers)):
+		listed_hdus.append(fits.ImageHDU(two_frames[i], header=two_headers[i]))
+	
+	new_file_name = primary_head_one["OBJECT"].replace(" ","_") + "%" + primary_head_two["OBJECT"].replace(" ","_") + ".fits"
+	
+	hdu_list = fits.HDUList(listed_hdus)
+	hdu_list.writeto(new_file_name)
+	hdu_list.close()

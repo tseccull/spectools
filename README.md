@@ -1,6 +1,6 @@
 # spectools
 
-v24.156.0
+v24.163.0
 
 Developer:    Tom Seccull
 
@@ -74,7 +74,8 @@ were stable across the consecutive observations of both targets. This script
 does not create new files, but instead just updates the input files. If this
 script is used, be sure to cite the appropriate article or link for the
 extinction curve. `extinct.py` is only readily compatible with spectra
-extracted by [MOTES](https://github.com/tseccull/motes).
+extracted by [MOTES](https://github.com/tseccull/motes), and it should be run
+on individual 1D spectra of a given target prior to stacking them.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
@@ -111,7 +112,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v0.0.5 - Under development
+v0.0.6 - Under development
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
 to have a common wavelength axis and be the product of both extraction by MOTES
