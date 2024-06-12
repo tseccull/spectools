@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v0.0.6
+divide.py - written by Tom Seccull, 2024-05-08 - v1.0.0
 
-	Last updated: 2024-06-11
+	Last updated: 2024-06-12
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -22,6 +22,34 @@ from matplotlib.widgets import Slider
 
 
 def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
+	"""
+	This function takes two spectra that are offset by a uniform
+	wavelength shift, interpolates the shifted second spectrum to the
+	wavelength axis of the first and divides the first spectrum by the 
+	second spectrum. Uncertainties in the spectral data are also 
+	propagated.
+	
+	Args:
+	 -- wave_axis (numpy.array)
+			Unshifted wavelength axis of the first spectrum.
+	 -- shifted_wave_axis (numpy.array)
+			Shifted wavelength axis of the second spectrum.
+	 -- spectra (numpy.array)
+			2D array containing the spectroscopic data of both the first
+			and second spectra.
+	 -- uncertainties (numpy.array)
+			2D array containing the uncertainties of the spectroscopic
+			data of the first and second spectra.
+			
+	Returns:
+	 -- output_array (numpy.array)
+			2D array containing the wavelength axis of the ratio
+			spectrum, the ratio spectrum, the uncertainties of the ratio
+			spectrum, and a row containing quality flags for each point
+			in the ratio spectrum where 1=GOOD and 0=BAD.
+	 
+	"""
+	
 	shifted_spectra = [spectra[0]]
 	shifted_uncertainties = [uncertainties[0]]
 
@@ -46,12 +74,16 @@ def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
 	qual_1d = [1 if x!=0. else 0 for x in mult_spec]
 
 	if offset > 0:
-		zero_edges = [x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]]
+		zero_edges = [
+			x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]
+		]
 		zero_edges = np.array(zero_edges)
 		qual_1d = np.array(qual_1d)	
 		qual_1d[zero_edges] = 0
 	elif offset < 0:
-		zero_edges = [x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]]
+		zero_edges = [
+			x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]
+		]
 		zero_edges = np.array(zero_edges)
 		qual_1d = np.array(qual_1d)	
 		qual_1d[zero_edges] = 0
@@ -74,16 +106,42 @@ def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
 	shifted_uncertainties[1][shifted_spectra[1]==0] = 0
 	shifted_spectra[1][shifted_uncertainties[1]==0] = 1
 	
-	ratio_uncertainties = np.abs(ratio_spectrum)*((((shifted_uncertainties[0]/shifted_spectra[0])**2)+((shifted_uncertainties[1]/shifted_spectra[1])**2))**0.5)
+	shifted_variance_0 = (shifted_uncertainties[0]/shifted_spectra[0])**2
+	shifted_variance_1 = (shifted_uncertainties[1]/shifted_spectra[1])**2
 	
-	return np.array([wavelength_axis, ratio_spectrum, ratio_uncertainties, qual_1d])
+	ratio_uncertainties = (
+		np.abs(ratio_spectrum) 
+	  * ((shifted_variance_0 + shifted_variance_1)**0.5)
+	)
+	
+	output_array = np.array(
+		[wavelength_axis, ratio_spectrum, ratio_uncertainties, qual_1d]
+	)
+	
+	return output_array
+
 
 def update_wave(val):
+	"""
+	This function controls updates to the wavelength shift plot based on
+	the input from the plot's slider.
+	
+	Args:
+	 -- val (numpy.float)
+			The value of the wavelength shift slider.
+	
+	Returns: None
+	"""
+	
 	global offset
 	offset = wave_slider.val
 	two_spec.set_data(wavelength_axis+offset, optimal_spectra[1])
 	fig.canvas.draw()
 
+
+###############################################################################
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
+###############################################################################	
 
 parser = argparse.ArgumentParser(
 	description="This script divides one 1D spectrum by another.\
@@ -125,10 +183,26 @@ aperture_uncertainties = np.array([one_frames[0][4], two_frames[0][4]])
 
 fig, ax = plt.subplots()
 plt.subplots_adjust(bottom=0.19)
-one_spec = ax.errorbar(wavelength_axis, optimal_spectra[0], yerr = optimal_uncertainties[0], marker='.')
-two_spec, = ax.plot(wavelength_axis, optimal_spectra[1], marker='.', zorder=2)
+
+one_spec = ax.errorbar(
+	wavelength_axis,
+	optimal_spectra[0],
+	yerr = optimal_uncertainties[0],
+	marker='.',
+	label=primary_head_one["OBJECT"]
+)
+
+two_spec, = ax.plot(
+	wavelength_axis,
+	optimal_spectra[1],
+	marker='.',
+	zorder=2,
+	label=primary_head_two["OBJECT"]
+)
+
 ax.set_xlabel(r"$\lambda$, " + primary_head_one["WAVU"])
 ax.set_ylabel("Relative Counts")
+ax.legend()
 
 ax_wave_slider = plt.axes([0.25, 0.05, 0.5, 0.03])
 wave_slider = Slider(
@@ -169,13 +243,47 @@ aperture_ratio_frame[2][optimal_ratio_frame[3]==0] = 0
 aperture_ratio_frame[3][optimal_ratio_frame[3]==0] = 0
 
 if args.plot:
-	plt.errorbar(optimal_ratio_frame[0], optimal_ratio_frame[1], yerr=optimal_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Optimal", zorder=1)
-	plt.errorbar(aperture_ratio_frame[0], aperture_ratio_frame[1], yerr=aperture_ratio_frame[2], label=primary_head_one["OBJECT"] + "/" + primary_head_two["OBJECT"] + " - Aperture", zorder=0)
+	plt.errorbar(
+		optimal_ratio_frame[0],
+		optimal_ratio_frame[1],
+		yerr=optimal_ratio_frame[2],
+		marker='.',
+		color='k',
+		label=(
+			primary_head_one["OBJECT"] 
+		  + "/" 
+		  + primary_head_two["OBJECT"] 
+		  + " - Optimal"
+		), 
+		zorder=1
+	)
+	plt.errorbar(
+		aperture_ratio_frame[0],
+		aperture_ratio_frame[1],
+		yerr=aperture_ratio_frame[2],
+		marker='.',
+		color='r',
+		label=(
+			primary_head_one["OBJECT"] 
+		  + "/" 
+		  + primary_head_two["OBJECT"] 
+		  + " - Aperture"
+		),
+		zorder=0
+	)
 	
 	ylim_bottom, ylim_top = plt.ylim()
 	qual_shade_bottom = np.ones(len(aperture_ratio_frame[1])) * ylim_bottom
 	qual_shade_top = np.ones(len(aperture_ratio_frame[1])) * ylim_top
-	plt.fill_between(optimal_ratio_frame[0], qual_shade_bottom, qual_shade_top, where=optimal_ratio_frame[3]==0, facecolor="red", alpha=0.5, label="QUAL=0")
+	plt.fill_between(
+		optimal_ratio_frame[0],
+		qual_shade_bottom,
+		qual_shade_top,
+		where=optimal_ratio_frame[3]==0,
+		facecolor="red",
+		alpha=0.5,
+		label="QUAL=0"
+	)
 	
 	plt.ylim(ylim_bottom, ylim_top)
 	plt.xlabel(r"$\lambda$, " + primary_head_one["WAVU"])
@@ -200,10 +308,8 @@ if args.save:
 	ratio_hdu = fits.PrimaryHDU(combi_ratio_frame)
 	ratio_header = ratio_hdu.header
 	ratio_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
-	ratio_header["FITSDOI"] = (
-		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
-	)
-	ratio_header["ORIGIN"] = ("divide.py v0.0.6", "Script that created this file.")
+	ratio_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
+	ratio_header["ORIGIN"] = ("divide.py v1.0.0", "Script that created this file.")
 	ratio_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
 	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
 	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")
@@ -219,16 +325,33 @@ if args.save:
 	ratio_header["HDUROW3"] = "Aperture ratio spectrum"
 	ratio_header["HDUROW4"] = "Aperture ratio spectrum uncertainty"
 	ratio_header["HDUROW5"] = "Quality flags: 1=GOOD, 0=BAD"
-	ratio_header["EXTNAME"] = primary_head_one["OBJECT"].replace(" ","_") + "/" + primary_head_two["OBJECT"].replace(" ","_")
+	ratio_header["EXTNAME"] = (
+		primary_head_one["OBJECT"].replace(" ","_")
+	  + "/" 
+	  + primary_head_two["OBJECT"].replace(" ","_")
+	)
 	
 	listed_hdus = [ratio_hdu]
 	
 	for i in range(len(one_headers)):
+		if "STACK" in one_headers[i]["EXTNAME"]:
+			one_headers[i]["EXTNAME"] = (
+				one_headers[i]["OBJECT"].replace(" ","_") + "_STACK"
+			)
 		listed_hdus.append(fits.ImageHDU(one_frames[i], header=one_headers[i]))
 	for i in range(len(two_headers)):
+		if "STACK" in two_headers[i]["EXTNAME"]:
+			two_headers[i]["EXTNAME"] = (
+				two_headers[i]["OBJECT"].replace(" ","_") + "_STACK"
+			)
 		listed_hdus.append(fits.ImageHDU(two_frames[i], header=two_headers[i]))
 	
-	new_file_name = primary_head_one["OBJECT"].replace(" ","_") + "%" + primary_head_two["OBJECT"].replace(" ","_") + ".fits"
+	new_file_name = (
+		primary_head_one["OBJECT"].replace(" ","_") 
+	  + "%" 
+	  + primary_head_two["OBJECT"].replace(" ","_") 
+	  + ".fits"
+	)
 	
 	hdu_list = fits.HDUList(listed_hdus)
 	hdu_list.writeto(new_file_name)

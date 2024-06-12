@@ -1,6 +1,6 @@
 # spectools
 
-v24.163.0
+v24.164.0
 
 Developer:    Tom Seccull
 
@@ -112,10 +112,10 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v0.0.6 - Under development
+v1.0.0
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
-to have a common wavelength axis and be the product of both extraction by MOTES
+to have wavelength axes of equal length and be the product of both extraction by MOTES
 and stacking by stack.py. Typical use of this script is to calibrate a spectrum
 of a minor planet with that of a solar twin or solar analog to derive the minor
 planet's reflectance spectrum.
