@@ -1,6 +1,6 @@
 # spectools
 
-v24.164.0
+v24.187.0
 
 Developer:    Tom Seccull
 
@@ -122,6 +122,16 @@ planet's reflectance spectrum.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
+# bingrad.py - under development
+
+v0.0.0
+
+This script has two functions. Primarily it is used to bin spectroscopic data 
+to boost its signal-to-noise ratio at the expense of spectral resolution. A 
+binned spectrum can be plotted and saved to a new FITS file. The secondary
+function is to allow the continuum gradient of the spectrum to be measured 
+across a user-defined wavelength range via linear regression. The resulting 
+linear fit can be plotted and its parameters will be printed in the terminal.
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
