@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.0
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.1
 	
-	Last updated: 2024-07-05
+	Last updated: 2024-07-06
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -88,9 +88,9 @@ while primary_frame[5][j] == 0: j -= 1
 primary_frame = primary_frame[:, i:j+1]
 
 # Make sure the number of unbinned points is even by removing the first or the
-# last point in the spectrum based on whichever is less certain. Having an even
-# number of data points in the spectrum simplifies the process of binning
-# outward from the centre of the spectrum.
+# last point in the spectrum based on whichever has a larger uncertainty. 
+# Having an even number of data points in the spectrum simplifies the process
+# of binning outward from the centre of the spectrum.
 if np.shape(primary_frame)[1]%2 != 0:
 	if primary_frame[2][0] > primary_frame[2][-1]:
 		primary_frame = primary_frame[:, 1:]
@@ -104,4 +104,27 @@ aperture_spectrum = primary_frame[3]
 aperture_errors = primary_frame[4]
 qual = primary_frame[5]
 
-print(len(wavelength_axis)/args.factor, len(wavelength_axis)%args.factor)
+upper_bins = np.arange(
+	int(len(wavelength_axis)*0.5) + args.factor,
+	len(wavelength_axis), 
+	args.factor
+)
+upper_bins = np.append(upper_bins, [len(wavelength_axis)])
+
+lower_bins = np.arange(
+	int(len(wavelength_axis)*0.5), 0, -args.factor
+)
+lower_bins = np.append(lower_bins, [0])
+
+bins = np.concatenate([np.flip(lower_bins), upper_bins])
+
+binned_wavelength_axis = []
+binned_optimal_spectrum = []
+binned_optimal_errors = []
+binned_aperture_spectrum = []
+binned_aperture_errors = []
+
+print(lower_bins)
+print(upper_bins)
+print(len(wavelength_axis), len(wavelength_axis)%args.factor)
+print(bins)
