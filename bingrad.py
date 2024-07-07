@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.1
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.2
 	
-	Last updated: 2024-07-06
+	Last updated: 2024-07-07
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -19,6 +19,45 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy.stats import linregress
+
+
+def binning(spectrum_data, error_data):
+	
+	uncertain_samples = []
+	
+	# If all data points in bin fall in a chip gap mark the binned point and 
+	# its uncertainty as zero
+	if all(x==0 for x in spectrum_data):
+		return 0., 0.
+	
+	error_data = error_data[spectrum_data!=0]
+	spectrum_data = spectrum_data[spectrum_data!=0]
+	for j in range(len(spectrum_data)):
+		uncertain_samples.append(
+			np.random.normal(
+				loc=spectrum_data[j],
+				scale=error_data[j],
+				size=100
+			)
+		)
+	
+	# Median is within the standard error of the mean from the mean in all
+	# cases. Taking the median as the binned value and the standard error
+	# of the mean as the uncertainty.
+	uncertain_samples = np.array(uncertain_samples).flatten()
+	binned_point_data = np.median(uncertain_samples)
+	binned_point_error = (
+		  np.std(uncertain_samples)
+		/ ((len(spectrum_data)-1)**0.5)
+	)
+	#plt.hist(uncertain_samples, bins=100)
+	#plt.axvline(binned_point_data, color='k')
+	#plt.axvline(binned_point_data-binned_point_error, color='r')
+	#plt.axvline(binned_point_data+binned_point_error, color='r')
+	#plt.show()
+	
+	return binned_point_data, binned_point_error
+
 
 parser = argparse.ArgumentParser(
 	description="This script has two functions. Primarily it is used to bin\
@@ -128,3 +167,58 @@ print(lower_bins)
 print(upper_bins)
 print(len(wavelength_axis), len(wavelength_axis)%args.factor)
 print(bins)
+
+i = 0
+wavelength_step = wavelength_axis[1]-wavelength_axis[0]
+end_points_needed = args.factor - bins[1]
+while bins[i] < bins[-1]:
+	if bins[i+1]-bins[i] < args.factor and bins[i] == 0:
+		wavelength_extension = np.arange(
+			wavelength_axis[0]-(end_points_needed * wavelength_step),
+			wavelength_axis[0], 
+			wavelength_step
+		)
+		bin_wavelengths = np.concatenate(
+			[wavelength_extension, wavelength_axis[:bins[1]]]
+		)
+	elif bins[i+1]-bins[i] < args.factor and bins[i+1] == len(wavelength_axis):
+		wavelength_extension = np.arange(
+			wavelength_axis[-1] + wavelength_step,
+			wavelength_axis[-1] + ((end_points_needed + 1) * wavelength_step),
+			wavelength_step
+		)
+		bin_wavelengths = np.concatenate(
+			[wavelength_axis[bins[i]:], wavelength_extension]
+		)
+	else:
+		bin_wavelengths = wavelength_axis[bins[i]:bins[i+1]]
+	binned_wavelength_axis.append(np.median(bin_wavelengths))
+	
+	bin_optimal_data = optimal_spectrum[bins[i]:bins[i+1]]
+	bin_optimal_errors = optimal_errors[bins[i]:bins[i+1]]
+	bin_aperture_data = aperture_spectrum[bins[i]:bins[i+1]]
+	bin_aperture_errors = aperture_errors[bins[i]:bins[i+1]]
+	
+	binned_optimal_datapoint, binned_optimal_error = binning(
+		bin_optimal_data, bin_optimal_errors
+	)
+	binned_aperture_datapoint, binned_aperture_error = binning(
+		bin_aperture_data, bin_aperture_errors
+	)
+	
+	binned_optimal_spectrum.append(binned_optimal_datapoint)
+	binned_optimal_errors.append(binned_optimal_error)
+	binned_aperture_spectrum.append(binned_aperture_datapoint)
+	binned_aperture_errors.append(binned_aperture_error)
+	
+	i += 1
+
+binned_wavelength_axis = np.array(binned_wavelength_axis)
+binned_optimal_spectrum = np.array(binned_optimal_spectrum)
+binned_optimal_errors = np.array(binned_optimal_errors)
+binned_aperture_spectrum = np.array(binned_aperture_spectrum)
+binned_aperture_errors = np.array(binned_aperture_errors)
+
+plt.errorbar(binned_wavelength_axis, binned_optimal_spectrum, yerr=binned_optimal_errors)
+#plt.errorbar(binned_wavelength_axis, binned_aperture_spectrum, yerr=binned_aperture_errors)
+plt.show()
