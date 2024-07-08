@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.0
+extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.1
 
-	Last updated: 2024-05-31
+	Last updated: 2024-07-08
 	
 	This script applies a correction to input 1D astronomical 
 	spectroscopic data based on the measured atmospheric extinction
@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+from scipy.interpolate import CubicSpline
 
 def get_extinction(extinct_curve_file):
 	with open(extinct_curve_file) as ext:
@@ -105,9 +106,10 @@ for i, file_name in enumerate(files):
 		wavelength_axis = file_hdu[0].data[0]
 		spectrum = file_hdu[0].data[1]
 		uncertainties = file_hdu[0].data[2]
-		interp_extinction = np.interp(
-			wavelength_axis, extinct_wavelength, extinct_curve
+		extinction_cubic_spline = CubicSpline(
+			extinct_wavelength, extinct_curve
 		)
+		interp_extinction = extinction_cubic_spline(wavelength_axis)
 		corrected_spectrum = spectrum * (
 			10 ** (0.4 * airmass * interp_extinction)
 		)
