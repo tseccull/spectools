@@ -1,6 +1,6 @@
 # spectools
 
-v24.190.0
+v24.191.0
 
 Developer:    Tom Seccull
 
@@ -112,7 +112,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v1.0.0
+v1.0.1
 
 This script divides one 1D spectrum by another. divide.py expects both spectra
 to have wavelength axes of equal length and be the product of both extraction by MOTES
@@ -124,7 +124,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 # bingrad.py - under development
 
-v0.0.2
+v0.0.3
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 

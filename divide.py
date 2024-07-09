@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v1.0.0
+divide.py - written by Tom Seccull, 2024-05-08 - v1.0.1
 
-	Last updated: 2024-06-12
+	Last updated: 2024-07-09
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -71,29 +71,29 @@ def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
 	)
 
 	mult_spec = shifted_spectra[0] * shifted_spectra[1]
-	qual_1d = [1 if x!=0. else 0 for x in mult_spec]
+	qual_1d = [0 if x!=0. else 1 for x in mult_spec]
 
 	if offset > 0:
 		zero_edges = [
-			x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]
+			x+1 for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]
 		]
 		zero_edges = np.array(zero_edges)
 		qual_1d = np.array(qual_1d)	
-		qual_1d[zero_edges] = 0
+		qual_1d[zero_edges] = 1
 	elif offset < 0:
 		zero_edges = [
-			x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [1,0]
+			x for x in range(len(qual_1d)) if qual_1d[x:x+2] == [0,1]
 		]
 		zero_edges = np.array(zero_edges)
 		qual_1d = np.array(qual_1d)	
-		qual_1d[zero_edges] = 0
+		qual_1d[zero_edges] = 1
 	else:
 		qual_1d = np.array(qual_1d)
 
-	shifted_spectra[0][qual_1d==0] = 0
-	shifted_spectra[1][qual_1d==0] = 0
-	shifted_uncertainties[0][qual_1d==0] = 0
-	shifted_uncertainties[1][qual_1d==0] = 0
+	shifted_spectra[0][qual_1d==1] = 0
+	shifted_spectra[1][qual_1d==1] = 0
+	shifted_uncertainties[0][qual_1d==1] = 0
+	shifted_uncertainties[1][qual_1d==1] = 0
 
 	shifted_spectra[0][shifted_spectra[1]==0] = 0
 	shifted_spectra[1][shifted_spectra[0]==0] = 1
@@ -238,9 +238,9 @@ aperture_ratio_frame = division(
 	aperture_uncertainties
 )
 
-aperture_ratio_frame[1][optimal_ratio_frame[3]==0] = 0
-aperture_ratio_frame[2][optimal_ratio_frame[3]==0] = 0
-aperture_ratio_frame[3][optimal_ratio_frame[3]==0] = 0
+aperture_ratio_frame[1][optimal_ratio_frame[3]==1] = 0
+aperture_ratio_frame[2][optimal_ratio_frame[3]==1] = 0
+aperture_ratio_frame[3][optimal_ratio_frame[3]==1] = 0
 
 if args.plot:
 	plt.errorbar(
@@ -279,10 +279,10 @@ if args.plot:
 		optimal_ratio_frame[0],
 		qual_shade_bottom,
 		qual_shade_top,
-		where=optimal_ratio_frame[3]==0,
+		where=optimal_ratio_frame[3]==1,
 		facecolor="red",
 		alpha=0.5,
-		label="QUAL=0"
+		label="QUAL=1"
 	)
 	
 	plt.ylim(ylim_bottom, ylim_top)
@@ -324,7 +324,7 @@ if args.save:
 	ratio_header["HDUROW2"] = "Optimal ratio spectrum uncertainty"
 	ratio_header["HDUROW3"] = "Aperture ratio spectrum"
 	ratio_header["HDUROW4"] = "Aperture ratio spectrum uncertainty"
-	ratio_header["HDUROW5"] = "Quality flags: 1=GOOD, 0=BAD"
+	ratio_header["HDUROW5"] = "Quality flags: 0=GOOD, 1=BAD"
 	ratio_header["EXTNAME"] = (
 		primary_head_one["OBJECT"].replace(" ","_")
 	  + "/" 

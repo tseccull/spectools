@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.2
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.3
 	
-	Last updated: 2024-07-07
+	Last updated: 2024-07-09
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -121,9 +121,9 @@ qual = primary_frame[5]
 
 # Cut off the qual==0 ends of the spectrum.
 i = 0
-while primary_frame[5][i] == 0: i += 1
+while primary_frame[5][i] == 1: i += 1
 j = np.shape(primary_frame)[1] - 1
-while primary_frame[5][j] == 0: j -= 1
+while primary_frame[5][j] == 1: j -= 1
 primary_frame = primary_frame[:, i:j+1]
 
 # Make sure the number of unbinned points is even by removing the first or the
@@ -162,11 +162,7 @@ binned_optimal_spectrum = []
 binned_optimal_errors = []
 binned_aperture_spectrum = []
 binned_aperture_errors = []
-
-print(lower_bins)
-print(upper_bins)
-print(len(wavelength_axis), len(wavelength_axis)%args.factor)
-print(bins)
+binned_qual = []
 
 i = 0
 wavelength_step = wavelength_axis[1]-wavelength_axis[0]
@@ -211,6 +207,17 @@ while bins[i] < bins[-1]:
 	binned_aperture_spectrum.append(binned_aperture_datapoint)
 	binned_aperture_errors.append(binned_aperture_error)
 	
+	binned_points = [
+		binned_optimal_datapoint, 
+		binned_optimal_error, 
+		binned_aperture_datapoint,
+		binned_aperture_error
+	]
+	if all(x==0 for x in binned_points):
+		binned_qual.append(1)
+	else:
+		binned_qual.append(0)
+	
 	i += 1
 
 binned_wavelength_axis = np.array(binned_wavelength_axis)
@@ -218,7 +225,48 @@ binned_optimal_spectrum = np.array(binned_optimal_spectrum)
 binned_optimal_errors = np.array(binned_optimal_errors)
 binned_aperture_spectrum = np.array(binned_aperture_spectrum)
 binned_aperture_errors = np.array(binned_aperture_errors)
+binned_qual = np.array(binned_qual)
 
-plt.errorbar(binned_wavelength_axis, binned_optimal_spectrum, yerr=binned_optimal_errors)
-#plt.errorbar(binned_wavelength_axis, binned_aperture_spectrum, yerr=binned_aperture_errors)
-plt.show()
+#if args.gradient_wavelength_ranges:
+
+if args.plot:
+	fig = plt.figure(figsize=(10,6))
+	ax = plt.subplot()
+	ax.errorbar(
+		binned_wavelength_axis,
+		binned_optimal_spectrum,
+		yerr=binned_optimal_errors,
+		marker='.',
+		linestyle='',
+		color="k",
+		label="Optimal Spectrum, Binned x" + str(args.factor)
+	)
+	ax.errorbar(
+		binned_wavelength_axis,
+		binned_aperture_spectrum + 1,
+		yerr=binned_aperture_errors,
+		marker='.',
+		linestyle='',
+		color="dimgray",
+		label="Aperture Spectrum +1, Binned x" + str(args.factor)
+	)
+	ylim_bottom, ylim_top = plt.ylim()
+	qual_shade_bottom = np.ones(len(binned_wavelength_axis)) * ylim_bottom
+	qual_shade_top = np.ones(len(binned_wavelength_axis)) * ylim_top
+	plt.fill_between(
+		binned_wavelength_axis,
+		qual_shade_bottom,
+		qual_shade_top,
+		where=binned_qual==1,
+		facecolor="red",
+		alpha=0.5,
+		label="QUAL=1"
+	)
+	ax.set_ylim(ylim_bottom, ylim_top)
+	ax.grid(linestyle="dashed")
+	ax.set_xlabel("Wavelength, " + headers[1]["WAVU"])
+	ax.set_ylabel("Relative Reflectance")
+	ax.legend()
+	plt.show()
+
+#if args.save:
