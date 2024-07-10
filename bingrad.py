@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.3
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.4
 	
-	Last updated: 2024-07-09
+	Last updated: 2024-07-10
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -227,7 +227,32 @@ binned_aperture_spectrum = np.array(binned_aperture_spectrum)
 binned_aperture_errors = np.array(binned_aperture_errors)
 binned_qual = np.array(binned_qual)
 
-#if args.gradient_wavelength_ranges:
+if args.gradient_wavelength_ranges:
+	optimal_point_distributions = []
+	aperture_point_distributions = []
+	for i in range(len(binned_wavelength_axis)):
+		optimal_point_distributions.append(
+			np.random.normal(
+				loc=binned_optimal_spectrum[i],
+				scale=binned_optimal_errors[i]*((args.factor-1)**0.5),
+				size=(2000)
+			)
+		)
+		aperture_point_distributions.append(
+			np.random.normal(
+				loc=binned_aperture_spectrum[i],
+				scale=binned_aperture_errors[i]*((args.factor-1)**0.5),
+				size=(2000)
+			)
+		)
+	optimal_point_distributions = np.array(optimal_point_distributions).T
+	aperture_point_distribtutions = np.array(aperture_point_distributions).T
+	print(np.shape(optimal_point_distributions), np.shape(aperture_point_distributions))
+	
+	for i in range(10):
+		plt.plot(binned_wavelength_axis, optimal_point_distributions[i])
+	plt.show()
+	exit()
 
 if args.plot:
 	fig = plt.figure(figsize=(10,6))
