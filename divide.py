@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v1.0.1
+divide.py - written by Tom Seccull, 2024-05-08 - v1.0.2
 
-	Last updated: 2024-07-09
+	Last updated: 2024-07-11
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
@@ -319,6 +319,7 @@ if args.save:
 	ratio_header["EXTENS2"] = (args.spec_file_two[:-5], "Extension of second spectrum data frame")
 	ratio_header["WAVEOFFS"] = (offset, "Wavelength offset applied to spectrum two")
 	ratio_header["WAVOFFSU"] = (primary_head_two["WAVU"], "Unit of wavelength offset")
+	ratio_header["WAVU"] = (primary_head_one["WAVU"], "Wavelength axis units")
 	ratio_header["HDUROW0"] = "Wavelength axis, " + primary_head_one["WAVU"]
 	ratio_header["HDUROW1"] = "Optimal ratio spectrum"
 	ratio_header["HDUROW2"] = "Optimal ratio spectrum uncertainty"

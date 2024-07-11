@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.4
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.5
 	
-	Last updated: 2024-07-10
+	Last updated: 2024-07-11
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -228,6 +228,8 @@ binned_aperture_errors = np.array(binned_aperture_errors)
 binned_qual = np.array(binned_qual)
 
 if args.gradient_wavelength_ranges:
+	sample_size = 2000
+	
 	optimal_point_distributions = []
 	aperture_point_distributions = []
 	for i in range(len(binned_wavelength_axis)):
@@ -235,25 +237,74 @@ if args.gradient_wavelength_ranges:
 			np.random.normal(
 				loc=binned_optimal_spectrum[i],
 				scale=binned_optimal_errors[i]*((args.factor-1)**0.5),
-				size=(2000)
+				size=(sample_size)
 			)
 		)
 		aperture_point_distributions.append(
 			np.random.normal(
 				loc=binned_aperture_spectrum[i],
 				scale=binned_aperture_errors[i]*((args.factor-1)**0.5),
-				size=(2000)
+				size=(sample_size)
 			)
 		)
 	optimal_point_distributions = np.array(optimal_point_distributions).T
-	aperture_point_distribtutions = np.array(aperture_point_distributions).T
-	print(np.shape(optimal_point_distributions), np.shape(aperture_point_distributions))
+	aperture_point_distributions = np.array(aperture_point_distributions).T
 	
-	for i in range(10):
-		plt.plot(binned_wavelength_axis, optimal_point_distributions[i])
-	plt.show()
-	exit()
-
+	wavelength_strings = args.gradient_wavelength_ranges.split(",")
+	wavelength_floats = [float(x) for x in wavelength_strings]
+	
+	hi_wavelength = wavelength_floats[-1]
+	lo_wavelength = wavelength_floats[0]
+	
+	gradient_indices = []
+	for i in range(int(len(wavelength_floats)*0.5)):
+		grad_region_indices = np.where(
+			np.logical_and(
+				binned_wavelength_axis > wavelength_floats[2*i],
+				binned_wavelength_axis < wavelength_floats[(2*i)+1]
+			)
+		)
+		valid_grad_region_indices = (
+			[x for x in grad_region_indices[0] if binned_qual[x]==0]
+		)
+		gradient_indices.append(valid_grad_region_indices)
+	
+	gradient_indices = np.concatenate(gradient_indices)
+	gradient_wavelengths = binned_wavelength_axis[gradient_indices]
+	
+	optimal_slopes = []
+	optimal_intercepts = []
+	aperture_slopes = []
+	aperture_intercepts = []
+	
+	per_hundred_nm_conversions = {
+		"angstroms" : 1000
+	}
+	
+	for i in range(sample_size):
+		optimal_grad_spectrum = (
+			optimal_point_distributions[i][gradient_indices]
+		)
+		opt_linear_fit = linregress(
+			gradient_wavelengths, optimal_grad_spectrum
+		)
+		optimal_slopes.append(opt_linear_fit.slope)
+		optimal_intercepts.append(opt_linear_fit.intercept)
+		
+		###### LINE 139 in binslope.py. Wrap this bit into a function and call once
+		# each for optimal and aperture measurement.
+		
+		aperture_grad_spectrum = (
+			aperture_point_distributions[i][gradient_indices]
+		)
+		ape_linear_fit = linregress(
+			gradient_wavelengths, aperture_grad_spectrum
+		)
+		aperture_slopes.append(ape_linear_fit.slope)
+		aperture_intercepts.append(ape_linear_fit.intercept)
+		
+		
+	
 if args.plot:
 	fig = plt.figure(figsize=(10,6))
 	ax = plt.subplot()
