@@ -67,8 +67,10 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	)
 	min_airmass = round(np.min(airmasses), 3)
 	max_airmass = round(np.max(airmasses), 3)
+	med_airmass = round(np.median(airmasses), 3)
 	new_head["LOAIRMSS"] = (min_airmass, "Minimum sequence airmass")
 	new_head["HIAIRMSS"] = (max_airmass, "Maximum sequence airmass")
+	new_head["MDAIRMSS"] = (med_airmass, "Median sequence airmass")
 	
 	condition_keys = [
 		"HUMIDITY", "TAMBIENT", "PRESSUR2", "DEWPOINT", "WINDSPEE", "WINDSPE2"

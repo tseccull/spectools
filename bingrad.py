@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.5
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.6
 	
-	Last updated: 2024-07-11
+	Last updated: 2024-07-12
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -18,6 +18,7 @@ import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 import numpy as np
 
+from matplotlib.gridspec import GridSpec
 from scipy.stats import linregress
 
 
@@ -37,7 +38,7 @@ def binning(spectrum_data, error_data):
 			np.random.normal(
 				loc=spectrum_data[j],
 				scale=error_data[j],
-				size=100
+				size=5000
 			)
 		)
 	
@@ -46,17 +47,42 @@ def binning(spectrum_data, error_data):
 	# of the mean as the uncertainty.
 	uncertain_samples = np.array(uncertain_samples).flatten()
 	binned_point_data = np.median(uncertain_samples)
-	binned_point_error = (
-		  np.std(uncertain_samples)
-		/ ((len(spectrum_data)-1)**0.5)
-	)
-	#plt.hist(uncertain_samples, bins=100)
-	#plt.axvline(binned_point_data, color='k')
-	#plt.axvline(binned_point_data-binned_point_error, color='r')
-	#plt.axvline(binned_point_data+binned_point_error, color='r')
-	#plt.show()
+	if len(spectrum_data) > 1:
+		binned_point_error = (
+			np.std(uncertain_samples)
+			/ ((len(spectrum_data)-1)**0.5)
+		)
+	else: binned_point_error = np.std(uncertain_samples)
 	
 	return binned_point_data, binned_point_error
+
+
+def grad_measurement(point_dist, grad_indices, grad_wavelengths, size, p100nm):
+	
+	gradients = []
+	fit_slopes = []
+	fit_intercepts = []
+	for i in range(size):
+		grad_spectrum = (point_dist[i][grad_indices])
+		linear_fit = linregress(grad_wavelengths, grad_spectrum)
+		x1 = gradient_wavelengths[0]
+		x2 = gradient_wavelengths[-1]
+		y1 = (x1*linear_fit.slope) + linear_fit.intercept
+		y2 = (x2*linear_fit.slope) + linear_fit.intercept
+		gradients.append(100*((y2-y1)/((x2-x1)/p100nm))*(2/(y1+y2)))
+		fit_slopes.append(linear_fit.slope)
+		fit_intercepts.append(linear_fit.intercept)
+	
+	gradients = np.array(gradients)
+	fit_slopes = np.array(fit_slopes)
+	fit_intercepts = np.array(fit_intercepts)
+	
+	median_grad = np.median(gradients)
+	grad_error = np.std(gradients)/((size-1)**0.5)
+	median_slope = np.median(fit_slopes)
+	median_intercept = np.median(fit_intercepts)
+
+	return median_grad, grad_error, median_slope, median_intercept
 
 
 parser = argparse.ArgumentParser(
@@ -228,7 +254,7 @@ binned_aperture_errors = np.array(binned_aperture_errors)
 binned_qual = np.array(binned_qual)
 
 if args.gradient_wavelength_ranges:
-	sample_size = 2000
+	sample_size = 5000
 	
 	optimal_point_distributions = []
 	aperture_point_distributions = []
@@ -252,6 +278,7 @@ if args.gradient_wavelength_ranges:
 	
 	wavelength_strings = args.gradient_wavelength_ranges.split(",")
 	wavelength_floats = [float(x) for x in wavelength_strings]
+	wavelength_floats = np.array(wavelength_floats)
 	
 	hi_wavelength = wavelength_floats[-1]
 	lo_wavelength = wavelength_floats[0]
@@ -272,77 +299,153 @@ if args.gradient_wavelength_ranges:
 	gradient_indices = np.concatenate(gradient_indices)
 	gradient_wavelengths = binned_wavelength_axis[gradient_indices]
 	
-	optimal_slopes = []
-	optimal_intercepts = []
-	aperture_slopes = []
-	aperture_intercepts = []
-	
 	per_hundred_nm_conversions = {
 		"angstroms" : 1000
 	}
 	
-	for i in range(sample_size):
-		optimal_grad_spectrum = (
-			optimal_point_distributions[i][gradient_indices]
-		)
-		opt_linear_fit = linregress(
-			gradient_wavelengths, optimal_grad_spectrum
-		)
-		optimal_slopes.append(opt_linear_fit.slope)
-		optimal_intercepts.append(opt_linear_fit.intercept)
-		
-		###### LINE 139 in binslope.py. Wrap this bit into a function and call once
-		# each for optimal and aperture measurement.
-		
-		aperture_grad_spectrum = (
-			aperture_point_distributions[i][gradient_indices]
-		)
-		ape_linear_fit = linregress(
-			gradient_wavelengths, aperture_grad_spectrum
-		)
-		aperture_slopes.append(ape_linear_fit.slope)
-		aperture_intercepts.append(ape_linear_fit.intercept)
-		
-		
+	per_100_nm_factor = per_hundred_nm_conversions[primary_head["WAVU"]]
+	
+	opt_gradient, opt_gradient_error, opt_slope, opt_inter = grad_measurement(
+		optimal_point_distributions,
+		gradient_indices,
+		gradient_wavelengths,
+		sample_size,
+		per_100_nm_factor
+	)
+	ape_gradient, ape_gradient_error, ape_slope, ape_inter = grad_measurement(
+		aperture_point_distributions,
+		gradient_indices,
+		gradient_wavelengths,
+		sample_size,
+		per_100_nm_factor
+	)
+	stack_headers = [x for x in headers if "STACK" in x["EXTNAME"]]
+	airmass_difference = np.abs(
+		stack_headers[0]["MDAIRMSS"] - stack_headers[1]["MDAIRMSS"]
+	)
+	opt_grad_uncertainty = np.sqrt(
+		opt_gradient_error**2
+		+ np.abs(opt_gradient - ape_gradient)**2
+		+ airmass_difference**2
+	)
+	ape_grad_uncertainty = np.sqrt(
+		ape_gradient_error**2
+		+ np.abs(opt_gradient - ape_gradient)**2
+		+ airmass_difference**2
+	)
+	
+	opt_grad = "%.2f" % round(opt_gradient,2)
+	u_opt_grad = "%.2f" % round(opt_grad_uncertainty,2)
+	ape_grad = "%.2f" % round(ape_gradient,2)
+	u_ape_grad = "%.2f" % round(ape_grad_uncertainty,2)
+	print(
+		"Optimal Spectrum Gradient: " 
+		+ opt_grad 
+		+ " +/- " 
+		+ u_opt_grad
+		+ " %/100 nm"
+	)
+	print(
+		"Aperture Spectrum Gradient: " 
+		+ ape_grad 
+		+ " +/- " 
+		+ u_ape_grad
+		+ " %/100 nm"
+	)
 	
 if args.plot:
-	fig = plt.figure(figsize=(10,6))
-	ax = plt.subplot()
-	ax.errorbar(
-		binned_wavelength_axis,
-		binned_optimal_spectrum,
-		yerr=binned_optimal_errors,
-		marker='.',
-		linestyle='',
-		color="k",
-		label="Optimal Spectrum, Binned x" + str(args.factor)
-	)
-	ax.errorbar(
-		binned_wavelength_axis,
-		binned_aperture_spectrum + 1,
-		yerr=binned_aperture_errors,
-		marker='.',
-		linestyle='',
-		color="dimgray",
-		label="Aperture Spectrum +1, Binned x" + str(args.factor)
-	)
-	ylim_bottom, ylim_top = plt.ylim()
-	qual_shade_bottom = np.ones(len(binned_wavelength_axis)) * ylim_bottom
-	qual_shade_top = np.ones(len(binned_wavelength_axis)) * ylim_top
-	plt.fill_between(
-		binned_wavelength_axis,
-		qual_shade_bottom,
-		qual_shade_top,
-		where=binned_qual==1,
-		facecolor="red",
-		alpha=0.5,
-		label="QUAL=1"
-	)
-	ax.set_ylim(ylim_bottom, ylim_top)
-	ax.grid(linestyle="dashed")
-	ax.set_xlabel("Wavelength, " + headers[1]["WAVU"])
-	ax.set_ylabel("Relative Reflectance")
-	ax.legend()
+	fig = plt.figure(figsize=(6,10))
+	gs = GridSpec(2,1, figure=fig)
+	ax1 = plt.subplot(gs[0,0])
+	ax2 = plt.subplot(gs[1,0])
+	
+	axes = [ax1, ax2]
+	specs = [binned_optimal_spectrum, binned_aperture_spectrum]
+	errs = [binned_optimal_errors, binned_aperture_errors]
+	cols = ["k","dimgray"]
+	labels = [
+		"Optimal Spectrum, Binned x" + str(args.factor),
+		"Aperture Spectrum, Binned x" + str(args.factor),
+	]
+	
+	for i, ax in enumerate(axes):
+		ax.errorbar(
+			binned_wavelength_axis,
+			specs[i],
+			yerr=errs[i],
+			marker='.',
+			linestyle='',
+			color=cols[i],
+			label=labels[i]
+		)
+	
+		ylim_bottom, ylim_top = ax.get_ylim()
+		qual_shade_bottom = np.ones(len(binned_wavelength_axis)) * ylim_bottom
+		qual_shade_top = np.ones(len(binned_wavelength_axis)) * ylim_top
+		ax.fill_between(
+			binned_wavelength_axis,
+			qual_shade_bottom,
+			qual_shade_top,
+			where=binned_qual==1,
+			facecolor="red",
+			alpha=0.5,
+			label="QUAL=1"
+		)
+	
+		ax.set_ylim(ylim_bottom, ylim_top)
+		ax.grid(linestyle="dashed")
+		if i==0:
+			ax.set_xticklabels([])
+		if i==1:
+			ax.set_xlabel("Wavelength, " + headers[1]["WAVU"])
+
+	plt.figtext(0.03, 0.435, "Relative Reflectance", rotation=90)
+	
+	if args.gradient_wavelength_ranges:
+		opt_line = (binned_wavelength_axis * opt_slope) + opt_inter
+		ape_line = (binned_wavelength_axis * ape_slope) + ape_inter
+		opt_input_points = (wavelength_floats * opt_slope) + opt_inter
+		ape_input_points = (wavelength_floats * ape_slope) + ape_inter
+		lines = [opt_line, ape_line]
+		cols = ["goldenrod", "magenta"]
+		grads = [opt_grad, ape_grad]
+		u_grads = [u_opt_grad, u_ape_grad]
+		input_points = [opt_input_points, ape_input_points]
+		for i , ax in enumerate(axes):
+			ax.plot(
+				binned_wavelength_axis,
+				lines[i],
+				linestyle="dashed",
+				color=cols[i],
+				linewidth=2.5,
+				zorder=9,
+				label=(
+					"Linear Fit: Gradient = "
+					+ grads[i]
+					+ " +/- "
+					+ u_grads[i]
+					+ " %/100 nm"
+				)
+			)
+			ax.plot(
+				wavelength_floats,
+				input_points[i],
+				linestyle="",
+				marker='.',
+				markersize=12,
+				mec=cols[i],
+				mfc="white",
+				zorder=9,
+				label="Gradient Input Wavelengths"
+			)
+			ax.legend(loc=4)
+	
+	else:
+		ax1.legend(loc=4)
+		ax2.legend(loc=4)
+
+	plt.subplots_adjust(hspace=0)
 	plt.show()
 
 #if args.save:
+### Add saving mechanism and fivide bingrad.py into multiple functions/files for clarity.
