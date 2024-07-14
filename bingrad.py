@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.6
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.7
 	
-	Last updated: 2024-07-12
+	Last updated: 2024-07-14
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -23,6 +23,31 @@ from scipy.stats import linregress
 
 
 def binning(spectrum_data, error_data):
+	"""
+	This function takes the spectroscopic data and uncertainties contained
+	within a section of a larger spectrum that is to be binned. Each of the
+	supplied datapoints is resampled from a gaussian distribution defined with
+	the mean as the point's value and sigma as the point's uncertainty. The
+	resulting distribution of resampled points from each of the datapoints in
+	the bin are combined into a single common distribution. The median of this
+	new distribution is returned as the value of the binned point while the 
+	standard error of the distributions mean is returned as the binned point's
+	uncertainty.
+	
+	Args:
+	 -- spectrum_data (numpy.array)
+			Array containing a subsection of the full spectrum that is to be
+			binned into a single point.
+	 -- error_data (numpy.array)
+			Array containing the uncertainties associated with the spectrum
+			values supplied in spectrum_data
+	
+	Returns:
+	 -- binned_point_data (float)
+			The data point derived from binning spectrum_data.
+	 -- binned_point_error (float)
+			An estimate of the uncertainty of binned_point_data. 
+	"""
 	
 	uncertain_samples = []
 	
@@ -58,6 +83,46 @@ def binning(spectrum_data, error_data):
 
 
 def grad_measurement(point_dist, grad_indices, grad_wavelengths, size, p100nm):
+	"""
+	This script takes in a large 2D array of data. Each row in this ray is 
+	spectroscopic data produced by resampling a common origin spectrum within
+	its uncertainties. To measure the gradient of the origin spectrum, a linear
+	regression is performed on each resampled spectrum to produce a 
+	distribution of gradients from which a median and standard error of the
+	mean can be calculated as the respective value of the gradient of the
+	origin spectrum and the uncertainty of that gradient.
+	
+	Args:
+	 -- point_dist (numpy.array)
+		2D array of spectroscopic data where each row is version of a common 
+		original spectrum that has been sampled from within the original
+		spectrums uncertainties.
+	 -- grad_indices (numpy.array)
+		Array of indices marking the region of the spectroscopic data to be 
+		measured. This array will skip gaps in the data caused by CCD chip gaps
+		or those marked by the user.
+	 -- grad_wavelengths (numpy.array)
+		The section of the full spectrum wavelength axis that is marked by
+		grad_indices.
+	 -- size (int)
+		The number of times the spectrum has been resampled to produce 
+		point_dist.
+	 -- p100nm (float)
+		Conversion factor that accounts for wavelength units of the data when
+		converting the raw slope measurement to units of %/100 nm.
+	
+	Returns:
+	 -- median_grad (float)
+		Converted spectral gradient in units of %/100 nm
+	 -- grad_error (float)
+		Uncertainty of spectral gradient in units of %/100 nm
+	 -- median_slope (float)
+		Raw median of the gradients returned by linregress. This is used to
+		plot the linear fit if args.plot is called.
+	 -- median_intercept (float)
+		Raw median of the intercepts returned by linregress. This is used to
+		plot the linear fit if args.plot is called.
+	"""
 	
 	gradients = []
 	fit_slopes = []
@@ -84,6 +149,10 @@ def grad_measurement(point_dist, grad_indices, grad_wavelengths, size, p100nm):
 
 	return median_grad, grad_error, median_slope, median_intercept
 
+
+###############################################################################
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # ####
+###############################################################################
 
 parser = argparse.ArgumentParser(
 	description="This script has two functions. Primarily it is used to bin\
@@ -300,7 +369,7 @@ if args.gradient_wavelength_ranges:
 	gradient_wavelengths = binned_wavelength_axis[gradient_indices]
 	
 	per_hundred_nm_conversions = {
-		"angstroms" : 1000
+		"angstroms" : 1000.
 	}
 	
 	per_100_nm_factor = per_hundred_nm_conversions[primary_head["WAVU"]]
@@ -444,8 +513,50 @@ if args.plot:
 		ax1.legend(loc=4)
 		ax2.legend(loc=4)
 
+	print(args.data_file)
 	plt.subplots_adjust(hspace=0)
 	plt.show()
 
-#if args.save:
-### Add saving mechanism and fivide bingrad.py into multiple functions/files for clarity.
+if args.save:
+	combi_binned_frame = np.array(
+		[
+			binned_wavelength_axis,
+			binned_optimal_spectrum,
+			binned_optimal_errors,
+			binned_aperture_spectrum,
+			binned_aperture_errors,
+			binned_qual
+		]
+	)
+	
+	binned_hdu = fits.PrimaryHDU(combi_binned_frame)
+	binned_header = binned_hdu.header
+	binned_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
+	binned_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
+	binned_header["ORIGIN"] = ("bingrad.py v0.0.7", "Script that created this file.")
+	binned_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
+	binned_header["INPUT1"] = (args.data_file, "Input spectrum file")
+	binned_header["OBJECT1"] = (primary_head["OBJECT1"], "Name of first object in ratio spectrum")
+	binned_header["OBJECT2"] = (primary_head["OBJECT2"], "Name of second object in ratio spectrum")
+	binned_header["EXTENS"] = (primary_head["EXTNAME"], "Extension of unbinned data frame")
+	binned_header["BINFACTR"] = (args.factor, "Binning factor used to bin spectrum")
+	binned_header["HDUROW0"] = "Wavelength axis, " + primary_head["WAVU"]
+	binned_header["HDUROW1"] = "Optimal binned spectrum"
+	binned_header["HDUROW2"] = "Optimal binned spectrum uncertainty"
+	binned_header["HDUROW3"] = "Aperture binned spectrum"
+	binned_header["HDUROW4"] = "Aperture binned spectrum uncertainty"
+	binned_header["HDUROW5"] = "Quality flags: 0=GOOD, 1=BAD"
+	binned_header["EXTNAME"] = (
+		primary_head["EXTNAME"].split("STACK")[0] + "BINNED"
+	)
+	
+	listed_hdus = [binned_hdu]
+	
+	for i in range(len(headers)):
+		listed_hdus.append(fits.ImageDU(frames[i], header=headers[i]))
+		
+	hdu_list = fits.HDUList(listed_hdus)
+	hdu_list.writeto("b" + args.data_file)
+	hdu_list.close()
+	
+	#### Test save function and add wavelength output to printout from gradient measurement.

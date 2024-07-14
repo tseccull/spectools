@@ -47,7 +47,6 @@ def division(wave_axis, shifted_wave_axis, spectra, uncertainties):
 			spectrum, the ratio spectrum, the uncertainties of the ratio
 			spectrum, and a row containing quality flags for each point
 			in the ratio spectrum where 1=GOOD and 0=BAD.
-	 
 	"""
 	
 	shifted_spectra = [spectra[0]]
@@ -140,8 +139,8 @@ def update_wave(val):
 
 
 ###############################################################################
-#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
-###############################################################################	
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # ####
+###############################################################################
 
 parser = argparse.ArgumentParser(
 	description="This script divides one 1D spectrum by another.\
