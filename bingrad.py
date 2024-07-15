@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/bin/python
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.7
+bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.8
 	
-	Last updated: 2024-07-14
+	Last updated: 2024-07-15
 	
 	This script has two functions. Primarily it is used to bin spectroscopic 
 	data to boost its signal-to-noise ratio at the expense of spectral 
@@ -15,6 +15,7 @@ bingrad.py = written by Tom Seccull, 2024-07-05 - v0.0.7
 
 import argparse
 import astropy.io.fits as fits
+import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -421,12 +422,29 @@ if args.gradient_wavelength_ranges:
 		+ u_ape_grad
 		+ " %/100 nm"
 	)
+	print(
+		"Reference wavelength: "
+		+ str((wavelength_floats[0]
+		+ wavelength_floats[-1])*0.5)
+		+ " "
+		+ primary_head["WAVU"]
+	)
+	print("Measured Wavelength Range(s):")
+	for i in range(int(len(wavelength_floats)*0.5)):
+		print(
+			"    "
+			+ str(wavelength_floats[i*2])
+			+ "--"
+			+ str(wavelength_floats[(i*2)+1])
+			+ " "
+			+ primary_head["WAVU"]
+		)
 	
 if args.plot:
 	fig = plt.figure(figsize=(6,10))
 	gs = GridSpec(2,1, figure=fig)
 	ax1 = plt.subplot(gs[0,0])
-	ax2 = plt.subplot(gs[1,0])
+	ax2 = plt.subplot(gs[1,0], sharex=ax1, sharey=ax1)
 	
 	axes = [ax1, ax2]
 	specs = [binned_optimal_spectrum, binned_aperture_spectrum]
@@ -463,12 +481,11 @@ if args.plot:
 	
 		ax.set_ylim(ylim_bottom, ylim_top)
 		ax.grid(linestyle="dashed")
-		if i==0:
-			ax.set_xticklabels([])
 		if i==1:
 			ax.set_xlabel("Wavelength, " + headers[1]["WAVU"])
 
 	plt.figtext(0.03, 0.435, "Relative Reflectance", rotation=90)
+	plt.setp(ax1.get_xticklabels(), visible=False)
 	
 	if args.gradient_wavelength_ranges:
 		opt_line = (binned_wavelength_axis * opt_slope) + opt_inter
@@ -513,7 +530,6 @@ if args.plot:
 		ax1.legend(loc=4)
 		ax2.legend(loc=4)
 
-	print(args.data_file)
 	plt.subplots_adjust(hspace=0)
 	plt.show()
 
@@ -553,10 +569,11 @@ if args.save:
 	listed_hdus = [binned_hdu]
 	
 	for i in range(len(headers)):
-		listed_hdus.append(fits.ImageDU(frames[i], header=headers[i]))
+		listed_hdus.append(fits.ImageHDU(frames[i], header=headers[i]))
 		
 	hdu_list = fits.HDUList(listed_hdus)
 	hdu_list.writeto("b" + args.data_file)
 	hdu_list.close()
 	
-	#### Test save function and add wavelength output to printout from gradient measurement.
+	##### Move gradient measurement stuff to functions in a separate file.
+	##### Consider doing the same for the output stuff (i.e. save and plot)

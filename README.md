@@ -1,6 +1,6 @@
 # spectools
 
-v24.196.0
+v24.197.0
 
 Developer:    Tom Seccull
 
@@ -124,7 +124,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 # bingrad.py - under development
 
-v0.0.7
+v0.0.8
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 
