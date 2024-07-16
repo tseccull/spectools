@@ -128,7 +128,7 @@ v1.0.0
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 
-binned spectrum can be plotted and saved to a new FITS file. The secondary
+binned spectrum can be plotted and/or saved to a new FITS file. The secondary
 function is to allow the continuum gradient of the spectrum to be measured 
 across a user-defined wavelength range via linear regression. The resulting 
 linear fit can be plotted and its parameters will be printed in the terminal.
