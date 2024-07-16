@@ -134,7 +134,7 @@ across a user-defined wavelength range via linear regression. The resulting
 linear fit can be plotted and its parameters will be printed in the terminal.
 `bingrad.py` expects an input spectrum in the format produced by `divide.py`. 
 
-Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
