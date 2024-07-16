@@ -1,6 +1,6 @@
 # spectools
 
-v24.197.0
+v24.198.0
 
 Developer:    Tom Seccull
 
@@ -103,7 +103,7 @@ other in almost all cases. Given its close proximity to the mean and its
 robustness against outliers, the median of the combined distribution in each 
 wavelength element is taken as the value of the stacked spectrum at that 
 wavelength. The standard error of the mean of the distribution is taken to be 
-the uncertainty each stacked data point. stack.py is only readily compatible 
+the uncertainty each stacked data point. `stack.py` is only readily compatible 
 with spectra extracted by [MOTES](https://github.com/tseccull/motes).
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
@@ -114,17 +114,17 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 v1.0.2
 
-This script divides one 1D spectrum by another. divide.py expects both spectra
+This script divides one 1D spectrum by another. `divide.py` expects both spectra
 to have wavelength axes of equal length and be the product of both extraction by MOTES
-and stacking by stack.py. Typical use of this script is to calibrate a spectrum
+and stacking by `stack.py`. Typical use of this script is to calibrate a spectrum
 of a minor planet with that of a solar twin or solar analog to derive the minor
 planet's reflectance spectrum.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
-# bingrad.py - under development
+# bingrad.py
 
-v0.0.8
+v1.0.0
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 
@@ -132,6 +132,9 @@ binned spectrum can be plotted and saved to a new FITS file. The secondary
 function is to allow the continuum gradient of the spectrum to be measured 
 across a user-defined wavelength range via linear regression. The resulting 
 linear fit can be plotted and its parameters will be printed in the terminal.
+`bingrad.py` expects an input spectrum in the format produced by `divide.py`. 
+
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
