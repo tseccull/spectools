@@ -1,8 +1,8 @@
 #! /home/tom/anaconda3/envs/work/bin/python
 """
-extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.1
+extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.2
 
-	Last updated: 2024-07-08
+	Last updated: 2024-07-18
 	
 	This script applies a correction to input 1D astronomical 
 	spectroscopic data based on the measured atmospheric extinction
@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import InterpolatedUnivariateSpline
 
 def get_extinction(extinct_curve_file):
 	with open(extinct_curve_file) as ext:
@@ -106,10 +106,10 @@ for i, file_name in enumerate(files):
 		wavelength_axis = file_hdu[0].data[0]
 		spectrum = file_hdu[0].data[1]
 		uncertainties = file_hdu[0].data[2]
-		extinction_cubic_spline = CubicSpline(
-			extinct_wavelength, extinct_curve
+		extinction_spline = InterpolatedUnivariateSpline(
+			extinct_wavelength, extinct_curve, k=1
 		)
-		interp_extinction = extinction_cubic_spline(wavelength_axis)
+		interp_extinction = extinction_spline(wavelength_axis)
 		corrected_spectrum = spectrum * (
 			10 ** (0.4 * airmass * interp_extinction)
 		)
@@ -145,7 +145,7 @@ for i, file_name in enumerate(files):
 				"UT timestamp for extinction correction"
 			)
 			file_hdu[0].header["EXTISCPT"] = (
-				"extinct.py v1.0.0",
+				"extinct.py v1.0.2",
 				"Script used to perform extinction correction"
 			)
 			file_hdu[0].header["EXTIDOI"] = (

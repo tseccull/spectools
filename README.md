@@ -1,6 +1,6 @@
 # spectools
 
-v24.198.0
+v24.200.0
 
 Developer:    Tom Seccull
 
@@ -58,7 +58,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # extinct.py
 
-v1.0.1
+v1.0.2
 
 This script applies an average extinction correction to input 1D astronomical 
 spectroscopic data based on the measured atmospheric extinction curve of the 
@@ -81,8 +81,8 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 Extinction Curve Sources:\
-GMOS-N - [See the Gemini Observatory web pages.](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction)\
-GMOS-S - [Stone & Baldwin 1983, MNRAS, 204, 347](https://doi.org/10.1093/mnras/204.2.347)
+GMOS-N - [Buton et al. 2013, A&A, 549, A8](https://doi.org/10.1051/0004-6361/201219834); see [Gemini website](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction) for the 3100 angstrom point.\
+GMOS-S - [Stritzinger et al. 2005, PASP, 117, 810](https://doi.org/10.1086/431468)
     
 
 # stack.py
