@@ -82,7 +82,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 Extinction Curve Sources:\
 GMOS-N - [Buton et al. 2013, A&A, 549, A8](https://doi.org/10.1051/0004-6361/201219834)\
-         see [Gemini website](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction) for the 3100 angstrom point.\
+-------- see [Gemini website](https://www.gemini.edu/observing/telescopes-and-sites/sites#Extinction) for the 3100 angstrom point.\
 GMOS-S - [Stritzinger et al. 2005, PASP, 117, 810](https://doi.org/10.1086/431468)
     
 
