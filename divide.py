@@ -309,7 +309,7 @@ if args.save:
 	ratio_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
 	ratio_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
 	ratio_header["ORIGIN"] = ("divide.py v1.0.0", "Script that created this file.")
-	ratio_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
+	ratio_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
 	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")
 	ratio_header["OBJECT1"] = (primary_head_one["OBJECT"], "Name of object in first spectrum")

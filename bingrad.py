@@ -344,7 +344,7 @@ if args.save:
 	binned_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
 	binned_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
 	binned_header["ORIGIN"] = ("bingrad.py v0.0.7", "Script that created this file.")
-	binned_header["DIVDOI"] = ("UNKNOWN", "Script repository DOI")
+	binned_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	binned_header["INPUT1"] = (args.data_file, "Input spectrum file")
 	binned_header["OBJECT1"] = (primary_head["OBJECT1"], "Name of first object in ratio spectrum")
 	binned_header["OBJECT2"] = (primary_head["OBJECT2"], "Name of second object in ratio spectrum")

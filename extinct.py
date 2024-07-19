@@ -149,7 +149,7 @@ for i, file_name in enumerate(files):
 				"Script used to perform extinction correction"
 			)
 			file_hdu[0].header["EXTIDOI"] = (
-				"UNKNOWN", "DOI of extinct.py repository"
+				"10.5281/zenodo.12786056", "DOI of extinct.py repository"
 			)
 			file_hdu[0].header["EXTICURV"] = (
 				extinction_functions[instrument],

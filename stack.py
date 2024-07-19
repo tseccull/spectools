@@ -265,7 +265,7 @@ if args.save:
 		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
 	)
 	new_header["ORIGIN"] = ("stack.py v1.0.2", "Script that created this file")
-	new_header["STACKDOI"] = ("UNKNOWN", "Script repository DOI")
+	new_header["STACKDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	stack_hdu = stack_header_dict[instrument](
 		new_hdu, headers, files, args.scaling_wavelength
 	)

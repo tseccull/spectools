@@ -67,7 +67,7 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 		"fronge.py v1.0.3", "Script used to perform fringe correction"
 	)
 	new_file_hdu_list[0].header["FRNGDOI"] = (
-		"UNKNOWN", "DOI of fronge.py repository"
+		"10.5281/zenodo.12786056", "DOI of fronge.py repository"
 	)
 	
 	frame_list = ["SCI", "VAR", "FRINGE_FRAME", "MAD_FRINGE_FRAME"]
