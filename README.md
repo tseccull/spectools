@@ -11,10 +11,11 @@ that this software will either work, or be useful to others. Updates to these
 scripts may arrive in this repo randomly and without warning. Those that 
 choose to use these scripts do so at their own risk. At very least, the 
 shebang Python path at the top of each script should be updated to match the 
-Python path in your system. Support from me may be limited. If, against all 
-odds, any of the scripts in this repo end up being useful in your work, please 
-consider citing the repo with the details provided in the CITATION.cff file. A
-Zenodo DOI may be obtained for this repo at some point in the future.
+Python path in your system. Support from me may be limited. 
+
+If, against all odds, any of the scripts in this repo end up being useful in 
+your work, please consider citing the repo with the details provided in the 
+CITATION.cff file or via the Zenodo DOI provided above.
 
 The scripts in this repo rely on other Python packages that deserve recognition 
 if they are used.
