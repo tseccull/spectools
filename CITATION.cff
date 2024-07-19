@@ -20,9 +20,9 @@ keywords:
   - astronomy
   - data reduction
   - spectroscopy
-license: GPL-3.0
-version: 1.0.0
-date-released: '2024-07-19'
 identifiers:
   - type: doi
     value: 10.5281/zenodo.12786056
+license: GPL-3.0
+version: 1.0.0
+date-released: '2024-07-19'
