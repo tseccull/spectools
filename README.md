@@ -1,6 +1,6 @@
 # spectools
 
-v24.200.0
+v1.0.0
 
 Developer:    Tom Seccull
 
