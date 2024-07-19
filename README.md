@@ -1,6 +1,6 @@
 # spectools
 
-v1.0.0
+v1.0.0\
 [![DOI](https://zenodo.org/badge/709271938.svg)](https://zenodo.org/doi/10.5281/zenodo.12786056)
 
 Developer:    Tom Seccull
