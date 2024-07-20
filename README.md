@@ -1,25 +1,22 @@
 # spectools
 
-v1.0.0\
-[![DOI](https://zenodo.org/badge/709271938.svg)](https://zenodo.org/doi/10.5281/zenodo.12786056)
+v1.0.0 | [![DOI](https://zenodo.org/badge/709271938.svg)](https://zenodo.org/doi/10.5281/zenodo.12786056)
 
-Developer:    Tom Seccull
+Developer: Tom Seccull
 
 This is a personal collection of scripts I that use for reduction, processing, 
-and analysis of astronomical spectroscopic data. I cannot make any guarantees 
-that this software will either work, or be useful to others. Updates to these 
-scripts may arrive in this repo randomly and without warning. Those that 
-choose to use these scripts do so at their own risk. At very least, the 
-shebang Python path at the top of each script should be updated to match the 
-Python path in your system. Support from me may be limited. 
+and analysis of astronomical spectroscopic data. This repo is intended more as 
+a record than a distribution. Feel free to use these scripts in whole or in 
+part, but note that you do so at your own risk; I cannot make any guarantees 
+that this software will either work, or be useful to others. Support from me 
+may be limited. 
 
-If, against all odds, any of the scripts in this repo end up being useful in 
-your work, please consider citing the repo with the details provided in the 
-CITATION.cff file or via the Zenodo DOI provided above.
+If, against all odds, any of the scripts in this repo end up being useful to 
+you in your work, please consider citing the repo with the details provided in 
+the via the Zenodo DOI provided above.
 
-The scripts in this repo rely on other Python packages that deserve recognition 
-if they are used.
-Please be sure to cite these as well where necessary:
+The scripts in this repo rely on multiple other Python packages that deserve 
+recognition if they are used. Please be sure to cite them where necessary:
 
 [Astropy](https://www.astropy.org/acknowledging.html), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
 

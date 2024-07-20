@@ -356,9 +356,7 @@ if args.save:
 	binned_header["HDUROW3"] = "Aperture binned spectrum"
 	binned_header["HDUROW4"] = "Aperture binned spectrum uncertainty"
 	binned_header["HDUROW5"] = "Quality flags: 0=GOOD, 1=BAD"
-	binned_header["EXTNAME"] = (
-		primary_head["EXTNAME"].split("STACK")[0] + "BINNED"
-	)
+	binned_header["EXTNAME"] = primary_head["EXTNAME"].split("STACK")[0] + "BINNED"
 	
 	listed_hdus = [binned_hdu]
 	
