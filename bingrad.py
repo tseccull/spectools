@@ -1,4 +1,4 @@
-#! /home/tom/anaconda3/bin/python
+#! /home/tom/anaconda3/envs/work/bin/python
 """
 bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.0
 	
@@ -33,7 +33,7 @@ def binning(spectrum_data, error_data):
 	points from each of the datapoints in the bin are combined into a
 	single common distribution. The median of this new distribution is
 	returned as the value of the binned point while the standard error
-	of the distributions mean is returned as the binned point's
+	of the distribution's mean is returned as the binned point's
 	uncertainty.
 	
 	Args:
