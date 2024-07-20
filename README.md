@@ -3,20 +3,22 @@
 ![GitHub Release](https://img.shields.io/github/v/release/tseccull/spectools)
 [![DOI](https://zenodo.org/badge/709271938.svg)](https://zenodo.org/doi/10.5281/zenodo.12786056)
 
-Developer: Tom Seccull
+Author: Tom Seccull
 
 This is a personal collection of scripts I that use for reduction, processing, 
-and analysis of astronomical spectroscopic data. This repo is intended more as 
-a record than a distribution. Feel free to use these scripts in whole or in 
-part, but note that you do so at your own risk; I cannot make any guarantees 
-that this software will either work, or be useful to others. Support from me 
-may be limited. 
+and analysis of astronomical spectroscopic data. Although these scripts are 
+still undergoing active development, this repo is intended more as a citable 
+record than a public software distribution. By all means feel free to use any 
+of these scripts, either in whole or in part, but note that you do so at your 
+own risk. I cannot guarantee that this software will either work or be 
+beneficial to you. If you download a copy of this repo, be sure to select the
+most recent stable release at the link on the right.  
 
-If, against all odds, any of the scripts in this repo end up being useful to 
-you in your work, please consider citing the repo with the details provided via 
-the Zenodo DOI above.
+If, against all odds, any of the scripts in this repo end up helping you in 
+your work, please consider citing the repo with the details provided via the 
+Zenodo DOI above.
 
-The scripts in this repo rely on multiple other Python packages that deserve 
+The scripts in this repo rely on multiple Python packages that deserve 
 recognition if they are used. Please be sure to cite them where necessary:
 
 [Astropy](https://www.astropy.org/acknowledging.html), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
