@@ -2,7 +2,7 @@
 """
 bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.0
 	
-	Last updated: 2024-07-16
+	Last updated: 2024-07-20
 	
 	This script has two functions. Primarily it is used to bin 
 	spectroscopic data to boost its signal-to-noise ratio at the expense
