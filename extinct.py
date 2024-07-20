@@ -2,7 +2,7 @@
 """
 extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.2
 
-	Last updated: 2024-07-18
+	Last updated: 2024-07-20
 	
 	This script applies a correction to input 1D astronomical 
 	spectroscopic data based on the measured atmospheric extinction
@@ -79,8 +79,8 @@ args = parser.parse_args()
 script_directory = os.path.abspath(os.path.dirname(__file__))
 extinction_curve_directory = script_directory + "/extinct/"
 extinction_functions = {
-	"GMOS-N" : "mkoextinct.dat",
-	"GMOS-S" : "ctioextinct.dat"
+	"GMOS-N" : "mko.dat",
+	"GMOS-S" : "ctio.dat"
 }
 
 airmass_keys = {
