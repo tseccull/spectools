@@ -13,8 +13,8 @@ that this software will either work, or be useful to others. Support from me
 may be limited. 
 
 If, against all odds, any of the scripts in this repo end up being useful to 
-you in your work, please consider citing the repo with the details provided in 
-the via the Zenodo DOI provided above.
+you in your work, please consider citing the repo with the details provided via 
+the Zenodo DOI above.
 
 The scripts in this repo rely on multiple other Python packages that deserve 
 recognition if they are used. Please be sure to cite them where necessary:
