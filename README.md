@@ -5,7 +5,7 @@
 
 Author: Tom Seccull
 
-This is a personal collection of scripts I that use for reduction, processing, 
+This is a personal collection of scripts that I use for reduction, processing, 
 and analysis of astronomical spectroscopic data. Although these scripts are 
 still undergoing active development, this repo is intended more as a citable 
 record than a public software distribution. By all means feel free to use any 
@@ -79,7 +79,7 @@ extinction curve. `extinct.py` is only readily compatible with spectra
 extracted by [MOTES](https://github.com/tseccull/motes), and it should be run
 on individual 1D spectra of a given target prior to stacking them.
 
-Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 Extinction Curve Sources:\
