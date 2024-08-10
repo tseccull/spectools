@@ -1,9 +1,9 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#! /home/tom/miniforge3/envs/work/bin/python
 
 """
-scrap.py - written by T. Seccull, 2024-05-06 - v1.0.6
+scrap.py - written by T. Seccull, 2024-05-06 - v1.0.7
 
-	Last updated - 2024-05-06
+	Last updated - 2024-08-10
 
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
 	with Astroscrappy/LA Cosmic. This script runs the detect_cosmics()
@@ -142,7 +142,7 @@ for f in files:
 		# Based on the value of instrument, this calls a prep_instrument
 		# function
 		detect_cosmics_parameters = instrument_prep[instrument](
-			spectrum_file, primary_header, args.fine_structure_mode
+			spectrum_file, args.fine_structure_mode
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.

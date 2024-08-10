@@ -1,4 +1,4 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#! /home/tom/miniforge3/envs/work/bin/python
 
 """
 moffat.py - written by T. Seccull, 2024-05-06

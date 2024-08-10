@@ -26,7 +26,7 @@ recognition if they are used. Please be sure to cite them where necessary:
 
 # scrap.py
 
-v1.0.6
+v1.0.7
 
 This is essentially a Python wrapper for Astropy's Astroscrappy, which is 
 itself a Python implementation of Pieter van Dokkum's LA Cosmic. This script 
