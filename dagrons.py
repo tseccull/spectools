@@ -19,8 +19,15 @@ dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.0
 	such that all the data and calibration frames have the same
 	format/RoI. This means science targets and their specphot standard
 	stars may have to be stored and reduced separately, but this script
-	is less complex as a result. DRAGONS should be cited if this is 
-	used.
+	is less complex as a result. dagrons.py only calls a subset of the
+	primitives provided by the full reduceScience() recipe that DRAGONS
+	normally runs for GMOS longslit spectroscopic data including
+	preparation, DQ and VAR frame addition, overscan correction, bias 
+	subtraction, ADU to e- converion, flat-field correction, QE
+	correction, and 2D spectrum distortion correction (rectification).
+	Cosmic ray flagging, fringe subtraction, sky subtraction,
+	extraction, and stacking are all performed later by other scripts in
+	the spectools repo.DRAGONS should be cited if this is used.
 """
 
 
@@ -60,7 +67,15 @@ parser = argparse.ArgumentParser(
 	directory, such that all the data and calibration frames have the\
 	same format/RoI. This means science targets and their specphot\
 	standard stars may have to be stored and reduced separately, but\
-	this script is less complex as a result."
+	this script is less complex as a result. dagrons.py only calls a\
+	subset of the primitives provided by the full reduceScience()\
+	recipe that DRAGONS normally runs for GMOS longslit spectroscopic\
+	data including preparation, DQ and VAR frame addition, overscan\
+	correction, bias subtraction, ADU to e- converion, flat-field\
+	correction, QE correction, and 2D spectrum distortion correction\
+	(rectification). Cosmic ray flagging, fringe subtraction, sky\
+	subtraction, extraction, and stacking are all performed later by\
+	other scripts in the spectools repo."
 )
 parser.add_argument(
 	"data_directory", type=str,
