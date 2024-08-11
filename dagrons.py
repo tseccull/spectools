@@ -27,7 +27,7 @@ dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.0
 	correction, and 2D spectrum distortion correction (rectification).
 	Cosmic ray flagging, fringe subtraction, sky subtraction,
 	extraction, and stacking are all performed later by other scripts in
-	the spectools repo.DRAGONS should be cited if this is used.
+	the spectools repo.DRAGONS should be cited if dagrons.py is used.
 """
 
 
