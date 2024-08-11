@@ -43,7 +43,7 @@ their specphot standard stars may have to be stored and reduced separately, but
 this script is less complex as a result. DRAGONS should be cited if this is
 used.
 
-Requires: [DRAGONS](https://www.gemini.edu/observing/phase-iii/reducing-data/dragons-data-reduction-software)
+Requires: [DRAGONS](https://www.gemini.edu/observing/phase-iii/reducing-data/dragons-data-reduction-software)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)  
 
 
