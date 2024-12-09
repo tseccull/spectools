@@ -21,7 +21,36 @@ Zenodo DOI above.
 The scripts in this repo rely on multiple Python packages that deserve 
 recognition if they are used. Please be sure to cite them where necessary:
 
-[Astropy](https://www.astropy.org/acknowledging.html), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
+[Astropy](https://www.astropy.org/acknowledging.html), [DRAGONS](https://www.gemini.edu/observing/phase-iii/reducing-data/dragons-data-reduction-software), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/citing-numpy/), [SciPy](https://scipy.org/citing-scipy/)
+
+
+# dagrons.py 
+
+v1.0.0
+
+This script is a partial reduction pipeline for GMOS longslit spectroscopic 
+data built with DRAGONS and based on its GMOS longslit spectroscopy reduction 
+tutorial. Some aspects of the reduction have been automated to some degree, but
+the bones are the same as what is presented in the DRAGONS documentation. The
+recipe called by dagrons.py for reduction of science data and where it should
+be pasted in DRAGONS is provided in `./dragons_reference_recipes/recipes_LS_SPECT.py`. 
+The directory where this script is initiated is taken to be the working 
+directory, with the directory containing data and calibrations for the 
+reduction provided as an argument. The data and calibrators for only one on-sky
+source are expected to be present in the data directory, such that all the data
+and calibration frames have the same format/RoI. This means science targets and
+their specphot standard stars may have to be stored and reduced separately, but
+this script is less complex as a result. `dagrons.py` only calls a subset of 
+the primitives provided by the full `reduceScience()` recipe that DRAGONS 
+normally runs for GMOS longslit spectroscopic data including preparation, DQ 
+and VAR frame addition, overscan correction, bias subtraction, ADU to e-
+converion, flat-field correction, QE correction, and 2D spectrum distortion
+correction (rectification). Cosmic ray flagging, fringe subtraction, sky 
+subtraction, extraction, and stacking are all performed later by other scripts
+in the spectools repo. DRAGONS should be cited if `dagrons.py` is used.
+
+Requires: [DRAGONS](https://www.gemini.edu/observing/phase-iii/reducing-data/dragons-data-reduction-software)\
+Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)  
 
 
 # scrap.py
