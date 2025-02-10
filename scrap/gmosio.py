@@ -1,7 +1,7 @@
 #! /home/tom/miniforge3/envs/work/bin/python
 
 """
-gmos.py - written by T. Seccull, 2024-05-06
+gmosio.py - written by T. Seccull, 2024-05-06
 	
 	Called by: scrap.py
 	Last updated: - 2024-08-10

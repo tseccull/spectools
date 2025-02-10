@@ -32,4 +32,5 @@ def reduceMinorPlanetScience(p):
     p.flatCorrect()
     p.QECorrect()
     p.distortionCorrect()
+    p.resampleToCommonFrame(conserve=True, trim_spatial=False)  # default force_linear=True, ie. linearized.
     p.storeProcessedScience(suffix="_2D")
