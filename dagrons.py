@@ -1,8 +1,8 @@
 #!/home/tom/miniforge3/envs/dragons/bin/python
 """
-dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.0
+dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.2
 	
-	Last updated: 2024-08-11
+	Last updated: 2025-02-13
 	
 	This script is a partial reduction pipeline for GMOS longslit
 	spectroscopic data built with DRAGONS and based on its GMOS longslit
@@ -171,7 +171,8 @@ master_bias_path = (
 reduce_flats = Reduce()
 reduce_flats.files.extend(flats)
 if args.interactive:
-	reduce_flats.uparms = [("interactive", True)]	
+	reduce_flats.uparms = [("interactive", True)]
+reduce_flats.recipename = "makeProcessedFlatStack"
 reduce_flats.runr()
 master_flat = reduce_flats.output_filenames[0]
 master_flat_path = (

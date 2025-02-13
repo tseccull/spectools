@@ -26,7 +26,7 @@ recognition if they are used. Please be sure to cite them where necessary:
 
 # dagrons.py 
 
-v1.0.1
+v1.0.2
 
 This script is a partial reduction pipeline for GMOS longslit spectroscopic 
 data built with DRAGONS and based on its GMOS longslit spectroscopy reduction 
