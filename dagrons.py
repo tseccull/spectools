@@ -1,8 +1,8 @@
 #!/home/tom/miniforge3/envs/dragons/bin/python
 """
-dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.2
+dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.3
 	
-	Last updated: 2025-02-13
+	Last updated: 2025-02-25
 	
 	This script is a partial reduction pipeline for GMOS longslit
 	spectroscopic data built with DRAGONS and based on its GMOS longslit
@@ -154,6 +154,7 @@ biases = dataselect.select_data(all_files, ["BIAS"])
 flats = dataselect.select_data(all_files, ["FLAT"])
 arcs = dataselect.select_data(all_files, ["ARC"])
 target_frames = dataselect.select_data(all_files, [], ["CAL"])
+target_frames = [[x] for x in target_frames]
 
 # Store the bad pixel mask in the calibration database
 [caldb.add_cal(bpm) for bpm in dataselect.select_data(all_files, ["BPM"])]
@@ -199,8 +200,9 @@ processed_calibs = [
 
 # Reduce target frames. A reference copy of the reduceMinorPlanetScience() 
 # recipe is stored in ./dragons_reference_recipes/recipes_LS_SPECT.py
-reduce_target = Reduce()
-reduce_target.files.extend(target_frames)
-reduce_target.ucals = normalize_ucals(processed_calibs)
-reduce_target.recipename = "reduceMinorPlanetScience"
-reduce_target.runr()
+for frame in target_frames:
+	reduce_target = Reduce()
+	reduce_target.files.extend(frame)
+	reduce_target.ucals = normalize_ucals(processed_calibs)
+	reduce_target.recipename = "reduceMinorPlanetScience"
+	reduce_target.runr()
