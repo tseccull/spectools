@@ -1,8 +1,9 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#!/usr/bin/env python3
+
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.0
+bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.1
 	
-	Last updated: 2024-07-20
+	Last updated: 2025-03-05
 	
 	This script has two functions. Primarily it is used to bin 
 	spectroscopic data to boost its signal-to-noise ratio at the expense

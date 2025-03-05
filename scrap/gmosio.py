@@ -1,10 +1,10 @@
-#! /home/tom/miniforge3/envs/work/bin/python
+#!/usr/bin/env python3
 
 """
 gmosio.py - written by T. Seccull, 2024-05-06
 	
 	Called by: scrap.py
-	Last updated: - 2024-08-10
+	Last updated: - 2025-03-05
 
 	This module contains the preparation and save functions called by
 	scrap.py for GMOS spectra.

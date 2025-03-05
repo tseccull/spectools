@@ -1,8 +1,9 @@
-#! /home/tom/anaconda3/envs/work/bin/python
-"""
-divide.py - written by Tom Seccull, 2024-05-08 - v1.0.2
+#!/usr/bin/env python3
 
-	Last updated: 2024-07-11
+"""
+divide.py - written by Tom Seccull, 2024-05-08 - v1.0.3
+
+	Last updated: 2025-03-05
 	
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product

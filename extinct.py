@@ -1,8 +1,9 @@
-#! /home/tom/anaconda3/envs/work/bin/python
-"""
-extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.2
+#!/usr/bin/env python3
 
-	Last updated: 2024-07-20
+"""
+extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.3
+
+	Last updated: 2025-03-05
 	
 	This script applies a correction to input 1D astronomical 
 	spectroscopic data based on the measured atmospheric extinction

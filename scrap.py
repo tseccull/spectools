@@ -1,9 +1,9 @@
-#! /home/tom/miniforge3/envs/work/bin/python
+#!/usr/bin/env python3
 
 """
-scrap.py - written by T. Seccull, 2024-05-06 - v1.0.7
+scrap.py - written by T. Seccull, 2024-05-06 - v1.0.8
 
-	Last updated - 2024-08-10
+	Last updated - 2025-03-05
 
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
 	with Astroscrappy/LA Cosmic. This script runs the detect_cosmics()

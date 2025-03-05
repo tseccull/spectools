@@ -1,8 +1,9 @@
-#!/home/tom/miniforge3/envs/dragons/bin/python
+#!/usr/bin/env python3
+
 """
-dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.3
+dagrons.py = written by Tom Seccull, 2024-08-11 - v1.0.4
 	
-	Last updated: 2025-02-25
+	Last updated: 2025-03-05
 	
 	This script is a partial reduction pipeline for GMOS longslit
 	spectroscopic data built with DRAGONS and based on its GMOS longslit

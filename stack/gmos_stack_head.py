@@ -1,9 +1,10 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#!/usr/bin/env python3
+
 """
 gmos_stack_head.py - written by Tom Seccull, 2024-05-06
 
 	Called by: stack.py
-	Last updated: 2024-05-31
+	Last updated: 2025-03-05
 	
 	This file contains the stack_header_gmos() function, which creates
 	the astropy header for the HDU containing the stacked GMOS spectra

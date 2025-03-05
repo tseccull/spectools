@@ -1,9 +1,10 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#!/usr/bin/env python3
+
 """
 gradient.py - written by Tom Seccull, 2024-07-16
 
 	Called by: bingrad.py
-	Last updated: 2024-07-16
+	Last updated: 2025-03-05
 	
 	This file contains all the functions needed by bingrad.py to perform
 	a linear regression of the supplied spectral data and measure the

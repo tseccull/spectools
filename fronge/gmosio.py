@@ -1,9 +1,10 @@
-#! /home/tom/anaconda3/envs/work/bin/python
+#!/usr/bin/env python3
+
 """
 gmosio.py - written by T. Seccull, 2024-05-06
 
 	Called by fronge.py
-    Last updated: 2024-05-09
+    Last updated: 2025-03-05
 
 	This module contains the save_gmos() function called by fronge.py.
 """

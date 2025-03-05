@@ -26,7 +26,7 @@ recognition if they are used. Please be sure to cite them where necessary:
 
 # dagrons.py 
 
-v1.0.3
+v1.0.4
 
 This script is a partial reduction pipeline for GMOS longslit spectroscopic 
 data built with DRAGONS and based on its GMOS longslit spectroscopy reduction 
@@ -55,7 +55,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # scrap.py
 
-v1.0.7
+v1.0.8
 
 This is essentially a Python wrapper for Astropy's Astroscrappy, which is 
 itself a Python implementation of Pieter van Dokkum's LA Cosmic. This script 
@@ -76,7 +76,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # fronge.py
 
-v1.0.3
+v1.0.4
 
 This script is designed to correct fringing in 2D spectroscopic data by 
 creating a median fringe frame and subtracting it from science data. A modular 
@@ -89,7 +89,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # extinct.py
 
-v1.0.2
+v1.0.3
 
 This script applies an average extinction correction to input 1D astronomical 
 spectroscopic data based on the measured atmospheric extinction curve of the 
@@ -119,7 +119,7 @@ GMOS-S - [Stritzinger et al. 2005, PASP, 117, 810](https://doi.org/10.1086/43146
 
 # stack.py
 
-v1.0.2
+v1.0.3
 
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
 spectrum with reduced noise. All input spectra are scaled to unity at either a
@@ -144,7 +144,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v1.0.2
+v1.0.3
 
 This script divides one 1D spectrum by another. `divide.py` expects both spectra
 to have wavelength axes of equal length and be the product of both extraction by MOTES
@@ -156,7 +156,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 # bingrad.py
 
-v1.0.0
+v1.0.1
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 

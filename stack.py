@@ -1,8 +1,9 @@
-#! /home/tom/anaconda3/envs/work/bin/python
-"""
-stack.py - written by Tom Seccull, 2024-05-06 - v1.0.2
+#!/usr/bin/env python3
 
-	Last updated: 2024-05-31
+"""
+stack.py - written by Tom Seccull, 2024-05-06 - v1.0.3
+
+	Last updated: 2025-03-05
 	
 	This script takes multiple 1D spectra and combines them to produce a
 	stacked 1D spectrum with reduced noise. All input spectra are scaled
