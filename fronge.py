@@ -27,7 +27,6 @@
 	Last updated - 2025-03-07
 
 	Description --------------------------------------------------------
-
 	This script is designed to act on 2D spectroscopic data where the
 	target has been observed in a sequence of offset dither patterns
 	along the spectrographic slit. For the science frame in each file,

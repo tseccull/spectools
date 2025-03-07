@@ -1,10 +1,32 @@
 #!/usr/bin/env python3
 
 """
-extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.3
+	extinct.py
 
-	Last updated: 2025-03-05
+	Copyright (C) 2024-05-06 Tom Seccull
 	
+	This script is part of the spectools repo hosted at 
+	https://github.com/tseccull/spectools
+	https://doi.org/10.5281/zenodo.12786056
+	
+	If used, please cite the spectools DOI above.
+	
+	This script is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Last updated - 2025-03-07
+
+	Description --------------------------------------------------------
 	This script applies a correction to input 1D astronomical 
 	spectroscopic data based on the measured atmospheric extinction
 	curve of the observing site. The 1D spectrum and its uncertainties
@@ -21,8 +43,19 @@ extinct.py - written by Tom Seccull, 2024-05-29 - v1.0.3
 	but instead just updates the input files. extinct.py is only readily
 	compatible with spectra extracted by MOTES, and it should be run on 
 	individual 1D spectra of a given target prior to stacking them.
+
+	Data Sources -------------------------------------------------------
+	Mauna Kea extinction curve - mko.dat
+	Buton et al. 2013, A&A, 549, A8
+	https://doi.org/10.1051/0004-6361/201219834
+	
+	Cerro Pachón/Cerro Tololo extinction curve - ctio.dat
+	Stritzinger et al. 2005, PASP, 117, 810
+	https://doi.org/10.1086/431468
 """
 
+__version__ = "1.0.4"
+__author__ = "Tom Seccull"
 
 import argparse
 import astropy.io.fits as fits
@@ -82,6 +115,11 @@ extinction_curve_directory = script_directory + "/extinct/"
 extinction_functions = {
 	"GMOS-N" : "mko.dat",
 	"GMOS-S" : "ctio.dat"
+}
+
+extinction_dois{
+	"GMOS-N" : "10.1051/0004-6361/201219834",
+	"GMOS-S" : "10.1086/431468"
 }
 
 airmass_keys = {
@@ -146,7 +184,7 @@ for i, file_name in enumerate(files):
 				"UT timestamp for extinction correction"
 			)
 			file_hdu[0].header["EXTISCPT"] = (
-				"extinct.py v1.0.2",
+				"extinct.py v" + __version__,
 				"Script used to perform extinction correction"
 			)
 			file_hdu[0].header["EXTIDOI"] = (
@@ -155,6 +193,10 @@ for i, file_name in enumerate(files):
 			file_hdu[0].header["EXTICURV"] = (
 				extinction_functions[instrument],
 				"Extinction curve used in extinction correction."
+			)
+			file_hdu[0].header["CURVEDOI"] = (
+				extinction_dois[instrument],
+				"DOI to source of the extinction curve used."
 			)
 			file_hdu.flush()
 			os.rename(file_name, "e" + file_name)		
