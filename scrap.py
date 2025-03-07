@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-scrap.py - written by T. Seccull, 2024-05-06 - v1.0.8
+scrap.py - written by T. Seccull, 2024-05-06 - v1.0.9
 
-	Last updated - 2025-03-05
+	Last updated - 2025-03-07
 
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
 	with Astroscrappy/LA Cosmic. This script runs the detect_cosmics()
@@ -34,6 +34,8 @@ scrap.py - written by T. Seccull, 2024-05-06 - v1.0.8
     Astroscrappy docs - https://astroscrappy.readthedocs.io/en/latest/
 """
 
+__author__ = "Tom Seccull"
+__version__ = "1.0.9"
 
 import argparse
 import astropy.io.fits as fits
@@ -176,5 +178,6 @@ for f in files:
 			cosmic_ray_mask*1,
 			clean_science_data,
 			detect_cosmics_parameters,
-			args
+			args,
+			__version__
 		)
