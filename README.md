@@ -89,7 +89,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # extinct.py
 
-v1.0.3
+v1.0.4
 
 This script applies an average extinction correction to input 1D astronomical 
 spectroscopic data based on the measured atmospheric extinction curve of the 
