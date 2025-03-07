@@ -117,9 +117,14 @@ extinction_functions = {
 	"GMOS-S" : "ctio.dat"
 }
 
-extinction_dois{
+extinction_dois = {
 	"GMOS-N" : "10.1051/0004-6361/201219834",
 	"GMOS-S" : "10.1086/431468"
+}
+
+curve_wavelength_multipliers = {
+	"GMOS-N" : 0.1,
+	"GMOS-S" : 0.1
 }
 
 airmass_keys = {
@@ -140,6 +145,7 @@ for i, file_name in enumerate(files):
 			extinct_wavelength, extinct_curve = get_extinction(
 				extinction_curve_directory + extinction_functions[instrument]
 			)
+			extinct_wavelength *= curve_wavelength_multipliers[instrument]
 		
 		airmass = primary_header[airmass_keys[instrument]]
 		wavelength_axis = file_hdu[0].data[0]
@@ -180,7 +186,7 @@ for i, file_name in enumerate(files):
 			file_hdu[0].data[1] = corrected_spectrum
 			file_hdu[0].data[2] = corrected_uncertainties
 			file_hdu[0].header["EXTIDATE"] = (
-				datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"), 
+				datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%dT%H:%M:%S"), 
 				"UT timestamp for extinction correction"
 			)
 			file_hdu[0].header["EXTISCPT"] = (
@@ -192,11 +198,11 @@ for i, file_name in enumerate(files):
 			)
 			file_hdu[0].header["EXTICURV"] = (
 				extinction_functions[instrument],
-				"Extinction curve used in extinction correction."
+				"Extinction curve used in extinction correction"
 			)
 			file_hdu[0].header["CURVEDOI"] = (
 				extinction_dois[instrument],
-				"DOI to source of the extinction curve used."
+				"DOI to source of extinction curve"
 			)
 			file_hdu.flush()
 			os.rename(file_name, "e" + file_name)		
