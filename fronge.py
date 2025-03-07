@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-fronge.py - written by T. Seccull, 2024-05-06 - v1.0.4
+fronge.py - written by T. Seccull, 2024-05-06 - v1.0.5
 
-    Last updated: 2025-03-05
+    Last updated: 2025-03-07
 
 	This script is designed to act on 2D spectroscopic data where the
 	target has been observed in a sequence of offset dither patterns
@@ -23,6 +23,8 @@ fronge.py - written by T. Seccull, 2024-05-06 - v1.0.4
 	except -h, which will show this description.
 """
 
+__version__ = "1.0.5"
+__author__ = "Tom Seccull"
 
 import argparse
 import astropy.io.fits as fits
@@ -143,4 +145,6 @@ for k in data_frames:
 	
 	# Subtract the fringe frame from the science frame and save the
 	# fringe-corrected data.	
-	instrument_save[instrument](k, fringe_frame, mad_frame, other_dither_data)
+	instrument_save[instrument](
+		k, fringe_frame, mad_frame, other_dither_data, __version__
+	)

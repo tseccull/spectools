@@ -237,6 +237,8 @@ def save_gmos(
 			detect_cosmics().
 	 -- command_line_arguments (class)
 			The scrap.py command line argument namespace.
+	 -- scrap_version (str)
+	        String noting the current version of scrap.py.
 	Returns:
 	 -- None
 	'''

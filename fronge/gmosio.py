@@ -4,17 +4,25 @@
 gmosio.py - written by T. Seccull, 2024-05-06
 
 	Called by fronge.py
-    Last updated: 2025-03-05
+    Last updated: 2025-03-07
 
 	This module contains the save_gmos() function called by fronge.py.
 """
+
+__author__ = "Tom Seccull"
 
 import astropy.io.fits as fits
 import copy
 import datetime
 
 
-def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
+def save_gmos(
+	file_string,
+	fringe_frame,
+	mad_frame,
+	other_dither_data,
+	fronge_version
+):
 	"""
 	Constructs and saves a new .fits file combining the original input
 	dataframes and headers with the defringed science frame, updated
@@ -30,6 +38,8 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 		    frame array.
 	 --	other_dither_data (list) - A list of file keywords for all the
 		    files that were median combined to make the fringe frame
+	 -- fronge_version (str) - A string noting the current version of
+	        fronge.py
 	
 	Returns:
 	 --	None
@@ -65,7 +75,8 @@ def save_gmos(file_string, fringe_frame, mad_frame, other_dither_data):
 	)
 	
 	new_file_hdu_list[0].header["FRNGSCPT"] = (
-		"fronge.py v1.0.3", "Script used to perform fringe correction"
+		"fronge.py v" + fronge_version,
+		"Script used to perform fringe correction"
 	)
 	new_file_hdu_list[0].header["FRNGDOI"] = (
 		"10.5281/zenodo.12786056", "DOI of fronge.py repository"
