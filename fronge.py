@@ -1,9 +1,32 @@
 #!/usr/bin/env python3
 
 """
-fronge.py - written by T. Seccull, 2024-05-06 - v1.0.5
+	fronge.py
 
-    Last updated: 2025-03-07
+	Copyright (C) 2024-05-06 Tom Seccull
+	
+	This script is part of the spectools repo hosted at 
+	https://github.com/tseccull/spectools
+	https://doi.org/10.5281/zenodo.12786056
+	
+	If used, please cite the spectools DOI above.
+	
+	This script is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Last updated - 2025-03-07
+
+	Description --------------------------------------------------------
 
 	This script is designed to act on 2D spectroscopic data where the
 	target has been observed in a sequence of offset dither patterns
