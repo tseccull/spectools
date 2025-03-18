@@ -119,7 +119,7 @@ GMOS-S - [Stritzinger et al. 2005, PASP, 117, 810](https://doi.org/10.1086/43146
 
 # stack.py
 
-v1.0.3
+v1.0.4
 
 This script takes multiple 1D spectra and combines them to produce a stacked 1D
 spectrum with reduced noise. All input spectra are scaled to unity at either a
@@ -144,7 +144,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v1.0.3
+v1.0.4
 
 This script divides one 1D spectrum by another. `divide.py` expects both spectra
 to have wavelength axes of equal length and be the product of both extraction by MOTES
@@ -156,7 +156,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 # bingrad.py
 
-v1.0.1
+v1.0.2
 
 This script has two functions. Primarily it is used to bin spectroscopic data 
 to boost its signal-to-noise ratio at the expense of spectral resolution. A 

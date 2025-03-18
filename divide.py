@@ -1,10 +1,32 @@
 #!/usr/bin/env python3
 
 """
-divide.py - written by Tom Seccull, 2024-05-08 - v1.0.3
+	divide.py
 
-	Last updated: 2025-03-05
+	Copyright (C) 2024-05-08 Tom Seccull
 	
+	This script is part of the spectools repo hosted at 
+	https://github.com/tseccull/spectools
+	https://doi.org/10.5281/zenodo.12786056
+	
+	If used, please cite the spectools DOI above.
+	
+	This script is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Last updated - 2025-03-05
+
+	Description --------------------------------------------------------
 	This script divides one 1D spectrum by another. divide.py expects
 	both spectra to have a common wavelength axis, be the product
 	of extraction by MOTES, and stacking by stack.py. Typical use of
@@ -12,6 +34,9 @@ divide.py - written by Tom Seccull, 2024-05-08 - v1.0.3
 	of a solar twin or solar analog to derive the minor planet's
 	reflectance spectrum.
 """
+
+__author__ = "Tom Seccull"
+__version__ = "1.0.4"
 
 import argparse
 import astropy.io.fits as fits
@@ -309,7 +334,7 @@ if args.save:
 	ratio_header = ratio_hdu.header
 	ratio_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
 	ratio_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
-	ratio_header["ORIGIN"] = ("divide.py v1.0.0", "Script that created this file.")
+	ratio_header["ORIGIN"] = ("divide.py v" + __version__, "Script that created this file.")
 	ratio_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
 	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")

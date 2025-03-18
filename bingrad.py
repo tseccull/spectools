@@ -1,10 +1,32 @@
 #!/usr/bin/env python3
 
 """
-bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.1
+	bingrad.py
+
+	Copyright (C) 2024-05-06 Tom Seccull
 	
-	Last updated: 2025-03-05
+	This script is part of the spectools repo hosted at 
+	https://github.com/tseccull/spectools
+	https://doi.org/10.5281/zenodo.12786056
 	
+	If used, please cite the spectools DOI above.
+	
+	This script is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Last updated - 2025-03-05
+
+	Description --------------------------------------------------------	
 	This script has two functions. Primarily it is used to bin 
 	spectroscopic data to boost its signal-to-noise ratio at the expense
 	of spectral resolution. A binned spectrum can be plotted and saved
@@ -13,6 +35,9 @@ bingrad.py = written by Tom Seccull, 2024-07-05 - v1.0.1
 	wavelength range via linear regression. The resulting linear fit can
 	be plotted and its parameters will be printed in the terminal.
 """
+
+__version__ = "1.0.2"
+__author__ = "Tom Seccull"
 
 import argparse
 import astropy.io.fits as fits
@@ -344,7 +369,7 @@ if args.save:
 	binned_header = binned_hdu.header
 	binned_header["DATE"] = (datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), "UT file creation date.")
 	binned_header["FITSDOI"] = ("10.1051/0004-6361:20010923", "FITS format definition paper DOI")
-	binned_header["ORIGIN"] = ("bingrad.py v0.0.7", "Script that created this file.")
+	binned_header["ORIGIN"] = ("bingrad.py v" + __version__, "Script that created this file.")
 	binned_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	binned_header["INPUT1"] = (args.data_file, "Input spectrum file")
 	binned_header["OBJECT1"] = (primary_head["OBJECT1"], "Name of first object in ratio spectrum")

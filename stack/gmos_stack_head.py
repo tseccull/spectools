@@ -16,6 +16,38 @@ import datetime
 import numpy as np
 
 
+def last_reduction_modifications(new_head, heads, files, keys, comments):
+	"""
+	Takes header timestamps from a set of spectra to be stacked, finds
+	the latest time for each of them, and assigns that time for that
+	keyword in the new stacked header.
+	
+	Args:
+	 -- new_head (astropy fits header)
+	        The header being constructed for the new stacked spectrum.
+	 -- heads (list)
+	        A list of the headers being combined to make new_head.
+	 -- files (list)
+	        List of the filenames of the spectra being stacked.
+	 -- keys (list)
+	        List of keywords with timestamps listed in the headers.
+	 -- comments (list)
+	        List of header comments associated with keys.
+	
+	Returns:
+	 -- new_head (astropy fits header)
+	        The header being constructed for the new stacked spectrum.
+	"""
+	for i, k in enumerate(keys):
+		date_times = [heads[x[:-5]][k] for x in files]
+		date_times = [datetime.datetime.fromisoformat(x) for x in date_times]
+		last_time_stamp = max(date_times).strftime("%Y-%m-%dT%H:%M:%S")
+		timestamp_comment = comments[i]
+		new_head[k] = (last_time_stamp, timestamp_comment)
+	
+	return new_head
+
+
 def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	"""
 	Creates the header for the fits Header Data Unit containing the
@@ -72,46 +104,6 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	new_head["LOAIRMSS"] = (min_airmass, "Minimum sequence airmass")
 	new_head["HIAIRMSS"] = (max_airmass, "Maximum sequence airmass")
 	new_head["MDAIRMSS"] = (med_airmass, "Median sequence airmass")
-	
-	condition_keys = [
-		"HUMIDITY", "TAMBIENT", "PRESSUR2", "DEWPOINT", "WINDSPEE", "WINDSPE2"
-	]
-	new_condition_keys = ["HUMID", "TAMBI", "PRESS", "DWPNT", "WNDMH", "WNDMS"]
-	condition_comments = [
-		"relative humidity, %",
-		"ambient temperature, C",
-		"atmospheric pressure, Pa", 
-		"dew point, C", "wind speed, m/s", 
-		"wind speed, mph"
-	] 
-	
-	for i in range(len(condition_keys)):
-		conditions = np.array(
-			[heads[x[:-5]][condition_keys[i]] for x in files]
-		)
-		min_condition = np.min(conditions)
-		max_condition = np.max(conditions)
-		med_condition = np.median(conditions)
-		
-		new_head["LO"+new_condition_keys[i]] = (
-			min_condition, "Minimum " + condition_comments[i]
-		)
-		new_head["HI"+new_condition_keys[i]] = (
-			max_condition, "Maximum " + condition_comments[i]
-		)
-		new_head["MED"+new_condition_keys[i]] = (
-			med_condition, "Median " + condition_comments[i]
-		)
-	
-	wind_directions = np.array([heads[x[:-5]]["WINDDIRE"] for x in files])
-	radian_wind_directions = wind_directions*(np.pi/180)
-	sum_sin_wind_directions = np.sum(np.sin(radian_wind_directions))
-	sum_cos_wind_directions = np.sum(np.cos(radian_wind_directions))
-	radian_mean_wind_direction = np.arctan2(
-		sum_sin_wind_directions, sum_cos_wind_directions
-	)
-	mean_wind_direction = round(radian_mean_wind_direction/(np.pi/180), 2)
-	new_head["MEDWDDIR"] = (mean_wind_direction, "Circular mean wind direction, deg")
 	
 	# Target and guiding metadata
 	new_head["OBJECT"] = (heads[key_0]["OBJECT"], "Target name")
@@ -318,44 +310,127 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	new_head["PIXSCALE"] = (heads[key_0]["PIXSCALE"], "Pixel scale in Y, ''/pixel")
 	new_head["CCDSUM"] = (heads[key_0]["CCDSUM"], "Detector binning, pixels")
 	new_head["GAIN"] = (heads[key_0]["GAIN"], "Amplifier gain")
-	new_head["GAINMULT"] = (heads[key_0]["GAINMULT"], "Gain multiplication")
+	new_head["GAINSET"] = (heads[key_0]["GAINSET"], "Gain setting (low/high)")
 	new_head["RDNOISE"] = (heads[key_0]["RDNOISE"], "Readout noise")
 	
 	# Data reduction metadata
-	new_head["OBSMODE"] = (heads[key_0]["OBSMODE"], "Observing mode (Image/IFU/MOS/LONGSLIT)")
-	
-	reduction_datetimes = [heads[x[:-5]]["GEM-TLM"] for x in files]
-	reduction_datetimes = [
-		datetime.datetime.fromisoformat(x) for x in reduction_datetimes
+	ut_string = "UT time stamp for "
+	reduction_keys = [
+		"GEM-TLM",
+		"VALDATA",
+		"ADDMDF",
+		"SDZSTRUC",
+		"SDZHDRSG",
+		"SDZHDRSI",
+		"SDZWCS",
+		"PREPARE",
+		"ADILLMSK",
+		"ADDDQ",
+		"ADDVAR",
+		"SUBOVER"
 	]
-	last_reduction_timestamp = max(reduction_datetimes).strftime("%Y-%m-%dT%H:%M:%S")
-	new_head["GEM-TLM"] = (last_reduction_timestamp, "Latest UT data reduction timestamp")
-	new_head["CRMETHOD"] = (heads[key_0]["CRMETHOD"], "Cosmic ray masking/cleaning method in scrap.py")
+	reduction_comments = [
+		"Time of last modification by GEMINI",
+		ut_string + "validateData",
+		ut_string + "addMDF",
+		ut_string + "standardizeStructure",
+		ut_string + "standardizeObservator",
+		ut_string + "standardizeInstrument",
+		ut_string + "standardizeWCS",
+		ut_string + "PREPARE",
+		ut_string + "addIllumMaskToDQ",
+		ut_string + "addDQ",
+		ut_string + "addVAR",
+		ut_string + "subtractOverscan"
+	]
+	new_head = last_reduction_modifications(
+		new_head, heads, files, reduction_keys, reduction_comments
+	)
+	
+	new_head["TRIMMED"] = (heads[key_0]["TRIMMED"], "Overscan section trimmed")
+	
+	reduction_keys = ["TRIMOVER"]
+	reduction_comments = [ut_string + "trimOverscan"]
+	new_head = last_reduction_modifications(
+		new_head, heads, files, reduction_keys, reduction_comments
+	)
+	
+	new_head["BIASIM"] = (heads[key_0]["BIASIM"], "Bias imaged used")
 	
 	reduction_keys = [
-		"GPREPARE", "GGAIN", "GIREDUCE", "GMOSAIC",
-		"GSAPPWAV", "GSREDUCE", "WMEF", "GSTRANSF"
+		"BIASCORR", "ADUTOELE", "ATTWVSOL"
 	]
+	reduction_comments = [
+		ut_string + "biasCorrect",
+		ut_string + "ADUToElectrons",
+		ut_string + "attachWavelengthSolut"
+	]
+	new_head = last_reduction_modifications(
+		new_head, heads, files, reduction_keys, reduction_comments
+	)
 	
-	reduction_comments = copy.deepcopy(reduction_keys)
-	if "CRDATE" in heads[key_0]:
-		reduction_keys.append("CRDATE")
-		reduction_comments.append("scrap.py")
-	if "FRNGDATE" in heads[key_0]:
-		reduction_keys.append("FRNGDATE")
-		reduction_comments.append("fronge.py")
-	reduction_keys.append("MOTESDAT")
-	reduction_comments.append("MOTES")
-	if "EXTIDATE" in heads[key_0]:
-		reduction_keys.append("EXTIDATE")
-		reduction_comments.append("extinct.py")
+	new_head["FLATIM"] = (heads[key_0]["FLATIM"], "Flat imaged used")
 	
-	for i, k in enumerate(reduction_keys):
-		date_times = [heads[x[:-5]][k] for x in files]
-		date_times = [datetime.datetime.fromisoformat(x) for x in date_times]
-		last_time_stamp = max(date_times).strftime("%Y-%m-%dT%H:%M:%S")
-		timestamp_comment = "Latest UT timestamp for " + reduction_comments[i]
-		new_head[k] = (last_time_stamp, timestamp_comment)
+	reduction_keys = [
+		"FLATCORR", "QECORR", "TRANSFRM", "ALIGN", "PROCSCI"
+	]
+	reduction_comments = [
+		ut_string + "flatCorrect",
+		ut_string + "QECorrect",
+		ut_string + "distortionCorrect",
+		ut_string + "resampleToCommonFrame",
+		ut_string + "storeProcessedScience"
+	]
+	new_head = last_reduction_modifications(
+		new_head, heads, files, reduction_keys, reduction_comments
+	)
+	
+	new_head["PROCMODE"] = heads[key_0]["PROCMODE"]
+	
+	if "CRSCRIPT" in heads[key_0]:
+		new_head["CRSCRIPT"] = (heads[key_0]["CRSCRIPT"], "Cosmic ray masking/cleaning script")
+		new_head["SCRAPDOI"] = (heads[key_0]["SCRAPDOI"], "Script repository DOI")
+		new_head["CRMETHOD"] = (heads[key_0]["CRMETHOD"], "Cosmic ray masking/cleaning method")
+		new_head["ASCDOI"] = (heads[key_0]["ASCDOI"], "Astroscrappy Zenodo DOI")
+		new_head["VDOKDOI"] = (heads[key_0]["VDOKDOI"], "van Dokkum 2001 PASP paper DOI")
+		reduction_keys = ["CRDATE"]
+		reduction_comments = [ut_string + "Astroscrappy"]
+		new_head = last_reduction_modifications(
+			new_head, heads, files, reduction_keys, reduction_comments
+		)
+		new_head["CRBKGD"] = (heads[key_0]["CRBKGD"], "Background estimation method for Astroscrappy")
+		new_head["CRSIGCLP"] = (heads[key_0]["CRSIGCLP"], "Astroscrappy sigclip value")
+		new_head["CRSIGFRC"] = (heads[key_0]["CRSIGFRC"], "Astroscrappy sigfrac value")
+		new_head["CROBJLIM"] = (heads[key_0]["CROBJLIM"], "Astroscrappy objlim value")
+		new_head["CRDETSAT"] = (heads[key_0]["CRDETSAT"], "Astroscrappy satlevel value (e-)")
+		new_head["CRNITER"] = (heads[key_0]["CRNITER"], "Astroscrappy niter value")
+		new_head["CRSEPMED"] = (heads[key_0]["CRSEPMED"], "Astroscrappy sepmed value")
+		new_head["CRDCTYPE"] = (heads[key_0]["CRDCTYPE"], "Astroscrappy cleantype value")
+		new_head["CRFSMODE"] = (heads[key_0]["CRFSMODE"], "Astroscrappy fsmode value")
+		new_head["CRPSFMOD"] = (heads[key_0]["CRPSFMOD"], "Astroscrappy psfmodel value")
+		new_head["CRPSFWHM"] = (heads[key_0]["CRPSFWHM"], "Astroscrappy psffwhm value (pix)")
+		new_head["CRPSFSIZ"] = (heads[key_0]["CRPSFSIZ"], "Astroscrappy psfsize value (pix)")
+	
+	new_head["CRMETHOD"] = (heads[key_0]["CRMETHOD"], "Cosmic ray masking/cleaning method in scrap.py")
+	
+	if "FRNGSCPT" in heads[key_0]:
+		new_head["FRNGSCPT"] = (heads[key_0]["FRNGSCPT"], "Fringe correction script")
+		new_head["FRNGDOI"] = (heads[key_0]["FRNGDOI"], "Script repository DOI")
+		reduction_keys = ["FRNGDATE"]
+		reduction_comments = [ut_string + "fronge.py"]
+		new_head = last_reduction_modifications(
+			new_head, heads, files, reduction_keys, reduction_comments
+		)
+	
+	new_head["MOTES"] = (heads[key_0]["MOTES"], "Extraction script")
+	new_head["MOTESV"] = (heads[key_0]["MOTESV"], "MOTES version")
+	new_head["MOTESDOI"] = (heads[key_0]["MOTESDOI"], "MOTES DOI")
+	
+	reduction_keys = ["UTXTIME"]
+	reduction_comments = [ut_string + "MOTES"]
+	new_head = last_reduction_modifications(
+		new_head, heads, files, reduction_keys, reduction_comments
+	)
 	
 	new_head["WAVU"] = (heads[key_0]["WAVU"], "Wavelength unit")
 	low_wave_comment = "Lower limit of wavelength range, " + new_head["WAVU"]
@@ -363,32 +438,44 @@ def stack_header_gmos(new_hdu, heads, files, scale_wavelength):
 	high_wave_comment = "Upper limit of wavelength range, " + new_head["WAVU"]
 	new_head["WAVH"] = (heads[key_0]["WAVH"], high_wave_comment)
 	
-	iqs = np.array([heads[x[:-5]]["IQ"] for x in files])
+	iqs = np.array([heads[x[:-5]]["ARCSECIQ"] for x in files])
 	min_iq = np.min(iqs)
 	max_iq = np.max(iqs)
 	med_iq = np.median(iqs)
 	new_head["LOIQ"] = (min_iq, "Best image quality - lowest FWHM, arcsec ")
 	new_head["HIIQ"] = (max_iq, "Worst image quality - highest FWHM, arcsec")
 	new_head["MEDIQ"] = (med_iq, "Median image quality - median FWHM, arcsec")
-	new_head["SNBINLIM"] = (heads[key_0]["SNBINLIM"], "maximum SNR per bin for extraction")
+	new_head["SNRBNLIM"] = (heads[key_0]["SNRBNLIM"], "maximum SNR per bin")
 	new_head["COLBNLIM"] = (heads[key_0]["COLBNLIM"], "minimum number of columns per bin")
-	new_head["FWHMMULT"] = (heads[key_0]["FWHMMULT"], "FWHM multiplier used to bound extraction region")
-	new_head["SKYBINLM"] = (heads[key_0]["SKYBINLM"], "max SNR per bin for sky subtraction")
-	new_head["SKYFWHM"] = (heads[key_0]["SKYFWHM"], "FWHM multiplier used to define the backround")
+	new_head["FWHMMULT"] = (heads[key_0]["FWHMMULT"], "FWHM multiplier to define extraction limits")
+	new_head["SSNRBNLM"] = (heads[key_0]["SSNRBNLM"], "max SNR per bin for sky subtraction")
+	new_head["SFWHMMLT"] = (heads[key_0]["SFWHMMLT"], "FWHM multiplier used to define the backround")
+	new_head["SKYORDER"] = (heads[key_0]["SKYORDER"], "polynomial order of spatial sky model")
+	
+	if "EXTISCPT" in heads[key_0]:
+		new_head["EXTISCPT"] = (heads[key_0]["EXTISCPT"], "Extinction correction script")
+		new_head["EXTIDOI"] = (heads[key_0]["EXTIDOI"], "Script repository DOI")
+		new_head["EXTICURV"] = (heads[key_0]["EXTICURV"], "Extinction curve used in extinction correction")
+		new_head["CURVEDOI"] = (heads[key_0]["CURVEDOI"], "DOI source of extinction curve")
+		reduction_keys = ["EXTIDATE"]
+		reduction_comments = [ut_string + "extinction correction"]
+		new_head = last_reduction_modifications(
+			new_head, heads, files, reduction_keys, reduction_comments
+		)
 	
 	# Stacking metadata
 	new_head["STACKED"] = (len(files), "Number of stacked frames")
 	for i ,file_name in enumerate(files):
 		stack_key_string = "STACK" + ("0"*(8-len(str(i+1))-5)) + str(i+1)
-		comment_string = "Stacked file #" + str(i+1)
+		comment_string = "Stack file"
 		new_head[stack_key_string] = (file_name, comment_string)
 	
 	new_head["SCALEWAV"] = (round(scale_wavelength, 2), "Wavelength where spectra are scaled to 1.")
-	new_head["HDUROW0"] = "Wavelength Axis, angstroms"
+	new_head["HDUROW0"] = "Wavelength Axis, " + new_head["WAVU"]
 	new_head["HDUROW1"] = "Stacked Scaled Optimal Spectrum"
 	new_head["HDUROW2"] = "Stacked Scaled Optimal Spectrum Uncertainty"
 	new_head["HDUROW3"] = "Stacked Scaled Aperture Spectrum"
 	new_head["HDUROW4"] = "Stacked Scaled Aperture Spectrum Uncertainty"
 	new_head["EXTNAME"] = "STACKED_1D_SPEC"
-		
+	
 	return new_hdu
