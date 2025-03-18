@@ -1,11 +1,32 @@
 #!/usr/bin/env python3
 
 """
-gmos_stack_head.py - written by Tom Seccull, 2024-05-06
+	gmos_stack_head.py
 
-	Called by: stack.py
-	Last updated: 2025-03-05
+	Copyright (C) 2024-05-06 Tom Seccull
 	
+	This script is part stack.py, in the spectools repo hosted at 
+	https://github.com/tseccull/spectools
+	https://doi.org/10.5281/zenodo.12786056
+	
+	If used, please cite the spectools DOI above.
+	
+	This script is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+	Last updated - 2025-03-18
+
+	Description --------------------------------------------------------
 	This file contains the stack_header_gmos() function, which creates
 	the astropy header for the HDU containing the stacked GMOS spectra
 	produced by stack.py.
