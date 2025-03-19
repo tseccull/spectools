@@ -201,6 +201,13 @@ primary_head_one = one_headers[0]
 primary_head_two = two_headers[0]
 wavelength_axis = one_frames[0][0]
 
+if one_headers[0]["NAXIS1"] < two_headers[0]["NAXIS1"]:
+	diff = two_headers[0]["NAXIS1"] - one_headers[0]["NAXIS1"]
+	two_frames = [x[:,:-diff] for x in two_frames]
+elif one_headers[0]["NAXIS1"] > two_headers[0]["NAXIS1"]:
+	diff = one_headers[0]["NAXIS1"] - two_headers[0]["NAXIS1"]
+	one_frames = [x[:,:-diff] for x in one_frames]
+
 optimal_spectra = np.array([one_frames[0][1], two_frames[0][1]])
 optimal_uncertainties = np.array([one_frames[0][2], two_frames[0][2]])
 aperture_spectra = np.array([one_frames[0][3], two_frames[0][3]])
