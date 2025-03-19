@@ -144,7 +144,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # divide.py
 
-v1.0.4
+v1.0.5
 
 This script divides one 1D spectrum by another. `divide.py` expects both spectra
 to have wavelength axes of equal length and be the product of both extraction by MOTES

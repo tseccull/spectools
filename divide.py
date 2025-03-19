@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-03-05
+	Last updated - 2025-03-19
 
 	Description --------------------------------------------------------
 	This script divides one 1D spectrum by another. divide.py expects
@@ -36,7 +36,7 @@
 """
 
 __author__ = "Tom Seccull"
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 import argparse
 import astropy.io.fits as fits
@@ -233,11 +233,11 @@ ax_wave_slider = plt.axes([0.25, 0.05, 0.5, 0.03])
 wave_slider = Slider(
 	ax_wave_slider,
 	r"$\lambda$ Offset, " + primary_head_two["WAVU"],
-	-20,
-	20,
+	-5,
+	5,
 	valinit=0,
-	valfmt="%.1f",
-	valstep=.1
+	valfmt="%.2f",
+	valstep=.005
 )
 wave_slider.on_changed(update_wave)
 plt.show()
