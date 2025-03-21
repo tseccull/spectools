@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-03-19
+	Last updated - 2025-03-21
 
 	Description --------------------------------------------------------
 	This script divides one 1D spectrum by another. divide.py expects
@@ -36,7 +36,7 @@
 """
 
 __author__ = "Tom Seccull"
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 
 import argparse
 import astropy.io.fits as fits
