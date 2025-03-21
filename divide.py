@@ -199,7 +199,6 @@ with fits.open(args.spec_file_two) as two:
 
 primary_head_one = one_headers[0]
 primary_head_two = two_headers[0]
-wavelength_axis = one_frames[0][0]
 
 if one_headers[0]["NAXIS1"] < two_headers[0]["NAXIS1"]:
 	diff = two_headers[0]["NAXIS1"] - one_headers[0]["NAXIS1"]
@@ -207,6 +206,8 @@ if one_headers[0]["NAXIS1"] < two_headers[0]["NAXIS1"]:
 elif one_headers[0]["NAXIS1"] > two_headers[0]["NAXIS1"]:
 	diff = one_headers[0]["NAXIS1"] - two_headers[0]["NAXIS1"]
 	one_frames = [x[:,:-diff] for x in one_frames]
+
+wavelength_axis = one_frames[0][0]
 
 optimal_spectra = np.array([one_frames[0][1], two_frames[0][1]])
 optimal_uncertainties = np.array([one_frames[0][2], two_frames[0][2]])
