@@ -186,7 +186,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 v1.0.0
 
 This script allows the user to manually set the quality flags for data points 
-in a spectrum.
+in a spectrum extracted with MOTES.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
 
@@ -195,9 +195,9 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 v1.0.0
 
-This script repackages 1D spectra saved in .fits format into files in a csv 
-format. Header metadata is stored in at the top of the file with each line 
-starting "#".
+This script repackages 1D spectra extracted with MOTES and saved in .fits 
+format into files in a csv format. Header metadata is stored in at the top of 
+the file with each line starting "#".
 
 Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)
 

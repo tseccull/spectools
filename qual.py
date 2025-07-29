@@ -28,7 +28,7 @@
 
 	Description --------------------------------------------------------	
 	This script allows the user to manually set the quality flags for
-	data points in a spectrum.
+	data points in a spectrum extracted with MOTES.
 """
 
 __version__ = "1.0.0"

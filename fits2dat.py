@@ -27,9 +27,9 @@
 	Last updated - 2025-04-02
 
 	Description --------------------------------------------------------	
-	This script repackages 1D spectra saved in .fits format into files
-	in a csv format. Header metadata is stored in at the top of the file
-	with each line starting "#".
+	This script repackages 1D spectra extracted with MOTES and saved in 
+	.fits format into files in a csv format. Header metadata is stored 
+	in at the top of the file with each line starting "#".
 """
 
 __version__ = "1.0.0"
