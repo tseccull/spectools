@@ -147,7 +147,7 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 v1.0.0
 
 `stax.py` works identically to `stack.py` but only accepts longslit SpeX 
-spectra observed in prism mode and reduced with Spextool.
+spectra observed in prism mode and reduced with [Spextool](https://irtfweb.ifa.hawaii.edu/~spex/Spextool.pdf).
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [SpeX-Prism](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
