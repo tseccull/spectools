@@ -181,5 +181,26 @@ linear fit can be plotted and its parameters will be printed in the terminal.
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)
 
 
+# qual.py
+
+v1.0.0
+
+This script allows the user to manually set the quality flags for data points 
+in a spectrum.
+
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
+
+
+# fits2dat.py
+
+v1.0.0
+
+This script repackages 1D spectra saved in .fits format into files in a csv 
+format. Header metadata is stored in at the top of the file with each line 
+starting "#".
+
+Requires: [Astropy](https://www.astropy.org/), [NumPy](https://numpy.org/)
+
+
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
