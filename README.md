@@ -142,6 +142,17 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
 
 
+# stax.py
+
+v1.0.0
+
+`stax.py` works identically to `stack.py` but only accepts longslit SpeX 
+spectra observed in prism mode and reduced with Spextool.
+
+Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
+Supported Instruments: [SpeX-Prism](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
+
+
 # divide.py
 
 v1.0.6
@@ -153,6 +164,7 @@ of a minor planet with that of a solar twin or solar analog to derive the minor
 planet's reflectance spectrum.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)
+
 
 # bingrad.py
 
@@ -167,6 +179,7 @@ linear fit can be plotted and its parameters will be printed in the terminal.
 `bingrad.py` expects an input spectrum in the format produced by `divide.py`. 
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)
+
 
 # License
 All scripts in this repo are licensed under [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) 
