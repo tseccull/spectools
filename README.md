@@ -148,6 +148,8 @@ v1.0.0
 
 `stax.py` works identically to `stack.py` but only accepts longslit SpeX 
 spectra observed in prism mode and reduced with [Spextool](https://irtfweb.ifa.hawaii.edu/~spex/Spextool.pdf).
+The products of `stax.py` can be fed into scripts further down the reduction 
+chain including `divide.py`, `bingrad.py`, `fits2dat.py`, and `qual.py`.
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [SpeX-Prism](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
