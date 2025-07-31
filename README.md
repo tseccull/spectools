@@ -154,21 +154,7 @@ chain including `divide.py`, `bingrad.py`, `fits2dat.py`, and `qual.py`.
 Unlike `stack.py`, `stax.py` can stack spectra in two different ways:
 
 Default "Bootstrap Median" Operation:
-All input spectra are scaled to unity at either a user-selected 
-wavelength or the central wavelength of the spectra. The spectra are
-then all randomly resampled within their uncertainties to estimate the
-total combined distribution of possible values for each wavelength in
-the stacked spectrum. The uncertainty distribution of each data point in
-each spectrum is assumed to be Gaussian with the mean defined by the
-value of the data point and the standard deviation defined by its
-uncertainty. For the resulting distribution of resampled points at each
-wavelength element, its mean and median are found to be within one
-standard error of the mean from each other in almost all cases. Given
-its close proximity to the mean and its robustness against outliers, the
-median of the combined distribution in each wavelength element is taken
-as the value of the stacked spectrum at that wavelength. The standard
-error of the mean of the distribution is taken to be the uncertainty
-each stacked data point.
+See `stack.py` description; this mode works in an identical way to that.
 
 "Summing" Operation":
 For some brigh targets its necessary to take very short exposures to
