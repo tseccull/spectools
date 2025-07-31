@@ -157,7 +157,7 @@ Default "Bootstrap Median" Operation:
 See `stack.py` description; this mode works in an identical way to that.
 
 "Summing" Operation":
-For some brigh targets its necessary to take very short exposures to
+For some bright targets it's necessary to take very short exposures to
 avoid saturating the sensor. Exposures shorter than ~ 5 s are short
 enough that frame-to-frame variation in the spectral continnum can be
 caused by the movement of the PSF center across the slit that results

@@ -63,7 +63,8 @@
 	atmospheric turbulence to be averaged out. This should mitigate the
 	effects of slit losses on the stacked spectrum provided enough frames
 	are stacked to sum the total integration time up to > 5 s. Even 
-	longer total integration times should give better results.   
+	longer total integration times should give better results.
+	Uncertainties of each stacked spectrum are summed in quadrature.   
 """
 
 __author__ = "Tom Seccull"
