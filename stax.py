@@ -24,14 +24,16 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-07-29
+	Last updated - 2025-07-31
 
 	Description --------------------------------------------------------
-	This script is identical to stack.py, but handles spectra observed 
+	This script is similar to stack.py, but handles spectra observed 
 	with SpeX at the NASA Infrared Telescope Facility and then reduced 
 	with Spextool. Like stack.py, it takes multiple 1D spectra and 
 	combines them to produce a stacked 1D spectrum with reduced noise. 
-	All input spectra are scaled to unity at either a  user-selected 
+	
+	- Default "Bootstrap Median" Operation -  
+	All input spectra are scaled to unity at either a user-selected 
 	wavelength or the central wavelength of the spectra. The spectra are
 	then all randomly resampled within their uncertainties to estimate
 	the total combined distribution of possible values for each 
@@ -47,18 +49,95 @@
 	stacked spectrum at that wavelength. The standard error of the mean
 	of the distribution is taken to be the uncertainty each stacked
 	data point.
+	
+	- "Summing" Operation" -
+	For some brigh targets its necessary to take very short exposures to
+	avoid saturating the sensor. Exposures shorter than ~ 5 s are short
+	enough that frame-to-frame variation in the spectral continnum can
+	be caused by the movement of the PSF center across the slit that
+	results from tip/tilt atmospheric distortion. This especially needs
+	to be considered if the telescope used has no facility for tip/tilt
+	correction. In summing mode the the spectra are stacked by simply
+	summing them all to average all spectra over a longer virtual
+	integration time that allows for the effects of tip/tilt
+	atmospheric turbulence to be averaged out. This should mitigate the
+	effects of slit losses on the stacked spectrum provided enough frames
+	are stacked to sum the total integration time up to > 5 s. Even 
+	longer total integration times should give better results.   
 """
 
 __author__ = "Tom Seccull"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 import argparse
 import astropy.io.fits as fits
+import copy
 import datetime
 import glob
 import stax.spex_stax_head as spexsh
 import matplotlib.pyplot as plt
 import numpy as np
+
+
+def bootstrap_median(files, scaling_wavelength):
+	"""
+	This function is used to stack the spectrum in the default
+	bootstrapped median mode of operation.
+	
+	Args:
+	 -- files (list)
+			List of filenames for files containing spectra to be
+			stacked.
+	 -- scaling_wavelength (float)
+			Wavelength at which the stacked spectrum will be scaled to
+			unity.
+	
+	Returns
+	 -- stacking_results (list)
+			List of objects resulting from the stacking procedure.
+	"""
+	
+	headers = {}
+	frames = {}
+	scaled_spectra = []
+	scaled_errors = []
+	scales = {}
+
+	for f in files:
+		with fits.open(f) as file_hdu_list:
+			headers[f[:-5]] = file_hdu_list[0].header
+			frames[f[:-5]] = file_hdu_list[0].data
+			frame = file_hdu_list[0].data
+	
+		wavelength_axis = frame[0]
+		spectrum = frame[1]
+		error = frame[2]
+		
+		scaling_wavelength = float(scaling_wavelength)
+		
+		if scaling_wavelength == 0.0:
+			scaling_wavelength += (wavelength_axis[0]+wavelength_axis[-1])*0.5
+		
+		scaling_index = np.argmin(np.abs(wavelength_axis-scaling_wavelength))
+		
+		scaled_data = scale_spectrum(frame, scaling_index)
+		scaled_spectra.append(scaled_data[0])
+		scaled_errors.append(scaled_data[1])
+		scales[f[:-5]] = scaled_data[2]
+	
+	scaled_spectra = np.array(scaled_spectra).T
+	scaled_errors = np.array(scaled_errors).T
+	
+	stacked_data = stacking(
+		scaled_spectra,
+		scaled_errors,
+		wavelength_axis,
+		len(files)
+	)
+	
+	stacking_results = [wavelength_axis, stacked_data, scales, headers, frames]
+
+	return stacking_results
 
 
 def scale_spectrum(spectrum_data, scaling_index):
@@ -98,6 +177,7 @@ def scale_spectrum(spectrum_data, scaling_index):
 	scaled_data = [scaled_spectrum, scaled_error, scale]
 
 	return scaled_data
+
 
 def stacking(spectra, errors, wavelength_axis, number_of_spectra):
 	"""
@@ -150,6 +230,61 @@ def stacking(spectra, errors, wavelength_axis, number_of_spectra):
 	
 	return stacked_frame	
 
+
+def sum_std(files, scaling_wavelength):
+	"""
+	This function is used to stack the spectrum in the summing mode of
+	operation.
+	
+	Args:
+	 -- files (list)
+			List of filenames for files containing spectra to be
+			stacked.
+	 -- scaling_wavelength (float)
+			Wavelength at which the stacked spectrum will be scaled to
+			unity.
+	
+	Returns
+	 -- stacking_results (list)
+			List of objects resulting from the stacking procedure.
+	"""
+	
+	headers = {}
+	frames = {}
+	scales = {}
+
+	for f in files:
+		with fits.open(f) as file_hdu_list:
+			headers[f[:-5]] = file_hdu_list[0].header
+			frames[f[:-5]] = file_hdu_list[0].data
+			frame = file_hdu_list[0].data
+		
+		if f == files[0]:
+			wavelength_axis = frame[0]
+			stacked_frame = copy.deepcopy(frame)
+			stacked_frame[2] *= stacked_frame[2]
+		else:
+			stacked_frame[1] += frame[1]
+			stacked_frame[2] += (frame[2]*frame[2])
+		
+	stacked_frame[2] = stacked_frame[2]**0.5
+	
+	scaling_wavelength = float(scaling_wavelength)
+	
+	if scaling_wavelength == 0.0:
+		scaling_wavelength += (wavelength_axis[0]+wavelength_axis[-1])*0.5
+	
+	scaling_index = np.argmin(np.abs(wavelength_axis-scaling_wavelength))
+	
+	scaled_data = scale_spectrum(stacked_frame, scaling_index)
+	scaled_stack = [wavelength_axis, scaled_data[0], scaled_data[1]]
+	scales["sum"] = scaled_data[2]
+	
+	stacking_results = [wavelength_axis, scaled_stack, scales, headers, frames]
+	
+	return stacking_results
+
+
 ###############################################################################
 #### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
 ###############################################################################	
@@ -176,48 +311,26 @@ parser.add_argument(
 	factor. Defaults to '0.0' which will result in the spectra being\
 	scaled to unity at their central wavelength."
 )
-
+parser.add_argument(
+	"-u", "--summing", action="store_true",
+	help="[boolean] Stack the spectra by summing them and then scaling.\
+	This kind of stacking is appropriate to use when exposure times are\
+	shorter than ~5 s."
+)
 args = parser.parse_args()
 
 files = sorted(glob.glob("*.fits"))
 
-headers = {}
-frames = {}
-scaled_spectra = []
-scaled_errors = []
-scales = {}
+if args.summing:
+	stack_results = sum_std(files, args.scaling_wavelength)
+else:
+	stack_results = bootstrap_median(files, args.scaling_wavelength)
 
-for f in files:
-	with fits.open(f) as file_hdu_list:
-		headers[f[:-5]] = file_hdu_list[0].header
-		frames[f[:-5]] = file_hdu_list[0].data
-		frame = file_hdu_list[0].data
-
-	wavelength_axis = frame[0]
-	spectrum = frame[1]
-	error = frame[2]
-	
-	args.scaling_wavelength = float(args.scaling_wavelength)
-	
-	if args.scaling_wavelength == 0.0:
-		args.scaling_wavelength += (wavelength_axis[0]+wavelength_axis[-1])*0.5
-	
-	scaling_index = np.argmin(np.abs(wavelength_axis-args.scaling_wavelength))
-	
-	scaled_data = scale_spectrum(frame, scaling_index)
-	scaled_spectra.append(scaled_data[0])
-	scaled_errors.append(scaled_data[1])
-	scales[f[:-5]] = scaled_data[2]
-
-scaled_spectra = np.array(scaled_spectra).T
-scaled_errors = np.array(scaled_errors).T
-
-stacked_data = stacking(
-	scaled_spectra,
-	scaled_errors,
-	wavelength_axis,
-	len(files)
-)
+wavelength_axis = stack_results[0]
+stacked_data = stack_results[1]
+scales = stack_results[2]
+headers = stack_results[3]
+frames = stack_results[4]
 
 if args.plot:
 	fig = plt.figure(figsize=(10,6))
@@ -232,7 +345,7 @@ if args.plot:
 		label="Stack"
 	)
 	ax.grid(linestyle="dashed")
-	ax.set_xlabel("Wavelength, " + headers[f[:-5]]["XUNITS"])
+	ax.set_xlabel("Wavelength, " + headers[files[0][:-5]]["XUNITS"])
 	ax.set_ylabel("Scaled DN/s")
 	ax.legend()
 	plt.show()
@@ -259,7 +372,12 @@ if args.save:
 		"10.1051/0004-6361:20010923", "FITS format definition paper DOI"
 	)
 	new_header["ORIGIN"] = ("stax.py v" + __version__, "Script that created this file")
-	new_header["STAXDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")	
+	new_header["STAXDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
+	if args.summing:
+		new_header["STAXMODE"] = ("Sum", "stax.py stacking method")
+		new_header["STXSCALE"] = (scales["sum"], "Spectrum stacking scaling factor")
+	else:
+		new_header["STAXMODE"] = ("Bootstrap Median", "stax.py stacking method")	
 
 	stack_hdu = stack_header_dict[instrument](
 		new_hdu, headers, files, args.scaling_wavelength
@@ -269,10 +387,10 @@ if args.save:
 	hdu_list = [stack_hdu]
 	hdu_list_keys = list(save_dict.keys())
 	for key in hdu_list_keys[1:]:
-		
-		headers[key]["SCALFACT"] = (
-			scales[key], "Optimal spectrum stacking scaling factor"
-		)
+		if len(scales) > 1:
+			headers[key]["SCALFACT"] = (
+				scales[key], "Spectrum stacking scaling factor"
+			)
 		headers[key]["EXTNAME"] = key
 		hdu_list.append(fits.ImageHDU(save_dict[key], header=headers[key]))
 	

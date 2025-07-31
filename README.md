@@ -144,15 +144,49 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # stax.py
 
-v1.0.0
+v1.1.0
 
-`stax.py` works identically to `stack.py` but only accepts longslit SpeX 
+`stax.py` works similarly to `stack.py` but only accepts longslit SpeX 
 spectra observed in prism mode and reduced with [Spextool](https://irtfweb.ifa.hawaii.edu/~spex/Spextool.pdf).
 The products of `stax.py` can be fed into scripts further down the reduction 
 chain including `divide.py`, `bingrad.py`, `fits2dat.py`, and `qual.py`.
 
+Unlike `stack.py`, `stax.py` can stack spectra in two different ways:
+
+Default "Bootstrap Median" Operation
+All input spectra are scaled to unity at either a user-selected 
+wavelength or the central wavelength of the spectra. The spectra are
+then all randomly resampled within their uncertainties to estimate the
+total combined distribution of possible values for each wavelength in
+the stacked spectrum. The uncertainty distribution of each data point in
+each spectrum is assumed to be Gaussian with the mean defined by the
+value of the data point and the standard deviation defined by its
+uncertainty. For the resulting distribution of resampled points at each
+wavelength element, its mean and median are found to be within one
+standard error of the mean from each other in almost all cases. Given
+its close proximity to the mean and its robustness against outliers, the
+median of the combined distribution in each wavelength element is taken
+as the value of the stacked spectrum at that wavelength. The standard
+error of the mean of the distribution is taken to be the uncertainty
+each stacked data point.
+
+"Summing" Operation"
+For some brigh targets its necessary to take very short exposures to
+avoid saturating the sensor. Exposures shorter than ~ 5 s are short
+enough that frame-to-frame variation in the spectral continnum can be
+caused by the movement of the PSF center across the slit that results
+from tip/tilt atmospheric distortion. This especially needs to be
+considered if the telescope used has no facility for tip/tilt 
+correction. In summing mode the the spectra are stacked by simply
+summing them all to average all spectra over a longer virtual
+integration time that allows for the effects of tip/tilt atmospheric
+turbulence to be averaged out. This should mitigate the effects of
+slit losses on the stacked spectrum provided enough frames are stacked
+to sum the total integration time up to > 5 s. Even longer total 
+integration times should give better results.   
+
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
-Supported Instruments: [SpeX-Prism](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
+Supported Instruments: [SpeX](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
 
 
 # divide.py
