@@ -169,7 +169,8 @@ integration time that allows for the effects of tip/tilt atmospheric
 turbulence to be averaged out. This should mitigate the effects of
 slit losses on the stacked spectrum provided enough frames are stacked
 to sum the total integration time up to > 5 s. Even longer total 
-integration times should give better results.   
+integration times should give better results. Uncertainties of each
+stacked spectrum are summed in quadrature.   
 
 Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.org/stable/users/project/citing.html), [NumPy](https://numpy.org/)\
 Supported Instruments: [SpeX](https://irtfweb.ifa.hawaii.edu/~spex/index.html)
