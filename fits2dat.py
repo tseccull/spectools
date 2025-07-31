@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-04-02
+	Last updated - 2025-07-31
 
 	Description --------------------------------------------------------	
 	This script repackages 1D spectra extracted with MOTES and saved in 
@@ -32,7 +32,7 @@
 	in at the top of the file with each line starting "#".
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Tom Seccull"
 
 import astropy.io.fits as fits

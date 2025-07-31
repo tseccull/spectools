@@ -216,7 +216,7 @@ Requires: [Astropy](https://www.astropy.org/), [Matplotlib](https://matplotlib.o
 
 # fits2dat.py
 
-v1.0.0
+v1.0.1
 
 This script repackages 1D spectra extracted with [MOTES](https://github.com/tseccull/motes) 
 and saved in .fits format into files in a csv format. Header metadata is stored
