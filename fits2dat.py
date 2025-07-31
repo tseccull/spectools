@@ -40,6 +40,19 @@ import glob
 import numpy as np
 
 def write_cards(txt_file, header):
+	"""
+	This function converts each FITS header card to a string that is
+	printed to the header of the csv formatted .dat file.
+	
+	Args:
+	 -- txt_file (_io.TextIOWrapper)
+			Open file object for the .dat file currently being written.
+	 -- header (astropy.io.fits.header.Header)
+			Astropy header object containing header cards to be written.
+	
+	Returns: None
+	"""
+	
 	for card in header:
 		card_value = str(header[card])
 		card_comment = header.comments[card]
@@ -47,6 +60,10 @@ def write_cards(txt_file, header):
 		txt_file.write(card_string)
 	
 	return None
+
+###############################################################################
+#### SCRIPT STARTS HERE  # # # # # # # # # # # # # # # # # # # # # # # # # #### 
+###############################################################################	
 
 files = sorted(glob.glob("*.fits"))
 hdu_extnames = ["/", "STACK"]
