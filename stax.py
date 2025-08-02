@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-07-31
+	Last updated - 2025-08-02
 
 	Description --------------------------------------------------------
 	This script is similar to stack.py, but handles spectra observed 
@@ -68,7 +68,7 @@
 """
 
 __author__ = "Tom Seccull"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 import argparse
 import astropy.io.fits as fits
@@ -352,6 +352,7 @@ if args.plot:
 	plt.show()
 
 if args.save:
+	stacked_data = np.vstack((stacked_data, stacked_data[1:]))
 	save_dict = {"stacked" : stacked_data}
 	
 	for i in headers:
@@ -378,7 +379,7 @@ if args.save:
 		new_header["STAXMODE"] = ("Sum", "stax.py stacking method")
 		new_header["STXSCALE"] = (scales["sum"], "Spectrum stacking scaling factor")
 	else:
-		new_header["STAXMODE"] = ("Bootstrap Median", "stax.py stacking method")	
+		new_header["STAXMODE"] = ("Bootstrap Median", "stax.py stacking method") 	
 
 	stack_hdu = stack_header_dict[instrument](
 		new_hdu, headers, files, args.scaling_wavelength
