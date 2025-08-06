@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-07-29
+	Last updated - 2025-08-06
 
 	Description --------------------------------------------------------
 	This file contains the stack_header_spex() function, which creates
@@ -236,9 +236,9 @@ def stack_header_spex(new_hdu, heads, files, scale_wavelength):
 	median_tcs_am = np.median(airmasses)
 	min_tcs_am = np.min(airmasses)
 	max_tcs_am = np.max(airmasses)
-	new_head["MINTCSAM"] = (min_tcs_am, "Minimum TCS Elevation, deg")
-	new_head["MEDTCSAM"] = (median_tcs_am, "Median TCS Elevation, deg")
-	new_head["MAXTCSAM"] = (max_tcs_am, "Maximum TCS Elevation, deg")
+	new_head["MINTCSAM"] = (min_tcs_am, "Minimum TCS Airmass")
+	new_head["MEDTCSAM"] = (median_tcs_am, "Median TCS Airmass")
+	new_head["MAXTCSAM"] = (max_tcs_am, "Maximum TCS Airmass")
 	
 	median_tcs_focus = median_tcs_value(heads, files, "TCS_FOC")
 	new_head["MEDTCSFC"] = (median_tcs_focus, "Median TCS actual focus")
