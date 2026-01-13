@@ -241,11 +241,11 @@ ax_wave_slider = plt.axes([0.25, 0.05, 0.5, 0.03])
 wave_slider = Slider(
 	ax_wave_slider,
 	r"$\lambda$ Offset, " + primary_head_two["WAVU"],
-	-1,
-	1,
+	-5,
+	5,
 	valinit=0,
-	valfmt="%.3f",
-	valstep=.001
+	valfmt="%.2f",
+	valstep=.005
 )
 wave_slider.on_changed(update_wave)
 plt.show()
