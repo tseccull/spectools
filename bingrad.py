@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-03-05
+	Last updated - 2026-01-13
 
 	Description --------------------------------------------------------	
 	This script has two functions. Primarily it is used to bin 
@@ -36,7 +36,7 @@
 	be plotted and its parameters will be printed in the terminal.
 """
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __author__ = "Tom Seccull"
 
 import argparse
