@@ -372,7 +372,7 @@ if args.save:
 	binned_header["ORIGIN"] = ("bingrad.py v" + __version__, "Script that created this file.")
 	binned_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	binned_header["INPUT1"] = (args.data_file, "Input spectrum file")
-	binned_header["OBJECT1"] = (primary_head["OBJECT1"], "Name of first object in ratio spectrum")
+	binned_header["OBJECT"] = (primary_head["OBJECT"], "Name of first object in ratio spectrum")
 	binned_header["OBJECT2"] = (primary_head["OBJECT2"], "Name of second object in ratio spectrum")
 	binned_header["EXTENS"] = (primary_head["EXTNAME"], "Extension of unbinned data frame")
 	binned_header["BINFACTR"] = (args.factor, "Binning factor used to bin spectrum")

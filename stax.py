@@ -106,7 +106,7 @@ def bootstrap_median(files, scaling_wavelength):
 
 	for f in files:
 		with fits.open(f) as file_hdu_list:
-			headers[f[:-5]] = file_hdu_list[0].header
+			headers[f[:-5]] = file_hdu_list[1].header
 			frames[f[:-5]] = file_hdu_list[0].data
 			frame = file_hdu_list[0].data
 	

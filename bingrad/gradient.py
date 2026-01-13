@@ -112,7 +112,8 @@ def grad_measurement(binned_frame, factor, grad_wavelengths, headers):
 	gradient_wavelengths = binned_frame[0][gradient_indices]
 	
 	per_hundred_nm_conversions = {
-		"angstroms" : 1000.
+		"angstroms" : 1000.,
+		"nm" : 100.
 	}
 	
 	per_100_nm_factor = per_hundred_nm_conversions[headers[0]["WAVU"]]

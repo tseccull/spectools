@@ -241,11 +241,11 @@ ax_wave_slider = plt.axes([0.25, 0.05, 0.5, 0.03])
 wave_slider = Slider(
 	ax_wave_slider,
 	r"$\lambda$ Offset, " + primary_head_two["WAVU"],
-	-5,
-	5,
+	-1,
+	1,
 	valinit=0,
-	valfmt="%.2f",
-	valstep=.005
+	valfmt="%.3f",
+	valstep=.001
 )
 wave_slider.on_changed(update_wave)
 plt.show()
@@ -346,7 +346,7 @@ if args.save:
 	ratio_header["DIVDOI"] = ("10.5281/zenodo.12786056", "Script repository DOI")
 	ratio_header["INPUT1"] = (args.spec_file_one, "First input spectrum file")
 	ratio_header["INPUT2"] = (args.spec_file_two, "Second input spectrum file")
-	ratio_header["OBJECT1"] = (primary_head_one["OBJECT"], "Name of object in first spectrum")
+	ratio_header["OBJECT"] = (primary_head_one["OBJECT"], "Name of object in first spectrum")
 	ratio_header["OBJECT2"] = (primary_head_two["OBJECT"], "Name of object in second spectrum")
 	ratio_header["EXTENS1"] = (args.spec_file_one[:-5], "Extension of first spectrum data frame")
 	ratio_header["EXTENS2"] = (args.spec_file_two[:-5], "Extension of second spectrum data frame")
