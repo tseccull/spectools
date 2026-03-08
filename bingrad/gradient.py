@@ -4,7 +4,7 @@
 gradient.py - written by Tom Seccull, 2024-07-16
 
 	Called by: bingrad.py
-	Last updated: 2026-01-13
+	Last updated: 2026-03-08
 	
 	This file contains all the functions needed by bingrad.py to perform
 	a linear regression of the supplied spectral data and measure the
@@ -151,6 +151,12 @@ def grad_measurement(binned_frame, factor, grad_wavelengths, headers):
 	u_opt_grad = "%.2f" % round(opt_grad_uncertainty,2)
 	ape_grad = "%.2f" % round(ape_gradient,2)
 	u_ape_grad = "%.2f" % round(ape_grad_uncertainty,2)
+	print(
+		"Raw Optimal Fitted Slope, Intercept: "
+		+ str(opt_slope)
+		+ ", "
+		+ str(opt_inter)
+	)
 	print(
 		"Optimal Spectrum Gradient: " 
 		+ opt_grad 
