@@ -1,7 +1,7 @@
 # spectools
 
 ![GitHub Release](https://img.shields.io/github/v/release/tseccull/spectools)
-[![DOI](https://zenodo.org/badge/709271938.svg)](https://zenodo.org/doi/10.5281/zenodo.12786056)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18908734.svg)](https://doi.org/10.5281/zenodo.18908734)
 
 Author: Tom Seccull
 
