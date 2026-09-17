@@ -47,7 +47,9 @@ and VAR frame addition, overscan correction, bias subtraction, ADU to e-
 converion, flat-field correction, QE correction, and 2D spectrum distortion
 correction (rectification). Cosmic ray flagging, fringe subtraction, sky 
 subtraction, extraction, and stacking are all performed later by other scripts
-in the spectools repo. DRAGONS should be cited if `dagrons.py` is used.
+in the spectools repo. Labrie et al. should be cited if `dagrons.py` is used.
+
+[Labrie et al. 2023, RNAAS, 7, 214](https://doi.org/10.3847/2515-5172/ad0044)
 
 Requires: [DRAGONS](https://www.gemini.edu/observing/phase-iii/reducing-data/dragons-data-reduction-software)\
 Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)  
