@@ -55,12 +55,12 @@ Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [G
 
 # scrap.py
 
-v1.0.9
+v1.1.0
 
 This is essentially a Python wrapper for Astropy's Astroscrappy, which is 
 itself a Python implementation of Pieter van Dokkum's LA Cosmic. This script 
-is used for detecting, masking, and cleaning cosmic ray hits in 2D 
-spectroscopic data. A modular design is intended to facilitate easy processing 
+is used for detecting, masking, and cleaning cosmic ray hits in 2D spectra or
+images. A modular design is intended to facilitate easy processing 
 of data observed with a variety of instruments. If Astroscrappy is used, both 
 McCully et al., and van Dokkum should be cited:
 
@@ -71,7 +71,7 @@ McCully et al., and van Dokkum should be cited:
 [van Dokkum 2001, PASP, 113, 1420](https://doi.org/10.1086/323894)
 
 Requires: [Astropy](https://www.astropy.org/), [Astroscrappy](https://doi.org/10.5281/zenodo.1482019), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/)\
-Supported Instruments: [GMOS-N](https://www.gemini.edu/instrumentation/gmos), [GMOS-S](https://www.gemini.edu/instrumentation/gmos)
+Supported Data: [GMOS-N Spectra](https://www.gemini.edu/instrumentation/gmos), [GMOS-S Spectra](https://www.gemini.edu/instrumentation/gmos), [IO:O Images](https://telescope.livjm.ac.uk/TelInst/Inst/IOO/)
 
 
 # fronge.py

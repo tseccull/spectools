@@ -24,7 +24,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-	Last updated - 2025-03-07
+	Last updated - 2025-09-17
 
 	Description --------------------------------------------------------
 	Locate, mask, and clean cosmic ray hits in 2D spectroscopic data
@@ -57,13 +57,14 @@
 """
 
 __author__ = "Tom Seccull"
-__version__ = "1.0.9"
+__version__ = "1.1.0"
 
 import argparse
 import astropy.io.fits as fits
 import astroscrappy as asc
 import glob
 import scrap.gmosio as gmosio
+import scrap.iooio as iooio
 
 
 ###############################################################################
@@ -73,13 +74,13 @@ import scrap.gmosio as gmosio
 # Parse scrap.py arguments
 parser = argparse.ArgumentParser(
 	description="Locate, mask, and clean cosmic ray hits in 2D\
-	spectroscopic data with Astroscrappy/LACosmic. This script runs the\
+	data with Astroscrappy/LACosmic. This script runs the\
 	detect_cosmics() function from Astroscrappy on supplied\
 	astronomical spectroscopic data. Astroscrappy is a Python\
 	implentation of Pieter van Dokkum's LACosmic. Cite both\
 	Astroscrappy and LACosmic if used. scrap.py will assume all files\
-	in the current directory are .fits formatted 2D spectra that need\
-	their cosmic rays masked and will try to apply detect_cosmics() to\
+	in the current directory are .fits formatted 2D spectra or images that\
+	need their cosmic rays masked and will try to apply detect_cosmics() to\
 	each in turn. scrap.py will replace the primary input data frame\
 	with the cleaned data array in the output .fits file; a copy of the\
 	original input data will be stored in a new Header Data Unit (HDU)\
@@ -146,27 +147,29 @@ files = sorted(glob.glob('*.fits'))
 # Create dictionary that scrap.py will use to call instrument specific
 # data preparation functions.
 instrument_prep = {
-	"GMOS-N": gmosio.prep_gmos,
-	"GMOS-S": gmosio.prep_gmos
+	"GMOS-N": gmosio.prep_gmos, # Spectra only
+	"GMOS-S": gmosio.prep_gmos, # Spectra only
+	"IO:O"  : iooio.prep_ioo    # Images
 }
 
 # Create dictionary that scrap.py will use to call instrument specific
 # data saving functions.
 instrument_save = {
 	"GMOS-N": gmosio.save_gmos,
-	"GMOS-S": gmosio.save_gmos
+	"GMOS-S": gmosio.save_gmos,
+	"IO:O"  : iooio.save_ioo
 }
 
 # Run detect_cosmics on every fits file listed in files.
 for f in files:
-	with fits.open(f) as spectrum_file:
-		primary_header = spectrum_file[0].header
+	with fits.open(f) as data_file:
+		primary_header = data_file[0].header
 		instrument = primary_header["INSTRUME"]
 		
 		# Based on the value of instrument, this calls a prep_instrument
 		# function
 		detect_cosmics_parameters = instrument_prep[instrument](
-			spectrum_file, args.fine_structure_mode
+			data_file, args.fine_structure_mode
 		)
 		
 		# Use Astroscrappy to detect, mask, and clean cosmic rays.
@@ -195,7 +198,7 @@ for f in files:
 		# of the quality frame.
 		instrument_save[instrument](
 			f,
-			spectrum_file,
+			data_file,
 			primary_header,
 			cosmic_ray_mask*1,
 			clean_science_data,
